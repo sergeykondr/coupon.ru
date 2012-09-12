@@ -94,15 +94,5 @@ class SidebarAdminController extends AdminController
 	}
 
 
-	public function loadModel($id)
-	{
-		$model = Sidebar::model()->findByPk((int) $id);
-		if($model === null)
-        {
-            $this->pageNotFound();
-        }
-
-		return $model;
-	}
 
 }

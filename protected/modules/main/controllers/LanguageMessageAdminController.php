@@ -132,14 +132,5 @@ class LanguageMessageAdminController extends AdminController
     }
 
 
-    public function loadModel($id)
-    {
-        $model = LanguageMessage::model()->findByPk($id);
-        if (!$model)
-        {
-            $model->pageNotFound();
-        }
 
-        return $model;
-    }
 }

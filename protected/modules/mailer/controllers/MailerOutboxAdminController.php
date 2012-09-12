@@ -85,17 +85,6 @@ class MailerOutboxAdminController extends AdminController
 	}
 
 
-	public function loadModel($id)
-	{
-		$model = MailerOutbox::model()->findByPk((int) $id);
-		if($model === null)
-        {
-            $this->pageNotFound();
-        }
-
-		return $model;
-	}
-
 
     public function actionBodyView($id)
     {

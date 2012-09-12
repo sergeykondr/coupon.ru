@@ -27,16 +27,4 @@ class <?= $class ?>Controller extends Controller
 			'data_provider' => $data_provider,
 		));
 	}
-
-
-	public function loadModel($id)
-	{
-		$model = <?= $class ?>::model()->findByPk((int) $id);
-		if($model === null)
-        {
-            $this->pageNotFound();
-        }
-
-		return $model;
-	}
 }

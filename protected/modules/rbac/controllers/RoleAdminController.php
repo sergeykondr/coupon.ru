@@ -64,19 +64,4 @@ class RoleAdminController extends AdminController
         $this->loadModel($name)->delete();
     }
 
-
-    public function loadModel($name)
-    {
-        $model = AuthItem::model()->findByAttributes(array(
-            'name' => $name,
-            'type' => CAuthItem::TYPE_ROLE
-        ));
-
-        if (!$model)
-        {
-            $this->pageNotFound();
-        }
-
-        return $model;
-    }
 }
