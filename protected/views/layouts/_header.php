@@ -8,6 +8,7 @@
     <![endif]-->
 
     <?
+
     $cs = Yii::app()->clientScript;
     $cs->registerCoreScript('jquery');
     $cs->registerCoreScript('jquery.ui');
