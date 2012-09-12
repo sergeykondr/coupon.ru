@@ -27,7 +27,7 @@
     ?>
 
     <!--[if lt IE 9]>
-    <link rel="stylesheet" href="/css/admin/ie.css" type="text/css" media="screen"/>
-    <script src="/js/admin/html5.js"></script>
+    <link rel="stylesheet" href="<?= $base ?>/css/admin/ie.css" type="text/css" media="screen"/>
+    <script src="<?= $base ?>/js/admin/html5.js"></script>
     <![endif]-->
 </head>

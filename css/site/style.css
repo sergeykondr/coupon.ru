@@ -9,7 +9,7 @@
 /*}*/
 
 body {
-    background-image: url(/img/site/stretched-179041.jpg);
+    background-image: url(../../img/site/stretched-179041.jpg);
     background-attachment: fixed;
     background-color: black;
     background-position: center top;
@@ -17,7 +17,7 @@ body {
 }
 
 #main-wrapper {
-    background: url(/img/site/white-bg.png);
+    background: url(../../img/site/white-bg.png);
     border-top-left-radius: 0 !important;
     border-top-right-radius: 0 !important;
     border-radius: 4px 4px 4px 4px;
