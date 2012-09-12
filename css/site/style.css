@@ -1,0 +1,154 @@
+/*.container {*/
+/*width: 1024px;*/
+/*}*/
+
+/*.navbar-top {*/
+/*width: 1024px;*/
+/*margin-left: auto;*/
+/*margin-right: auto;*/
+/*}*/
+
+body {
+    background-image: url(/img/site/stretched-179041.jpg);
+    background-attachment: fixed;
+    background-color: black;
+    background-position: center top;
+    background-repeat: no-repeat;
+}
+
+#main-wrapper {
+    background: url(/img/site/white-bg.png);
+    border-top-left-radius: 0 !important;
+    border-top-right-radius: 0 !important;
+    border-radius: 4px 4px 4px 4px;
+    width: 600px !important;
+    margin-left: auto;
+    margin-right: auto;
+    width: 1024px !important;
+    padding: 10px 15px;
+}
+
+
+.modal {
+    display: none;
+}
+
+.container-fluid {
+    padding-left: 0;
+    padding-right: 0;
+}
+
+.user-photo-link {
+    padding: 0 0 0 0 !important;
+    width:23px;
+    height:23px;
+    display:block;
+    overflow:hidden;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
+}
+
+.row-fluid .well {
+    background-color: #F9F9F9;
+}
+
+.row-fluid .span8.well {
+    background-color: #FFFFFF;
+}
+
+.well {
+    border-radius: 6px 6px 6px 6px;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    text-shadow: 0 1px 0 #FFFFFF;
+}
+
+h1 {
+    font-size: 18px;
+    font-weight: bold;
+    line-height: 20px;
+}
+
+
+/*.container {*/
+/*margin-left: 0 !important;*/
+/*margin-right: 0 !important;*/
+/*}*/
+
+
+
+/*.portlet {*/
+/*display: inline !important;*/
+/*}*/
+
+/*.portlet-content {*/
+/*display: inline !important;*/
+/*}*/
+
+/*.span4 {*/
+/*width: 324px;*/
+/*margin-left: 0 !important;*/
+/*}*/
+
+/*.user-link {*/
+/*color: #f5f5f5 !important;*/
+/*text-decoration: underline !important;*/
+/*}*/
+
+/*h1 {*/
+/*color: #343434 !important;*/
+/*}*/
+
+/*.brand {*/
+/*color: #ffffff !important;*/
+/*margin-top: 3px;*/
+/*}*/
+
+
+
+
+/*.container .row {*/
+/*margin-left: 0 !important;*/
+/*}*/
+
+/*#middle-content {*/
+/*float: left;*/
+/*width: 700px;*/
+/*}*/
+
+/*#sidebar-content {*/
+/*width: 200px;*/
+/*float: right;*/
+/*}*/
+
+
+.alert p {
+    margin: 0 0 0 0!important;
+}
+
+.oper-btn {
+    width: 244px;
+}
+
+#sections-menu li a{
+    line-height: 24px;
+    font-size: 12px;
+}
+
+.well h4 {
+    font-size: 14px;
+    color: #333333;
+    font-weight: normal;
+    margin-top: 0;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+span.italic-12 {
+    font-style: italic;
+    font-size: 12px;
+}
+
+.mright10 {
+    margin-right: 10px;
+}

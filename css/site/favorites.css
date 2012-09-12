@@ -1,0 +1,31 @@
+.favorite {
+    float: left;
+    padding: 5px 0;
+    padding-top: 6px;
+    margin-right: 5px;
+}
+
+.favorite a {
+    width: 15px;
+    height: 13px;
+    display: block;
+    margin-top: 1px;
+}
+
+.favorite a.guest, .favorite a.guest {
+    cursor: help;
+}
+
+.favorite a.user, .favorite a.added {
+    cursor: pointer;
+}
+
+.favs_count {
+    float: left;
+    font-size: 9px;
+    line-height: 28px;
+    cursor: help;
+    display: block;
+    position: relative;
+    overflow: hidden;
+}

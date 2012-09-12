@@ -1,0 +1,33 @@
+.rating {
+    float: right;
+}
+.rating-value {
+    float: left;
+    font-weight: bold;
+    line-height: 15px;
+    margin-right: 5px;
+    display: block;
+}
+
+.rating-vote {
+    width: 14px;
+    height: 14px;
+    float: left;
+    margin-left: 4px;
+}
+
+.rating-vote.plus, .rating-vote.minus {
+    cursor: pointer;
+}
+
+.rating-value.green {
+    color: #339900;
+}
+
+.rating-value.red {
+    color: #CC0000;
+}
+
+.rating-value.grey {
+    color: #808080;
+}

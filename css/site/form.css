@@ -1,0 +1,67 @@
+.checkbox
+{
+    padding-left:  0;
+}
+
+.errorMessage{
+    color: #B94A48
+}
+
+.back_button{
+    margin: 0 0 0 10px;
+}
+
+.form-vertical input[type=text], .form-vertical input[type=password], .form-vertical textarea, .form-vertical .uneditable-input{
+    width: 420px;
+}
+
+select {
+    width: 425px;
+}
+
+.chosen select{
+    width: 419px;
+}
+
+textarea {
+    min-height: 180px;
+    max-width: 98%;
+}
+/*file manager*/
+.fileupload-content button{
+    line-height: 14px;
+}
+
+.editable span{
+    border-bottom: 1px #AAF dashed;
+}
+
+.editable textarea, .editable input{
+    display:       block;
+    margin-bottom: 1px;
+}
+
+.form-vertical input.date_picker {
+    width: 393px;
+}
+
+.captcha.control-group input {
+    width: 100px !important;
+    margin-right: 15px;
+}
+.captcha.control-group a {
+    margin-left: 15px;
+}
+
+.help-block, .help-inline {
+    color: red !important;
+}
+
+.wide-from input[type=text], .wide-from textarea {
+    /*width: 100% !important;*/
+    width: 590px !important;
+}
+
+.wide-from select {
+    width: 604px !important;
+}
