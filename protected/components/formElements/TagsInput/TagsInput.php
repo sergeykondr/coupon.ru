@@ -36,7 +36,7 @@ class TagsInput extends InputWidget
                   ->registerScript(
                         'da',
                         '$("#' .  $model_class . '_' . $this->element_name . '").tagsInput({
-                            "width"            : "100%",
+                            "width"            : "96%",
                             "defaultText"      : "' . $this->default_text . '",
                             "autocomplete_url" : "/main/tag/autoComplete",
                             "minChars"         : 3
