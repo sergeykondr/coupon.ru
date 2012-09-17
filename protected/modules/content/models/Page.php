@@ -82,9 +82,6 @@ class Page extends ActiveRecord
                          )
                      )
                  ),
-                'SportRel' => array(
-                    'class' => 'application.modules.content.components.activeRecordBehaviors.SportRelBehavior'
-                )
             )
         );
     }

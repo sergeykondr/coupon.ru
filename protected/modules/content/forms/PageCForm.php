@@ -5,7 +5,6 @@ Yii::app()->clientScript->registerScriptFile('/js/content/page/form.js');
 if (!$this->model->isNewRecord)
 {
     $this->model->sections_ids = PageSectionRel::model()->getSectionsIds($this->model->id);
-    $this->model->sports_ids   = SportRel::model()->getSportsIds($this->model);
 }
 
 return array(
