@@ -22,19 +22,10 @@ $this->widget('AdminDetailView', array(
             'value' => MetaTag::model()->html($model->id, get_class($model)),
             'type'  => 'raw'
         ),
-        array(
-            'name'  => 'language',
-            'value' => $languages[$model->language]
-        ),
 		array(
             'name'  => 'text',
             'type'  => 'raw',
             'value' => $model->text
         ),
-        array(
-          'label' => 'Тэги',
-          'type'  => 'raw',
-          'value' => Tag::getString(get_class($model), $model->id)
-      ),
 	),
 ));
