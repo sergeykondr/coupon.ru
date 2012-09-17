@@ -19,8 +19,8 @@ class TagsInput extends InputWidget
 						   INNER JOIN tags_rels ON tags_rels.tag_id = tags.id
 						   WHERE tags_rels.object_id = {$this->model->id} AND
 								 tags_rels.model_id  = '{$model_class}'";
-			
-			$tags = Yii::app()->db->createCommand($sql)->queryScalar();		
+
+			$tags = Yii::app()->db->createCommand($sql)->queryScalar();
 		}
 
         $this->registerScripts($model_class);
@@ -36,7 +36,7 @@ class TagsInput extends InputWidget
                   ->registerScript(
                         'da',
                         '$("#' .  $model_class . '_' . $this->element_name . '").tagsInput({
-                            "width"            : "96%",
+                            "width"            : "98%",
                             "defaultText"      : "' . $this->default_text . '",
                             "autocomplete_url" : "/main/tag/autoComplete",
                             "minChars"         : 3
