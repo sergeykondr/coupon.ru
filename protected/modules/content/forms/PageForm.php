@@ -14,7 +14,7 @@ return array(
 //            'source' => 'title'
 //        ),
         'files'    => array(
-            'type'      => 'file_uploader',
+            'type'      => 'uploader',
             'data_type' => 'image',
             'title'     => 'Файлы'
         ),

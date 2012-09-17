@@ -42,6 +42,7 @@ class MediaModule extends WebModule
     {
         return array(
             '/userAlbums/<userId:\d*>' => '/media/mediaAlbum/userAlbums',
+            '/media/mediaAlbum/userAlbums/<id:\d*>' => '/media/mediaAlbum/userAlbums',
         );
     }
 
@@ -78,4 +79,14 @@ class MediaModule extends WebModule
         ), $config));
     }
 
+
+    public function someFuncName($method, $methodData, $owner = null)
+    {
+        switch($method){
+            case 'album':
+                $methodData['model'] = $owner;
+                return Yii::app()->controller->widget('media.portlets.ImageGallery', $methodData, true);
+                break;
+        }
+    }
 }
