@@ -8,6 +8,8 @@ date_default_timezone_set('Europe/Moscow');
 
 define('DS', DIRECTORY_SEPARATOR);
 
+$_SERVER['DOCUMENT_ROOT'] = __DIR__ .'/';
+
 $_SERVER['DOCUMENT_ROOT'] = str_replace(array('\\', '/'), DS, $_SERVER['DOCUMENT_ROOT']);
 
 if (substr($_SERVER['DOCUMENT_ROOT'], -1) != DS)
@@ -28,3 +30,4 @@ $config = APP_PATH . 'config' . DS . CONFIG .'.php';
 
 Yii::createWebApplication($config)->run();
 
+//Yii::app()->executor->migrate('up');
