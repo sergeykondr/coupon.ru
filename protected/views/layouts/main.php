@@ -48,7 +48,7 @@
 </head>
 
 <body>
-
+<? echo Yii::app()->baseUrl; ?>
 <? $this->renderPartial('application.views.layouts._modal'); ?>
 
 <div id='main-wrapper'>
@@ -58,7 +58,7 @@
 
     <div class="container-fluid">
         <div class="row-fluid">
-            <div class="span8 well">
+            <div class="span12 well">
                 <? if ($this->page_title): ?>
                     <h1><?= $this->page_title ?></h1>
                 <? endif ?>
@@ -69,10 +69,11 @@
 
                 <?= $content ?>
             </div>
-            <!--/span-->
+            <!--/span
             <div class="span4 sidebar-manager">
-                <?= $this->widget('SidebarManager') ?>
+                <= $this->widget('SidebarManager') >
             </div>
+            -->
         </div>
         <hr>
 

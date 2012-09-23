@@ -34,9 +34,14 @@ class PageAdminController extends AdminController
     public function actionCreate()
     {
         $model = new Page(ActiveRecord::SCENARIO_CREATE);
-        $form  = new Form('content.PageForm', $model);
+        $form  = new Form('content.PageForm', $model); // в конструктор передается модель
         $this->performAjaxValidation($model);
 
+        /*
+         * Метод submitted() перед тем, как вернуть true то он заполняет модель данными.
+         * (все модели которые передались в конструкторе, будут заполнены значениями из формы
+         * далее модель сохраняется
+         */
         if ($form->submitted() && $model->save())
         {
             $this->redirect(array(
@@ -86,6 +91,7 @@ class PageAdminController extends AdminController
 
     public function actionDelete($id)
     {
+        echo "asdf";
         $this->loadModel($id)->delete();
 
         if (!isset($_GET['ajax']))

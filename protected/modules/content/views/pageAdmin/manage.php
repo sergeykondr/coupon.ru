@@ -17,13 +17,7 @@ $this->widget('AdminGridView', array(
             'value'  => 'Page::$status_options[$data->status]',
             'filter' => Page::$status_options
         ),
-        array(
-            'name'  => 'language',
-            'value' => function ($data) {
-                $languages = Language::getList();
-                return $languages[$data->language];
-            }
-        ),
+
         'date_create',
 		array(
 			'class'=>'CButtonColumn',

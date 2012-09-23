@@ -6,6 +6,7 @@
  * @property $model_id
  * @property $date_create
  */
+
 class View extends ActiveRecord
 {
     const PAGE_SIZE = 20;

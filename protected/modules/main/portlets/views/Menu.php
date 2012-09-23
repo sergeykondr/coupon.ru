@@ -6,16 +6,13 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </a>
-            <a href="/" class="brand">SiteName</a>
+            <a href="/" class="brand">coupon.ru</a>
             <div class="nav-collapse">
                 <?
                 $this->widget('BootMenu', array(
                     'items'       => $items
                 ))
                 ?>
-                <form action="" class="navbar-search pull-left">
-                    <input type="text" placeholder="Поиск" value="<?= $query ?>" class="search-query span2">
-                </form>
                 <ul class="nav pull-right" style="margin-right: 0;">
                     <? if (Yii::app()->user->isGuest): ?>
                         <li><?= CHtml::link(t('Войти'), array('/users/user/login'), array('class' => 'modal-link', 'data-title' => 'Авторизация')); ?></li>

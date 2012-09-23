@@ -41,12 +41,14 @@ class DocsController extends CController
      */
     public function getViewFile($view)
     {
+        //во view = index, tmpl?
         $viewFile = '';
         $data = explode('/', $view);
-        $moduleId = array_shift($data);
+        $moduleId = array_shift($data); //index
         if (empty($data)) {
-            $data[] = 'index';
+            $data[] = 'index'; //выполняется
         }
+        //возвращает экземпляр нашего модуля? мы передаем (index). что такое экземпляр модуля?
         $module = Yii::app()->getModule($moduleId);
         if ($module) {
             $viewFile = $module->getBasePath() . '/docs/' . implode('/', $data) . '.php';

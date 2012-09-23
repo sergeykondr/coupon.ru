@@ -63,25 +63,10 @@ abstract class Controller extends CController implements ControllerInterface
     {
         return array(
             array(
-                'label' => t('Топики'),
-                'url'   => array('content/page/index')
+                'label' => t('Как это работает'),
+                'url'   => array('/')
             ),
-            array(
-                'label' => t('Блоги'),
-                'url'   => array('content/pageSection/index')
-            ),
-            array(
-                'label' => t('Видео'),
-                'url'   => '/'
-            ),
-            array(
-                'label' => t('Фото'),
-                'url'   => '/'
-            ),
-            array(
-                'label' => t('Люди'),
-                'url'   => '/'
-            ),
+
         );
     }
 

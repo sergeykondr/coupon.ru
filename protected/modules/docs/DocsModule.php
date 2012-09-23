@@ -34,8 +34,10 @@ class DocsModule extends WebModule
     public function routes()
     {
         return array(
+            /*
             '/docs/module/<module:.*>/<view:.*>' => '/docs/docs/module',
             '/docs/<view:.*>' => '/docs/docs/index',
+            */
             '/docs/' => '/docs/docs/index',
             '/docs/base/<view:.*>' => '/docs/docs/index',
             '/docs/base/<folder:\w*>/<view:\w*>' => '/docs/docs/index',

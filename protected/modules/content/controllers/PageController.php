@@ -40,8 +40,44 @@ class PageController extends Controller
                 'url'   => array('content/page/index')
             ),
             array(
-                'label' => t('Лучшие'),
-                'url'   => array('content/page/top')
+                'label' => t('Красота'),
+                'url'   => array('content/page/index')
+            ),
+            array(
+                'label' => t('Здоровье'),
+                'url'   => array('content/page/index')
+            ),
+            array(
+                'label' => t('Еда'),
+                'url'   => array('content/page/index')
+            ),
+            array(
+                'label' => t('Развлечения'),
+                'url'   => array('content/page/index')
+            ),
+            array(
+                'label' => t('Отдых'),
+                'url'   => array('content/page/index')
+            ),
+            array(
+                'label' => t('Товары'),
+                'url'   => array('content/page/index')
+            ),
+            array(
+                'label' => t('Фото'),
+                'url'   => array('content/page/index')
+            ),
+            array(
+                'label' => t('Обучение'),
+                'url'   => array('content/page/index')
+            ),
+            array(
+                'label' => t('Авто'),
+                'url'   => array('content/page/index')
+            ),
+            array(
+                'label' => t('Прочее'),
+                'url'   => array('content/page/index')
             ),
             array(
                 'label'   => Yii::app()->user->isGuest ?: t('Ваши') . '(' . Page::model()->count('user_id = ' . Yii::app()->user->id) . ')',
@@ -118,7 +154,6 @@ class PageController extends Controller
         {
             $this->pageNotFound();
         }
-
         $this->render("view", array(
             "page" => $page
         ));
@@ -149,6 +184,7 @@ class PageController extends Controller
 
     public function actionUpdate($id)
     {
+        echo "111";
         $model = Page::model()->findByPk($id);
         if (!$model)
         {
