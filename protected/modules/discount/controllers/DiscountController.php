@@ -1,11 +1,10 @@
 <?
 
-class ActionController extends Controller
+class DiscountController extends Controller
 {
     public function actionView($id)
     {
-
-        $page = Action::model()->findByPk($id);
+        $page = Discount::model()->findByPk($id);
         if (!$page)
         {
             $this->pageNotFound();
@@ -13,11 +12,6 @@ class ActionController extends Controller
         $this->render("viewPage", array(
             "page" => $page
         ));
-
-    }
-    public function actionViews($id)
-    {
-
 
 
     }
