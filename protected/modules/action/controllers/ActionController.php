@@ -15,6 +15,12 @@ class ActionController extends Controller
         ));
 
     }
+    public function actionViews($id)
+    {
+
+
+
+    }
 
     public function actionIndex()
     {
@@ -27,6 +33,7 @@ class ActionController extends Controller
         return array(
             'view'         => 'Просмотр акции',
             'index'        => 'Все акции',
+            'views'         => 'Просмотр акции',
 
         );
     }
