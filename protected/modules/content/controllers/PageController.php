@@ -209,6 +209,7 @@ class PageController extends Controller
     {
         $this->page_title = '';
 
+        /*
         $data_provider = new CActiveDataProvider('Page', array(
             'criteria' => array(
                 'condition' => "status = '" . Page::STATUS_PUBLISHED . "'",
@@ -219,10 +220,23 @@ class PageController extends Controller
                 'pageSize' => '10'
             )
         ));
+        */
+        $data_provider = new CActiveDataProvider('Discount', array(
+            'criteria' => array(
+                'order'     => 'date DESC',
+            ),
+            'pagination' => array(
+                'pageSize' => '10'
+            )
+        ));
+
 
         $this->render('index', array(
             'data_provider' => $data_provider,
         ));
+
+
+
     }
 
 
