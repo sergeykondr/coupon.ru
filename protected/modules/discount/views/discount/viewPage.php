@@ -1,12 +1,9 @@
 <?
-$this->page_title = $page->title;
-
-echo CHtml::encode($page->title);
-echo CHtml::encode($page->caption);
-echo CHtml::encode($page->text);
+$this->page_title = $page->title; //заголовок <h1>
+//echo CHtml::encode($page->text);
 ?>
 
-<h3>Полет на параплане для одного или двоих с фото и видеосъемкой со скидкой до 55%! Пари над землёй!</h3>
+<h3><? echo CHtml::encode($page->caption); ?></h3>
 
 <div class="row-fluid">
     <div class="span8">
@@ -44,6 +41,7 @@ echo CHtml::encode($page->text);
             </ul>
             <div id="myTabContent" class="tab-content">
                 <div class="tab-pane fade active in" id="first">
+                    <? echo CHtml::encode($page->text); ?>
                     <p>Клуб MAC – один из старейших парапланерных клубов, который стоял у истоков зарождения параглайдинга в Москве. Основатель клуба и его бессменный руководитель на протяжении уже более 10 лет – Сергей Елизаров, пилот с 18-летним опытом полетов и более чем 800 часами налета. Грамотная и квалифицированная команда клуба в сегодняшнем составе работает уже седьмой год и постоянно повышает свой летный и инструкторский опыт, выезжая на учебно-тренировочные сборы в различные страны.</p>
                     <b>Условия</b>
                     <ul>
