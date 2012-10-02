@@ -38,14 +38,14 @@ class PageController extends Controller
         $categories=Category::model()->findAll();
         //массив для меню
         $menu = array();
-        //первая часть url для страниц категорий
-        $urlPart = 'discount/category/';
         //записываем первое меню - 'Все' (его нет в БД)
         $menu[] = array(
             'label' => t('Все'),
             'url'   => array('discount/category/all')
         );
         //записываем всё остальное меню
+        //первая часть url для страниц категорий
+        $urlPart = 'discount/category/';
         foreach ($categories as $name)
         {
             $menu[] = array(
@@ -54,6 +54,7 @@ class PageController extends Controller
             );
         }
         return $menu;
+
         /*return array(
             array(
                 'label' => t('Все'),
