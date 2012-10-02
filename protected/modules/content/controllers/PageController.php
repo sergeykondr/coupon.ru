@@ -48,8 +48,10 @@ class PageController extends Controller
         $urlPart = 'discount/category/';
         foreach ($categories as $name)
         {
+            //обращаемся к модели категорий по id, узнаем кол-во акций
+            $count = Category::model()->with('discountCount')->findByPk($name->id);
             $menu[] = array(
-                'label' => t($name->name),
+                'label' => t($name->name.' ('.$count->discountCount.')'),
                 'url'   => array($urlPart.$name->url)
             );
         }

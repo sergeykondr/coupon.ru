@@ -29,7 +29,8 @@ class Category extends ActiveRecord
     public function relations()
     {
         return array(
-            'discount' => array(self::HAS_MANY, 'Discount', 'id'),
+            'discountCount'=>array(self::STAT, 'Discount', 'category_id'),
+            //'discount' => array(self::HAS_MANY, 'Discount', 'id'),
         );
     }
 
