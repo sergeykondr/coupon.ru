@@ -34,57 +34,80 @@ class PageController extends Controller
 
     public function subMenuItems()
     {
-        return array(
+        //узнаем категории из БД
+        $categories=Category::model()->findAll();
+        //массив для меню
+        $menu = array();
+        //первая часть url для страниц категорий
+        $urlPart = 'discount/category/';
+        //записываем первое меню - 'Все' (его нет в БД)
+        $menu[] = array(
+            'label' => t('Все'),
+            'url'   => array('discount/category/all')
+        );
+        //записываем всё остальное меню
+        foreach ($categories as $name)
+        {
+            $menu[] = array(
+                'label' => t($name->name),
+                'url'   => array($urlPart.$name->url)
+            );
+        }
+        return $menu;
+        /*return array(
             array(
                 'label' => t('Все'),
-                'url'   => array('content/page/index')
+                'url'   => array('discount/category/all')
             ),
             array(
                 'label' => t('Красота'),
-                'url'   => array('content/page/index')
+                'url'   => array('discount/category/beauty')
             ),
             array(
                 'label' => t('Здоровье'),
-                'url'   => array('content/page/index')
+                'url'   => array('discount/category/health')
             ),
             array(
                 'label' => t('Еда'),
-                'url'   => array('content/page/index')
+                'url'   => array('discount/category/food')
             ),
             array(
                 'label' => t('Развлечения'),
-                'url'   => array('content/page/index')
+                'url'   => array('discount/category/entertainment')
             ),
             array(
                 'label' => t('Отдых'),
-                'url'   => array('content/page/index')
+                'url'   => array('discount/category/rest')
             ),
             array(
                 'label' => t('Товары'),
-                'url'   => array('content/page/index')
+                'url'   => array('discount/category/beauty')
             ),
             array(
                 'label' => t('Фото'),
-                'url'   => array('content/page/index')
+                'url'   => array('discount/category/photo')
             ),
             array(
                 'label' => t('Обучение'),
-                'url'   => array('content/page/index')
+                'url'   => array('discount/category/education'),
+                'active'=>false
             ),
             array(
                 'label' => t('Авто'),
-                'url'   => array('content/page/index')
+                'url'   => array('discount/category/auto')
             ),
             array(
                 'label' => t('Прочее'),
-                'url'   => array('content/page/index')
+                'url'   => array('discount/category/other')
             ),
             array(
                 'label'   => Yii::app()->user->isGuest ?: t('Ваши') . '(' . Page::model()->count('user_id = ' . Yii::app()->user->id) . ')',
                 'url'     => array('/page/user/' . Yii::app()->user->id),
                 'visible' => !Yii::app()->user->isGuest
             )
-        );
+        );*/
+
+
     }
 
 
@@ -208,6 +231,17 @@ class PageController extends Controller
     public function actionIndex()
     {
         $this->page_title = '';
+
+
+        /*
+        echo '<pre>';
+        print_r($menu);
+        echo '</pre>';*/
+
+
+
+        //echo $categories->name;
+        //dump($categories->attributes);
 
         /*
         $data_provider = new CActiveDataProvider('Page', array(
