@@ -23,8 +23,64 @@ class DiscountController extends Controller
 
     public function actionIndex()
     {
-        echo "asd";
+        $this->page_title = '';
 
+
+        /*
+        echo '<pre>';
+        print_r($menu);
+        echo '</pre>';*/
+
+
+
+        //echo $categories->name;
+        //dump($categories->attributes);
+
+        /*
+        $data_provider = new CActiveDataProvider('Page', array(
+            'criteria' => array(
+                'condition' => "status = '" . Page::STATUS_PUBLISHED . "'",
+                'order'     => 'date_create DESC',
+                'with'      => array('tags')
+            ),
+            'pagination' => array(
+                'pageSize' => '10'
+            )
+        ));
+        */
+        $data_provider = new CActiveDataProvider('Discount', array(
+            'criteria' => array(
+                'order'     => 'date DESC',
+            ),
+            'pagination' => array(
+                'pageSize' => '10'
+            )
+        ));
+
+
+        $this->render('index', array(
+            'data_provider' => $data_provider,
+        ));
+
+    }
+
+    public function actionCategory($category)
+    {
+        //echo $category;
+
+        $activeDataProvider = new CActiveDataProvider(Discount::model()->with('category')->inCategory(1), array(
+                'criteria' => array(
+                    'order'     => 'date DESC',
+                ),
+                'pagination' => array(
+                    'pageSize' => '10'
+                )
+            )
+        );
+
+        $this->render('index', array(
+            'data_provider' => $activeDataProvider,
+        ));
     }
 
     public static function actionsTitles()
@@ -33,13 +89,37 @@ class DiscountController extends Controller
             'view'         => 'Просмотр акции',
             'index'        => 'Все акции',
             'views'         => 'Просмотр акции',
+            'category' => 'Просмотр категорий',
 
         );
     }
 
     public function subMenuItems()
     {
-        return array(
+        //узнаем категории из БД
+        $categories=Category::model()->findAll();
+        //массив для меню
+        $menu = array();
+        //записываем первое меню - 'Все' (его нет в БД)
+        $menu[] = array(
+            'label' => t('Все'),
+            'url'   => array('/discount/discount/index')
+        );
+        //записываем всё остальное меню
+        //первая часть url для страниц категорий
+        $urlPart = '/discount/discount/category/'; //'category/';
+        foreach ($categories as $name)
+        {
+            //обращаемся к модели категорий по id, узнаем кол-во акций
+            $count = Category::model()->with('discountCount')->findByPk($name->id);
+            $menu[] = array(
+                'label' => t($name->name.' ('.$count->discountCount.')'),
+                'url'   => array($urlPart.$name->url)
+            );
+        }
+        return $menu;
+
+        /*return array(
             array(
                 'label' => t('Все'),
                 'url'   => array('discount/category/all')
@@ -90,7 +170,9 @@ class DiscountController extends Controller
                 'url'     => array('/page/user/' . Yii::app()->user->id),
                 'visible' => !Yii::app()->user->isGuest
             )
-        );
+        );*/
+
+
     }
 
 }

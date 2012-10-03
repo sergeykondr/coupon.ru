@@ -42,7 +42,9 @@ class DiscountModule extends WebModule
     public function routes()
     {
         return array(
+            '/'                   => 'discount/discount/index',
             '/discount/<id:\d+>'  => 'discount/discount/view',
+            '/category/<category:[a-zA-Zа-яА-Я ]+>'  => 'discount/discount/category',
         );
     }
 }
