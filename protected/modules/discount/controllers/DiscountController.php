@@ -85,7 +85,7 @@ class DiscountController extends Controller
 
     }
 
-    //узнаем id категории по ее названию. вместотого, чтобы делать запрос к БД
+    //узнаем id категории по ее названию. вместо того, чтобы делать запрос к БД
     private function whatIdCategory($cat)
     {
         switch ($cat) {
@@ -111,7 +111,6 @@ class DiscountController extends Controller
                 return 10;
             default:
                 return 10;
-
         }
     }
 
