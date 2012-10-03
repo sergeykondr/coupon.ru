@@ -25,7 +25,6 @@ class DiscountController extends Controller
     {
         $this->page_title = '';
 
-
         /*
         echo '<pre>';
         print_r($menu);
@@ -64,11 +63,12 @@ class DiscountController extends Controller
 
     }
 
-    public function actionCategory($category)
+    public function actionCategory($cat)
     {
-        //echo $category;
+        $catId = $this->whatIdCategory($cat);
 
-        $activeDataProvider = new CActiveDataProvider(Discount::model()->with('category')->inCategory(1), array(
+
+        $activeDataProvider = new CActiveDataProvider(Discount::model()->with('category')->inCategory($catId), array(
                 'criteria' => array(
                     'order'     => 'date DESC',
                 ),
@@ -81,6 +81,38 @@ class DiscountController extends Controller
         $this->render('index', array(
             'data_provider' => $activeDataProvider,
         ));
+
+
+    }
+
+    //узнаем id категории по ее названию. вместотого, чтобы делать запрос к БД
+    private function whatIdCategory($cat)
+    {
+        switch ($cat) {
+            case 'beauty':
+                return 1;
+            case 'health':
+                return 2;
+            case 'food':
+                return 3;
+            case 'entertainment':
+                return 4;
+            case 'rest':
+                return 5;
+            case 'goods':
+                return 6;
+            case 'photo':
+                return 7;
+            case 'education':
+                return 8;
+            case 'auto':
+                return 9;
+            case 'other':
+                return 10;
+            default:
+                return 10;
+
+        }
     }
 
     public static function actionsTitles()
@@ -96,6 +128,7 @@ class DiscountController extends Controller
 
     public function subMenuItems()
     {
+
         //узнаем категории из БД
         $categories=Category::model()->findAll();
         //массив для меню
@@ -107,34 +140,36 @@ class DiscountController extends Controller
         );
         //записываем всё остальное меню
         //первая часть url для страниц категорий
-        $urlPart = '/discount/discount/category/'; //'category/';
+        $urlPart = '/discount/discount/category'; //'category/';
         foreach ($categories as $name)
         {
             //обращаемся к модели категорий по id, узнаем кол-во акций
             $count = Category::model()->with('discountCount')->findByPk($name->id);
             $menu[] = array(
                 'label' => t($name->name.' ('.$count->discountCount.')'),
-                'url'   => array($urlPart.$name->url)
+                'url'   => array($urlPart, 'cat' => $name->url )
             );
         }
         return $menu;
 
-        /*return array(
+        /*
+        return array(
             array(
                 'label' => t('Все'),
-                'url'   => array('discount/category/all')
+                'url'   => array('/discount/discount/index')
             ),
             array(
                 'label' => t('Красота'),
-                'url'   => array('discount/category/beauty')
+                'url'   => array('/discount/discount/category', 'cat'=>'beauty')
             ),
+
             array(
                 'label' => t('Здоровье'),
-                'url'   => array('discount/category/health')
+                'url'   => array('/category/health')
             ),
             array(
                 'label' => t('Еда'),
-                'url'   => array('discount/category/food')
+                'url'   => array('category/food')
             ),
             array(
                 'label' => t('Развлечения'),
@@ -170,8 +205,8 @@ class DiscountController extends Controller
                 'url'     => array('/page/user/' . Yii::app()->user->id),
                 'visible' => !Yii::app()->user->isGuest
             )
-        );*/
-
+        );
+        */
 
     }
 

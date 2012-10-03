@@ -44,7 +44,7 @@ class DiscountModule extends WebModule
         return array(
             '/'                   => 'discount/discount/index',
             '/discount/<id:\d+>'  => 'discount/discount/view',
-            '/category/<category:[a-zA-Zа-яА-Я ]+>'  => 'discount/discount/category',
+            '/category/<cat:[a-zA-Z]+>'  => 'discount/discount/category',
         );
     }
 }
