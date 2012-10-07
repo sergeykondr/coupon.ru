@@ -65,10 +65,13 @@ class DiscountController extends Controller
 
     public function actionCategory($cat)
     {
-        $catId = $this->whatIdCategory($cat);
+        //узнаем какую категорию запрашивают
+        $modelCat=Category::model()->findByAttributes(array('url'=>$cat));
 
+        if($modelCat===null)
+            throw new CHttpException(404,'Страница не найдена');
 
-        $activeDataProvider = new CActiveDataProvider(Discount::model()->with('category')->inCategory($catId), array(
+        $activeDataProvider = new CActiveDataProvider(Discount::model()->with('category')->inCategory($modelCat->id), array(
                 'criteria' => array(
                     'order'     => 'date DESC',
                 ),
@@ -83,35 +86,6 @@ class DiscountController extends Controller
         ));
 
 
-    }
-
-    //узнаем id категории по ее названию. вместо того, чтобы делать запрос к БД
-    private function whatIdCategory($cat)
-    {
-        switch ($cat) {
-            case 'beauty':
-                return 1;
-            case 'health':
-                return 2;
-            case 'food':
-                return 3;
-            case 'entertainment':
-                return 4;
-            case 'rest':
-                return 5;
-            case 'goods':
-                return 6;
-            case 'photo':
-                return 7;
-            case 'education':
-                return 8;
-            case 'auto':
-                return 9;
-            case 'other':
-                return 10;
-            default:
-                return 10;
-        }
     }
 
     public static function actionsTitles()
