@@ -97,10 +97,8 @@ class PageAdminController extends AdminController
 
     public function actionViewDiscount($id)
     {
-        //$model = $this->loadModel($id);
-        $model = new Discount();
-        $model->findByPk($id);
         $model = Discount::model()->findByPk($id);
+       // Yii::app()->end();
 
         $this->render('viewDiscount', array('model' => $model));
 
