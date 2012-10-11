@@ -12,37 +12,22 @@ $this->page_title = $page->title; //заголовок <h1>
             <div class="carousel-inner">
 
 
-                <?
+            <?
                 $i=0; //счетчик для первой картинки
                 foreach($page->gallery as $gal)
                 {
+                    ?>
+                    <div class="item<?
                     if ($i==0)
                     {
-                    $i++;
-                ?>
-                    <div class="item active">
-                    <?
-                        echo CHtml::image($gal->getHref());
-                    ?>
-                    </div>
-
-                    <?
+                        echo ' active';
+                       $i++;
                     }
-                    else
-                    {
-                    ?>
-                        <div class="item">
-                        <?
-                        echo CHtml::image($gal->getHref());
-                        ?>
-                        </div>
-                    <?
-                    }
+                    echo '">';
+                    echo CHtml::image($gal->getHref());
+                    echo '</div>';
                 }
-                    ?>
-
-
-
+            ?>
 
 
                 <!--
