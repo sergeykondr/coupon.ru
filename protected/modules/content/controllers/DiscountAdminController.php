@@ -62,7 +62,7 @@ class DiscountAdminController extends AdminController
     public function actionUpdate($id)
     {
         $model = $this->loadModel($id); //Discount
-        $form  = new Form('content.PageForm', $model);
+        $form  = new Form('content.DiscountForm', $model);
 
         $this->performAjaxValidation($model);
 
