@@ -76,12 +76,22 @@
 <!--    --><?// $this->widget('CommentsPortlet', array('model' => $data)); ?>
 <? endif ?>
 
+
+
 <?
-echo "инфа из MediaFile:";
-foreach ($data->gallery as $gal)
+
+//echo $data->getServerPath();
+
+foreach ($data->files as $gal)
 {
-    echo 2222;
-    echo $gal->path;
+  //  echo 222;
+//echo $gal->getHref();
+
+    echo $gal->path . '     /       ';
+    echo $gal->name;
+
+    echo CHtml::image($gal->getHref());
+    //echo $gal->path;
 }
 
 ?>

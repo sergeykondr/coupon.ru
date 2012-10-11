@@ -36,9 +36,9 @@ class ContentModule extends WebModule
     {
         return array(
             'Список страниц'    => Yii::app()->createUrl('/content/pageAdmin/manage'),
-            'Список акций (new)'    => Yii::app()->createUrl('/content/pageAdmin/manage'),
+            'Список дискаунтов (new)'    => Yii::app()->createUrl('/content/discountAdmin/manage'),
             'Добавить страницу' => Yii::app()->createUrl('/content/pageAdmin/create'),
-            'Добавить акцию (new)' => Yii::app()->createUrl('/content/pageAdmin/creatediscount'),
+            'Добавить дискаунт (new)' => Yii::app()->createUrl('/content/discountAdmin/create'),
             'Разделы страниц'   => Yii::app()->createUrl('/content/pageSectionAdmin/manage'),
             'Добавить раздел'   => Yii::app()->createUrl('/content/pageSectionAdmin/create'),
             'Управление меню'   => Yii::app()->createUrl('/content/menuAdmin/manage'),
