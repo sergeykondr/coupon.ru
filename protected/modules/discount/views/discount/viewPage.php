@@ -10,6 +10,42 @@ $this->page_title = $page->title; //заголовок <h1>
         <div id="myCarousel" class="carousel slide">
             <!-- Carousel items -->
             <div class="carousel-inner">
+
+
+                <?
+                $i=0; //счетчик для первой картинки
+                foreach($page->gallery as $gal)
+                {
+                    if ($i==0)
+                    {
+                    $i++;
+                ?>
+                    <div class="item active">
+                    <?
+                        echo CHtml::image($gal->getHref());
+                    ?>
+                    </div>
+
+                    <?
+                    }
+                    else
+                    {
+                    ?>
+                        <div class="item">
+                        <?
+                        echo CHtml::image($gal->getHref());
+                        ?>
+                        </div>
+                    <?
+                    }
+                }
+                    ?>
+
+
+
+
+
+                <!--
                 <div class="item active">
                     <img src="http://alkupone.ru/system/picture/7616/huge_1346429445.jpg" alt="">
                 </div>
@@ -19,6 +55,7 @@ $this->page_title = $page->title; //заголовок <h1>
                 <div class="item">
                     <img src="http://alkupone.ru/system/picture/7616/huge_1346429445.jpg" alt="">
                 </div>
+                -->
             </div>
             <!-- Carousel nav -->
             <a class="carousel-control left" href="#myCarousel" data-slide="prev">‹</a>
