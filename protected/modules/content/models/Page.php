@@ -76,7 +76,7 @@ class Page extends ActiveRecord
                  'FileManager' => array(
                      'class' => 'application.components.activeRecordBehaviors.FileManagerBehavior',
                      'tags' => array(
-                         'gallery' => array(
+                         'files' => array(
                              'title' => 'Галерея',
                              'data_type' => 'image'
                          )
