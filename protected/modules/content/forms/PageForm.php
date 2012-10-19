@@ -31,6 +31,7 @@ return array(
         'text'     => array(
             'type' => 'editor'
         ),
+        'MetaTag' =>array('type'=>'meta_tags'),
     ),
     'buttons'              => array(
         'submit' => array(

@@ -15,7 +15,6 @@ class HelpController extends Controller
         );
     }
 
-
     public function actions()
     {
         return array(

@@ -1,8 +1,8 @@
 <style type="text/css">
-    .save_alias, .meta-tags-form{ display: none }
+    .save_alias, .meta-tags-form{  }
 </style>
 <? $class = get_class($this->model); ?>
-<div id="<? echo $this->id ?>" class="meta-tags-form">
+<div id="<? echo $this->id ?>" class="meta-tags-form modal-body ">
 
     <p>
         <? echo CHtml::activeLabel($model, 'title'); ?>

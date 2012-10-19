@@ -40,7 +40,8 @@ class MetaTags extends JuiInputWidget
             ),
             'linkOptions'=>array(
                 'class'=> 'btn btn-info'
-            )
+            ),
+            'title' => 'мета тег',
         ));
     }
 }

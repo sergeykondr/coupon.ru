@@ -1,15 +1,34 @@
 <br>
-Заголовок: <?= CHtml::link(CHtml::encode($data->title), $data->href, array('class' => 'page-title')); ?>
-<br>
-Описание: <?= CHtml::link(CHtml::encode($data->caption), $data->href, array('class' => 'page-title')); ?>
+Заголовок: <?= CHtml::link(CHtml::encode($data->name), $data->href, array('class' => 'page-title')); ?>
 <br>
 Фото:
 <br>
-Истекает: <?= Yii::app()->dateFormatter->formatDateTime($data->date, 'long', 'short') ?>
+
+Истекает: <?= Yii::app()->dateFormatter->formatDateTime($data->endsell, 'long', 'short') ?>
+<br>
+
+<?
+//$this->now = new CDbExpression('NOW()');
+echo $a =  time();
+echo '<br>';
+echo $b = strtotime($data->endsell);
+echo '<br>';
+echo $c = $b-$a;
+echo '<br>осталось часов: ' . floor($c/60/60);
+
+?>
+<br>
+<?= Yii::app()->dateFormatter->format('d MMMM yyyy hh mm', time()); ?>
 <br>
 Осталось:
-<br clear="all"/>
 
+<br>
+Купили
+<br>
+Метро
+<br>
+Скидка <? echo CHtml::encode($data->discount); ?>% за <? echo CHtml::encode($data->pricecoupon); ?> р.
+<br clear="all"/>
 <!--
 <div class="span4">
     <h2>Heading</h2>

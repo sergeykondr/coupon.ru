@@ -73,6 +73,7 @@ class Page extends ActiveRecord
             parent::behaviors(),
             array(
                  'Tag' => array('class' => 'application.components.activeRecordBehaviors.TagBehavior'),
+                 'MetaTag' => array('class' => 'application.components.activeRecordBehaviors.MetaTagBehavior'),
                  'FileManager' => array(
                      'class' => 'application.components.activeRecordBehaviors.FileManagerBehavior',
                      'tags' => array(

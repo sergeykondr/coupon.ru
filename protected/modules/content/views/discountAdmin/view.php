@@ -11,13 +11,23 @@ $this->widget('AdminDetailView', array(
     'data'=>$model,
     'attributes'=>array(
         'category_id',
-        'title',
-        'caption',
-        'numbers_buy',
-        'price',
+        'name',
+        'description',
         array(
-            'name'  => 'date',
-            'value' => date('d.m.Y h:i', strtotime($model->date))
+            'name'  => 'beginsell (Дата начала продаж купонов)',
+            'value' => date('d.m.Y h:i', strtotime($model->beginsell))
+        ),
+        array(
+            'name'  => 'endsell (Дата окончания продаж купонов)',
+            'value' => date('d.m.Y h:i', strtotime($model->endsell))
+        ),
+        array(
+            'name'  => 'beginvalid (Дата начала действия купона)',
+            'value' => date('d.m.Y h:i', strtotime($model->beginvalid))
+        ),
+        array(
+            'name'  => 'endvalid (Дата окончания действия купона)',
+            'value' => date('d.m.Y h:i', strtotime($model->endvalid))
         ),
         array(
             'name'  => 'text',

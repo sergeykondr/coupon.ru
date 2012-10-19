@@ -49,7 +49,7 @@ class DiscountController extends Controller
         */
         $data_provider = new CActiveDataProvider('Discount', array(
             'criteria' => array(
-                'order'     => 'date DESC',
+                'order'     => 'beginsell DESC',
             ),
             'pagination' => array(
                 'pageSize' => '10'

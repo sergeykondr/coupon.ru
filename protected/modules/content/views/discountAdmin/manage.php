@@ -9,11 +9,11 @@ $this->widget('AdminGridView', array(
     'filter'       => $model,
     'columns' => array(
         array(
-            'name' => 'title',
+            'name' => 'name',
             'type' => 'raw'
         ),
 
-        'date',
+        'beginsell',
         array(
             'class'=>'CButtonColumn',
         ),
