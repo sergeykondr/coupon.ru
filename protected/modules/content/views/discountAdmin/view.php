@@ -14,20 +14,20 @@ $this->widget('AdminDetailView', array(
         'name',
         'description',
         array(
-            'name'  => 'beginsell (Дата начала продаж купонов)',
-            'value' => date('d.m.Y h:i', strtotime($model->beginsell))
+            'name'  => 'beginsell (Дата начала продаж купонов. Формат по русски)',
+            'value' => date('d.m.Y H:i:s', strtotime($model->beginsell))
         ),
         array(
-            'name'  => 'endsell (Дата окончания продаж купонов)',
-            'value' => date('d.m.Y h:i', strtotime($model->endsell))
+            'name'  => 'endsell (Дата окончания продаж купонов. Формат по русски)',
+            'value' => date('d.m.Y H:i:s', strtotime($model->endsell))
         ),
         array(
-            'name'  => 'beginvalid (Дата начала действия купона)',
-            'value' => date('d.m.Y h:i', strtotime($model->beginvalid))
+            'name'  => 'beginvalid (Дата начала действия купона. Формат по русски)',
+            'value' => date('d.m.Y H:i:s', strtotime($model->beginvalid))
         ),
         array(
-            'name'  => 'endvalid (Дата окончания действия купона)',
-            'value' => date('d.m.Y h:i', strtotime($model->endvalid))
+            'name'  => 'endvalid (Дата окончания действия купона. Формат по русски)',
+            'value' => date('d.m.Y H:i:s', strtotime($model->endvalid))
         ),
         array(
             'name'  => 'text',

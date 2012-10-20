@@ -1,5 +1,7 @@
 <?
 $this->page_title = $page->title;
+
+
 if (Yii::app()->user->checkAccess('Page_update'))
 {
     $link = CHtml::link(
