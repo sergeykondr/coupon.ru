@@ -82,6 +82,11 @@ return array(
             'type' => 'text'
         ),
 
+        'company_time'    => array(
+            'type' => 'text'
+        ),
+        '<br><p>Узнать координаты можно <a  target="_blank" href="http://api.yandex.ru/maps/tools/getlonglat/">тут</a></p>',
+
         'company_coordinates'    => array(
             'type' => 'text'
         ),
