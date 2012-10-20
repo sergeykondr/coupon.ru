@@ -73,7 +73,7 @@ class DiscountController extends Controller
 
         $activeDataProvider = new CActiveDataProvider(Discount::model()->with('category')->inCategory($modelCat->id), array(
                 'criteria' => array(
-                    'order'     => 'date DESC',
+                    'order'     => 'beginsell DESC',
                 ),
                 'pagination' => array(
                     'pageSize' => '10'
