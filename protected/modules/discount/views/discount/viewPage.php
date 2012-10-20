@@ -1,9 +1,9 @@
 <?
-$this->page_title = $page->title; //заголовок <h1>
+$this->page_title = $page->name; //заголовок <h1>
 //echo CHtml::encode($page->text);
 ?>
 
-<h3><? echo CHtml::encode($page->title); ?></h3>
+<h3><? echo CHtml::encode($page->name); ?></h3>
 
 <div class="row-fluid">
     <div class="span8">
@@ -18,12 +18,16 @@ $this->page_title = $page->title; //заголовок <h1>
                 {
                     ?>
                     <div class="item<?
+                    /*
                     if ($i==0)
                     {
                         echo ' active';
                        $i++;
                     }
                     echo '">';
+                    */
+                    echo $action = (!$i++) ? ' active">' : '">';
+
                     echo CHtml::image($gal->getHref());
                     echo '</div>';
                 }
