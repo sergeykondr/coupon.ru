@@ -89,8 +89,8 @@ small.grey {
 }
 
 .breadcrumb li {
-    padding-left: 4px;
-    padding-right: 4px;
+    padding-left: 2px;
+    padding-right: 2px;
 }
 
 .breadcrumb li.active > a, .breadcrumb li > a:hover {
