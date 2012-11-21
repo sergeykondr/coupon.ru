@@ -1,5 +1,5 @@
 <?
-$this->page_title = t('Рекдирование страницы');
+$this->page_title = t('Редактирование страницы');
 
 $this->tabs = array(
     'список страниц'    => $this->createUrl('manage'),
