@@ -6,6 +6,7 @@ return array(
         'clientOptions' => array('validateOnSubmit' => true),
     ),
     'elements'             => array(
+        'MetaTag' =>array('type'=>'meta_tags'),
         'name'    => array(
             'type' => 'text'
         ),
@@ -24,10 +25,8 @@ return array(
 
 
         'description'    => array(
-            'type' => 'editor'
-        ),
-        'description'    => array(
-            'type' => 'editor'
+            'type' => 'textarea',
+             //echo $form->textArea($model, 'Details', array('maxlength' => 300, 'rows' => 6, 'cols' => 50));
         ),
 
         //дата акции
@@ -98,7 +97,6 @@ return array(
         'xml_kuponator'    => array(
             'type' => 'checkbox'
         ),
-        'hint' => '<h2>HFP</h2>',
 
         /*
             'url' => array(

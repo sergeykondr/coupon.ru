@@ -1,5 +1,5 @@
 <?
-$this->page_title = $page->title;
+//$this->pageTitle = $page->title;
 
 ?>
 

@@ -16,7 +16,6 @@ class PageController extends Controller
     }
 
 
-
     public static function actionsTitles()
     {
         return array(
@@ -180,8 +179,8 @@ class PageController extends Controller
         {
             $this->pageNotFound();
         }
-        //$this->setMetaTags($page);
-       // Yii::app()->clientScript->registerMetaTag;
+        $this->setMetaTags($page);
+        //Yii::app()->clientScript->registerMetaTag;
 
 
         $this->render("view", array(
