@@ -1,34 +1,36 @@
-<br>
-Заголовок: <?= CHtml::link(CHtml::encode($data->name), $data->href, array('class' => 'page-title')); ?>
-<br>
-Фото:
-<br>
+<?= (($index % 3)==0 ) ? '<div class="row-fluid">' : '' ?>
+    <div class="span4 well">
+        <?
+        $i=0; //счетчик для первой картинки
+        $imghtml=''; //сюда пишем адрес первой картинки
+        foreach($data->gallery as $gal)
+        {
+            $imghtml = CHtml::image($gal->getHref(),'',array('class'=>'img-rounded'));
+            break;
+        }
+        echo CHtml::link($imghtml, $data->href, array('class' => 'page-title'));
+        ?>
+        <br>
+        <!--заголовок-->
+        <?= CHtml::link(CHtml::encode($data->name), '/discount/'.$data->id, array('class' => 'page-title')); ?>
+        <br>
+        <p><small>Купон действует до <?= Yii::app()->dateFormatter->format('d MMMM yyyy', $data->endvalid); ?></small></p>
+        Метро
+        <br>
+        Скидка <? echo CHtml::encode($data->discount); ?>% за <? echo CHtml::encode($data->pricecoupon); ?> р.
+        <br>
+        <div class="row-fluid">
+            <div class="span6">
+                <center>Осталось:  <?=$data->expires('short');?></center>
+            </div>
+            <div class="span6">
+                <center>Купили:  <? echo $data->cheat() + $data->numbers_buy;  ?></center>
+                <!-- <br clear="all"/> -->
+            </div>
+        </div>
+    </div>
+<?= (($index % 3)==2 ) ? '</div>' : '' ?>
 
-Истекает: <?= Yii::app()->dateFormatter->formatDateTime($data->endsell, 'long', 'short') ?>
-<br>
-
-<?
-//$this->now = new CDbExpression('NOW()');
-echo $a =  time();
-echo '<br>';
-echo $b = strtotime($data->endsell);
-echo '<br>';
-echo $c = $b-$a;
-echo '<br>осталось часов: ' . floor($c/60/60);
-
-?>
-<br>
-<?= Yii::app()->dateFormatter->format('d MMMM yyyy hh mm', time()); ?>
-<br>
-Осталось:
-
-<br>
-Купили
-<br>
-Метро
-<br>
-Скидка <? echo CHtml::encode($data->discount); ?>% за <? echo CHtml::encode($data->pricecoupon); ?> р.
-<br clear="all"/>
 <!--
 <div class="span4">
     <h2>Heading</h2>

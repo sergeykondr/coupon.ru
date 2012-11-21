@@ -31,11 +31,18 @@ class Category extends ActiveRecord
         $nowDate = $this->nowDate();
         return array(
             'discountCount'=>array(self::STAT, 'Discount', 'category_id',
-                                'condition'=>"DATE(beginsell) <= '" . $this->nowDate() ."' AND DATE(endsell) >= '".$this->nowDate(). "'"
+                                'condition'=>$this->queryActual()
             ),
             //'discount' => array(self::HAS_MANY, 'Discount', 'id'),
         );
     }
+
+
+    public function queryActual()
+    {
+        return "DATE(beginsell) <= '" . $this->nowDate() ."' AND DATE(endsell) >= '".$this->nowDate(). "'";
+    }
+
 
     private function nowDate()
     {

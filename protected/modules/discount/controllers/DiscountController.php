@@ -2,6 +2,20 @@
 
 class DiscountController extends Controller
 {
+
+    public static function actionsTitles()
+    {
+        return array(
+            'view'         => 'Просмотр акции',
+            'index'        => 'Все акции',
+            'views'         => 'Просмотр акции',
+            'category' => 'Просмотр категорий',
+            'buy' => 'Покупка акции',
+
+        );
+    }
+
+
     public function actionView($id)
     {
         $page = Discount::model()->with('category')->findByPk($id);
@@ -10,20 +24,109 @@ class DiscountController extends Controller
             $this->pageNotFound();
         }
 
+        //узнать в какой категории акция
+        //$similar = Discount::model()->with('category')->findByPk($id);
+        $similars = new CActiveDataProvider('Discount', array(
+            'criteria' => array(
+                'order'     => 'all_buy DESC',
+                'limit'=>5,
+                'condition'=>'category_id = ' . $page->category_id . ' AND id <>' . $page->id, //выводим из тойже категории + исключаем текущий дискаунт
+            ),
+            'pagination' => array(
+                'pageSize' => '5'
+            )
+        ));
+        $similars->setPagination(false);
+
        // echo $page->category->name;
        // dump($page->category->attributes);
 
         $this->render("viewPage", array(
+            "page" => $page, "similars" => $similars,
+        ));
+    }
+
+
+    public function actionBuy($id)
+    {
+        $model=new Buy;
+        if(isset($_POST['Buy']))
+        {
+            $model->attributes=$_POST['Buy'];
+            if($model->validate())
+            {
+                $model->discount_id = $id;
+                $model->date = $model->nowDate();
+
+                $page = Discount::model()->with('category')->findByPk($id);
+
+                /*проверка покупался ли купон ранее
+                если запись с таким e-mail и discountid существует,
+                то просто показываем купон, без заведения новой строчки в БД buy (покупка)
+                */
+                $buyIsExist=Buy::model()->find(array(
+                    'condition'=>'email=:email AND discount_id=:discountID',
+                    'params'=>array(':email'=>$model->email,':discountID'=>$id),
+                ));
+                //если такой покупки еще нет, то делаем соответствующие записи
+                //
+                if (!$buyIsExist)
+                {
+                    //добавляем новую покупку.
+                    $model->save();
+                    $buyCurrentId = $model->id; //узнаем id новой покупки
+                    //счетчик купивших в discount +1
+                    if (!$page)
+                    {
+                        $this->pageNotFound();
+                    }
+                    $page->numbers_buy ++;
+                    $page->save();
+
+                }
+                else
+                {
+                    $buyCurrentId = $buyIsExist->id; //узнаем id старой покупки
+                }
+
+                //узнать id текущей покупки
+                //echo $model->id;
+
+                //генерируем купон
+                $similars = Discount::model()->findByPk($id);
+                if (!$page)
+                {
+                    $this->pageNotFound();
+                }
+                $this->renderPartial("viewCoupon", array(
+                    "page" => $page, "similars" => $similars, "buyCurrentId" => $buyCurrentId,
+                ));
+            }
+        }
+
+        //$this->redirect(array('site/index'));
+        /*
+        $page = Discount::model()->with('category')->findByPk($id);
+        if (!$page)
+        {
+            $this->pageNotFound();
+        }
+
+        // echo $page->category->name;
+        // dump($page->category->attributes);
+
+        $this->render("viewPage", array(
             "page" => $page
         ));
-
-
+        */
 
     }
 
+
     public function actionIndex()
     {
-        $this->page_title = '';
+        //$this->page_title = '';
+        $this->pageTitle = 'Гланая страница';
 
         /*
         echo '<pre>';
@@ -52,7 +155,7 @@ class DiscountController extends Controller
                 'order'     => 'beginsell DESC',
             ),
             'pagination' => array(
-                'pageSize' => '10'
+                'pageSize' => '30'
             )
         ));
 
@@ -65,7 +168,9 @@ class DiscountController extends Controller
 
     public function actionCategory($cat)
     {
-        //узнаем какую категорию запрашивают
+        //получаем критерию актуальных акций
+        //$cr= ;
+
         $modelCat=Category::model()->findByAttributes(array('url'=>$cat));
 
         if($modelCat===null)
@@ -74,9 +179,10 @@ class DiscountController extends Controller
         $activeDataProvider = new CActiveDataProvider(Discount::model()->with('category')->inCategory($modelCat->id), array(
                 'criteria' => array(
                     'order'     => 'beginsell DESC',
+                    'condition'=>Category::model()->queryActual(),
                 ),
                 'pagination' => array(
-                    'pageSize' => '10'
+                    'pageSize' => '30'
                 )
             )
         );
@@ -88,16 +194,6 @@ class DiscountController extends Controller
 
     }
 
-    public static function actionsTitles()
-    {
-        return array(
-            'view'         => 'Просмотр акции',
-            'index'        => 'Все акции',
-            'views'         => 'Просмотр акции',
-            'category' => 'Просмотр категорий',
-
-        );
-    }
 
     public function subMenuItems()
     {
@@ -124,6 +220,7 @@ class DiscountController extends Controller
             );
         }
         return $menu;
+
 
         /*
         return array(

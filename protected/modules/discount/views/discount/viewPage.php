@@ -3,11 +3,11 @@ $this->page_title = $page->name; //заголовок <h1>
 //echo CHtml::encode($page->text);
 ?>
 
-<h3><? echo CHtml::encode($page->description); ?></h3>
+<h4><? echo CHtml::encode($page->description); ?></h4>
 
 <div class="row-fluid">
     <div class="span8">
-        <div id="myCarousel" class="carousel slide">
+        <div id="myCarousel" class="carousel slide carousel-hidden">
             <!-- Carousel items -->
             <div class="carousel-inner">
 
@@ -17,7 +17,7 @@ $this->page_title = $page->name; //заголовок <h1>
                 foreach($page->gallery as $gal)
                 {
                     ?>
-                    <div class="item<?
+                    <div class="item<?=(!$i++) ? ' active">' : '">';
                     /*
                     if ($i==0)
                     {
@@ -26,14 +26,11 @@ $this->page_title = $page->name; //заголовок <h1>
                     }
                     echo '">';
                     */
-                    echo $action = (!$i++) ? ' active">' : '">';
-
                     echo CHtml::image($gal->getHref());
                     echo '</div>';
+
                 }
             ?>
-
-
                 <!--
                 <div class="item active">
                     <img src="http://alkupone.ru/system/picture/7616/huge_1346429445.jpg" alt="">
@@ -52,60 +49,99 @@ $this->page_title = $page->name; //заголовок <h1>
         </div>
     </div>
     <div class="span4 well">
-        <p>Скидка до NNN % за MMM Р.   Купить</p>
-        Уже купили
-        Купон действует до
-        До завершения осталось:
-        <p>vk.com fb.com g+</p>
+        <p>Скидка до <?=$page->discount;?> % за <?=$page->pricecoupon;?> Р.</p>
+
+        <!-- Начало описания виджета модального окна -->
+            <?php $this->beginWidget('bootstrap.widgets.BootModal', array('id'=>'buyModal')); ?>
+                <?
+                $qForm = new Buy;
+                $form = $this->beginWidget('CActiveForm', array(
+                    'id' => 'EmailForm',
+                    'enableClientValidation' => true,
+                    'clientOptions' => array(
+                        'validateOnSubmit' => true,
+                    ),
+                    'action' => array('/discount/buy/'.$page->id),
+                ));
+                ?>
+                    <div class="modal-header">
+                        <a class="close" data-dismiss="modal">&times;</a>
+                        <h3>Приобретение купона</h3>
+                    </div>
+                    <div class="modal-body">
+                        <?php echo $form->errorSummary($qForm); ?>
+                        <?php echo $form->labelEx($qForm,'email'); ?>
+                        <?php echo $form->textField($qForm,'email', array('size'=>35)); ?>
+                        <?php echo $form->error($qForm,'email'); ?>
+                        <?//php echo $form->textFieldRow($model, 'textField', array('class'=>'span3')); ?>
+                        <?php // echo CHtml::submitButton('Отправить'); ?>
+                     </div>
+
+                    <div class="modal-footer">
+                        <?php $this->widget('bootstrap.widgets.BootButton', array('buttonType'=>'submit', 'label'=>'Получить купон')); ?>
+                    </div>
+                <?php $this->endWidget(); ?>
+            <?php $this->endWidget(); ?>
+        <!-- Конец описания виджета модального окна -->
+
+        <?php $this->widget('bootstrap.widgets.BootButton', array(
+          'label'=>'Купить',
+           'url'=>'#buyModal',
+            'type'=>'primary',
+            'htmlOptions'=>array('data-toggle'=>'modal'),
+        )); ?>
+
+
+
+
+        <br>
+        Уже купили: <? echo $page->cheat() + $page->numbers_buy;  ?><br>
+        Купон действует до: <?= Yii::app()->dateFormatter->format('d MMMM yyyy', $page->endvalid); ?><br>
+        До завершения осталось: <?=$page->expires('long');?> <br>
+
+    </div>
+    <div class="span4 well">
+        Поделиться в социальных сетях:<br>
+       <script type="text/javascript" src="//yandex.st/share/share.js" charset="utf-8"></script>
+       <div class="yashare-auto-init" data-yashareL10n="ru" data-yashareType="none" data-yashareQuickServices="yaru,vkontakte,facebook,twitter,odnoklassniki,moimir,lj"></div>
+
     </div>
 </div>
+
+<script src="http://api-maps.yandex.ru/2.0-stable/?load=package.full&lang=ru-RU&coordorder=longlat" type="text/javascript"></script>
 <script type="text/javascript">
-    // Создает обработчик события window.onLoad
-    YMaps.jQuery(function () {
-        // Создает экземпляр карты и привязывает его к созданному контейнеру
-        var map = new YMaps.Map(YMaps.jQuery("#YMapsID")[0]);
-
-        // Устанавливает начальные параметры отображения карты: центр карты и коэффициент масштабирования
-        map.setCenter(new YMaps.GeoPoint(30.343561,60.050282), 14);
+    // Как только будет загружен API и готов DOM, выполняем инициализацию
+    var myMap;
+    ymaps.ready(init);
 
 
-        //map.addControl(new YMaps.TypeControl());
-        map.addControl(new YMaps.ToolBar());
-        map.addControl(new YMaps.Zoom());
-        //map.addControl(new YMaps.MiniMap());
-        //map.addControl(new YMaps.ScaleLine());
+    function init () {
+        myMap = new ymaps.Map("map", {
+            center: [37.631534,55.763964],
+            zoom: 10
+        }),
+            // При создании метки указываем ее свойства:  текст для отображения в иконке и содержимое балуна,
+            // который откроется при нажатии на эту метку
+            myPlacemark = new ymaps.Placemark([<?= CHtml::encode($page->company_coordinates); ?>], {
+                // Свойства
+                balloonContent: '<?= CHtml::encode($page->company_address); ?>'
+                //iconContent: 'Щелкни по мне',
+                //balloonContentHeader: 'Заголовок',
+                //balloonContentBody: 'Содержимое <em>балуна</em>',
+                //balloonContentFooter: 'Подвал'
+            }, {
+                // Опции
+                preset: 'twirl#blueStretchyIcon' // иконка растягивается под контент
+            });
 
-        //включить масштабирование колесиком мыши
-        map.enableScrollZoom();
+        // Добавляем метку на карту
+        myMap.geoObjects.add(myPlacemark);
 
-        // Создает метку и добавляет ее на карту
-        // Создает метку с маленьким значком красного цвета
-        var placemark = new YMaps.Placemark(new YMaps.GeoPoint(30.343561, 60.050282),{style: "default#darkblueSmallPoint"});
-
-
-
-        placemark.name = "Пивной ресторан Флинт";
-        placemark.description = "проспект Просвещения д.33";
-        map.addOverlay(placemark);
-
-        // Открывает балун
-        //placemark.openBalloon();
-
-
-
-
-        // Создает метку с маленьким значком красного цвета
-
-
-
-    })
-    enableScrollZoom();
-
-
+    }
 </script>
+
 <div class="row-fluid">
     <div class="span8">
-        табы
         <div class="bs-docs-example">
             <ul id="myTab" class="nav nav-tabs">
                 <li class="active"><a href="#first" data-toggle="tab">Описание/Условие</a></li>
@@ -118,41 +154,50 @@ $this->page_title = $page->name; //заголовок <h1>
                     //echo CHtml::encode($page->text);
                     //$parts = explode('{{cut}}', $page->text);
                     //echo array_shift($parts);
-                    echo CHtml::encode($page->text);
+                    echo $page->text;
                     ?>
                 </div>
                 <div class="tab-pane fade" id="second">
-                    <script src="http://api-maps.yandex.ru/1.1/index.xml?key=AFf-glABAAAAqNw4bwQA9awjTssGwVzj3NjVQYoih034tyQAAAAAAAAAAADfnVtM3sJaBJBFRPGFg7xkVUJXUA==" type="text/javascript"></script>
 
+                    <div id="map" style="width:662px;height:400px"></div>
 
-                    <div id="YMapsID" style="width:600px;height:400px"></div>
                     <p><?= CHtml::encode($page->company_name); ?></p>
                     <p><?= CHtml::link(CHtml::encode($page->company_url), $page->company_url); ?></p>
                     <p>тел.: <?= CHtml::encode($page->company_tel); ?></p>
                     <p><?= CHtml::encode($page->company_address); ?></p>
                     <p><?= CHtml::encode($page->company_time); ?></p>
-
                 </div>
                 <div class="tab-pane fade" id="third">
                     <p>Комментарии</p>
                 </div>
-
             </div>
         </div>
     </div>
+
     <div class="span4 well">
-        блоки похожих акций
+        <b>Похожие акции:</b>
+        <?php $this->widget('zii.widgets.CListView', array(
+        'dataProvider'=>$similars,
+        'itemView'=>'_viewSimilar',
+        'summaryText'  => '',
+          ));
+        ?>
     </div>
 </div>
 
-
 <script type="text/javascript">
-    YMaps.jQuery("#second").bind('click', function () {
-        $('#YMapsID').toggle();
-        map.redraw(); // Перерисовка карты
-        return false;
-    });
+    $('a[data-toggle="tab"]').on('shown', function (e) {
+        ymaps.ready(function () {
+            //alert($('#profile').is(':visible'));
+            console.log(e.target);
+            var strUrl = String(e.target);
+            strUrl.indexOf("profile");
+            //alert ($(e.target).attr('id'));
+
+            if ($(e.target).attr('href') == '#second' )
+            {
+                myMap.container.fitToViewport();
+            }
+        })
+    })
 </script>
-
-
-
