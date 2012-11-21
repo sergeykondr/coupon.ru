@@ -201,12 +201,12 @@ class AdminGridView extends BootGridView
                 }
             }
         }
-
+        /* sergeykondr.
         if (!$button_column_exists)
         {
             $this->addColumn(array('class' => 'CButtonColumn'), count($this->columns) + 1);
         }
-
+        */
         if ($this->many_many_sortable)
         {
             $this->addColumn(array(
