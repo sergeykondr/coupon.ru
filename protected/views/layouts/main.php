@@ -1,12 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="utf-8">
-    <title><? echo $this->meta_title ?></title>
-    <meta name="description" content="<? echo $this->meta_description ?>">
-    <meta name="keywords" content="<? echo $this->meta_keywords ?>">
-    <meta name="author" content="">
-
+<title><? echo $this->pageTitle ?></title>
+<meta charset="utf-8">
+    <? /*<meta name="description" content="< echo $this->meta_description >">
+    <meta name="keywords" content="< echo $this->meta_keywords >">
+    <meta name="author" content=""> */?>
     <!--[if lt IE 9]>
     <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
@@ -26,6 +25,7 @@
     $cs->registerCssFile($base.'/css/site/comments.css');
     $cs->registerCssFile($base.'/css/site/favorites.css');
     $cs->registerCssFile($base.'/css/site/rating.css');
+    $cs->registerCssFile($base.'/css/site/discount.css');
     $cs->registerScriptFile($base.'/js/site/modal-windows.js');
 
 //    $cs->registerCssFile(Yii::app()->assetManager->publish(Yii::getPathOfAlias('webroot.css.site.styles') . '.less'));
@@ -42,9 +42,7 @@
 
 
     ?>
-
     <link rel="shortcut icon" href="/favicon.ico">
-
 </head>
 
 <body>
