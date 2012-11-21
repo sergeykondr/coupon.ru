@@ -169,8 +169,9 @@ abstract class Controller extends CController implements ControllerInterface
             ));
             if ($meta_tag)
             {
+                $this->pageTitle = $meta_tag->title;
                 $meta_tag = array(
-                    'title' => $meta_tag->title,
+                    //'title' => $meta_tag->title,
                     'description' => $meta_tag->description,
                     'keywords' => $meta_tag->keywords
                 );
