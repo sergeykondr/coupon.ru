@@ -5,6 +5,25 @@ $this->page_title = $page->name; //заголовок <h1>
 
 <h4><? echo CHtml::encode($page->description); ?></h4>
 
+<?
+$list = CHtml::listData($metro, 'id', 'name');
+
+    $this->widget('application.components.formElements.chosen.Chosen',array(
+    'name' => 'metro', // input name
+    'value' => array(1, 55), // selection
+    'multiple'=>true,
+    'data' => $list,
+    ));
+
+
+echo CHtml::dropDownList('listname', 'F',
+    array('M' => 'Male', 'F' => 'Female'));
+?>
+<?php echo CHtml::dropDownList('categories', '',
+    $list,
+    array('empty' => '(Select a category)'));
+?>
+
 <div class="row-fluid">
     <div class="span8">
         <div id="myCarousel" class="carousel slide carousel-hidden">
@@ -166,6 +185,7 @@ $this->page_title = $page->name; //заголовок <h1>
                     <p>тел.: <?= CHtml::encode($page->company_tel); ?></p>
                     <p><?= CHtml::encode($page->company_address); ?></p>
                     <p><?= CHtml::encode($page->company_time); ?></p>
+                    <p>Метро: <?php echo implode(', ', CHtml::listData($page->metros, 'id', 'name')); ?></p>
                 </div>
                 <div class="tab-pane fade" id="third">
                     <p>Комментарии</p>
