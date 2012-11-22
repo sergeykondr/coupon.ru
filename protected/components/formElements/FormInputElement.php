@@ -8,7 +8,7 @@ class FormInputElement extends CFormInputElement
         'alias'             => 'AliasField',
         'file'              => 'FileWidget',
         'captcha'           => 'Captcha',
-        'chosen'            => 'Chosen',
+        'chosen'            => 'ChosenAlex.ChosenWidget',
         'all_in_one_input'  => 'AllInOneInput',
         'multi_select'      => 'EMultiSelect',
         'date'              => 'FJuiDatePicker',
