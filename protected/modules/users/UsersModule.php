@@ -45,8 +45,8 @@ class UsersModule extends WebModule
     public function adminMenu()
     {
         return array(
-            'Все пользователи '     => '/users/userAdmin/manage',
-            'Добавить пользователя' => '/users/userAdmin/create',
+            //'Все пользователи '     => '/users/userAdmin/manage',
+            //'Добавить пользователя' => '/users/userAdmin/create',
         );
     }
 

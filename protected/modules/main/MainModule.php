@@ -42,12 +42,12 @@ class MainModule extends WebModule
             'Логирование'                     => '/main/logAdmin/manage',
             //'Действия сайта'                  => '/main/SiteActionAdmin/manage',
             //'Обратная связь'                  => '/main/feedbackAdmin/manage',
-            'Языки'                           => '/main/LanguageAdmin/manage',
-            'Добавить язык'                   => '/main/LanguageAdmin/create',
-            'Языки (переводы)'                => '/main/LanguageMessageAdmin/manage',
-            'Языки (добавить перевод)'        => '/main/LanguageMessageAdmin/create',
+            //'Языки'                           => '/main/LanguageAdmin/manage',
+            //'Добавить язык'                   => '/main/LanguageAdmin/create',
+            //'Языки (переводы)'                => '/main/LanguageMessageAdmin/manage',
+            //'Языки (добавить перевод)'        => '/main/LanguageMessageAdmin/create',
             //'Языки (Неиспользуемые переводы)' => '/main/LanguageMessageAdmin/notUsableList',
-            'Параметры'                       => '/main/ParamAdmin/manage',
+            //'Параметры'                       => '/main/ParamAdmin/manage',
         );
     }
 

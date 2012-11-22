@@ -58,9 +58,9 @@ class MailerModule extends WebModule
     public function adminMenu()
     {
         return array(
-            'Исходящие письма' => Yii::app()->createUrl('/mailer/mailerOutboxAdmin/manage'),
-            'Шаблоны'          => Yii::app()->createUrl('/mailer/mailerTemplateAdmin/manage'),
-            'Добавить шаблон'  => Yii::app()->createUrl('/mailer/mailerTemplateAdmin/create'),
+            //'Исходящие письма' => Yii::app()->createUrl('/mailer/mailerOutboxAdmin/manage'),
+            //'Шаблоны'          => Yii::app()->createUrl('/mailer/mailerTemplateAdmin/manage'),
+            //'Добавить шаблон'  => Yii::app()->createUrl('/mailer/mailerTemplateAdmin/create'),
         );
     }
 }

@@ -54,10 +54,12 @@ class BannersModule extends WebModule
     public function adminMenu()
     {
         return array(
+            /*
             'Баннеры (горизонт.)'   => '/banners/bannerAdmin/manage/is_big/1',
             'Баннеры (вертикаль.)'  => '/banners/bannerAdmin/manage/is_big/0',
             'Добавить (горизонт.)'  => '/banners/bannerAdmin/create/is_big/1',
             'Добавить (вертикаль.)' => '/banners/bannerAdmin/create/is_big/0',
+            */
         );
     }
 
