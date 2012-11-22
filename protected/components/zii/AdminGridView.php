@@ -325,7 +325,7 @@ class AdminGridView extends BootGridView
 
         echo '<div class="pager-select">';
         echo "&nbsp; &nbsp;" . t("Показывать на странице") . ": ";
-        Yii::app()->controller->widget('application.components.formElements.Chosen.ChosenWidget', array(
+        Yii::app()->controller->widget('application.components.formElements.ChosenAlex.ChosenWidget', array(
             'name'       => "pager_pages",
             'current'    => $value,
             'items'      => array_combine(range(10, 500, 5), range(10, 500, 5)),
