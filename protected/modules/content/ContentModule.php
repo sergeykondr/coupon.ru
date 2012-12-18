@@ -36,13 +36,13 @@ class ContentModule extends WebModule
     {
         return array(
             'Список страниц'    => Yii::app()->createUrl('/content/pageAdmin/manage'),
-            'Список дискаунтов (new)'    => Yii::app()->createUrl('/content/discountAdmin/manage'),
+            'Список дискаунтов'    => Yii::app()->createUrl('/content/discountAdmin/manage'),
             'Добавить страницу' => Yii::app()->createUrl('/content/pageAdmin/create'),
-            'Добавить дискаунт (new)' => Yii::app()->createUrl('/content/discountAdmin/create'),
-            'Разделы страниц'   => Yii::app()->createUrl('/content/pageSectionAdmin/manage'),
-            'Добавить раздел'   => Yii::app()->createUrl('/content/pageSectionAdmin/create'),
-            'Управление меню'   => Yii::app()->createUrl('/content/menuAdmin/manage'),
-            'Добавить меню'     => Yii::app()->createUrl('/content/menuAdmin/create'),
+            'Добавить дискаунт' => Yii::app()->createUrl('/content/discountAdmin/create'),
+            //'Разделы страниц'   => Yii::app()->createUrl('/content/pageSectionAdmin/manage'),
+            //'Добавить раздел'   => Yii::app()->createUrl('/content/pageSectionAdmin/create'),
+            //'Управление меню'   => Yii::app()->createUrl('/content/menuAdmin/manage'),
+            //'Добавить меню'     => Yii::app()->createUrl('/content/menuAdmin/create'),
         );
     }
 
