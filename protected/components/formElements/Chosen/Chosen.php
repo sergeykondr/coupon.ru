@@ -1,4 +1,5 @@
 <?php
+Yii::import('application.components.formElements.chosen.Chosen');
 /**
  * Widget to use Chosen in Yii application.
  *
