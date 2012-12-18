@@ -16,6 +16,38 @@ return array(
             'items' => CHtml::listData(Category::model()->findAll(), 'id', 'name'),
             'empty' => 'не выбран'
         ),
+/*
+        Yii::app()->controller->widget('application.components.formElements.ChosenAlex.ChosenWidget', array(
+            'name'       => "pager_pages",
+            'current'    => $value,
+            'items'      => array_combine(range(10, 500, 5), range(10, 500, 5)),
+            'htmlOptions'=> array(
+                'style'=>'width:60px',
+                'class' => 'pager_select',
+                'model' => get_class($this->filter)
+            )
+        ));
+
+    $this->widget('application.components.formElements.chosen.Chosen',array(
+    'name' => 'metro', // input name
+    'value' => '', // selection
+    'multiple'=>true,
+    'data' => $list,
+    ));
+
+*/
+        'metros' => array(
+            'type'  => 'application.components.formElements.chosen.Chosen',
+            'name' => 'metrospost', // input name
+            //'value' =>  1, // selection
+            'multiple'=>true,
+            'data' => CHtml::listData(Metro::model()->findAll(), 'id', 'name'),
+            'htmlOptions' => array(
+                'name' => 'metrosRell', // input name
+            )
+
+
+        ),
 
         'gallery'    => array(
             'type'      => 'uploader_modal',
