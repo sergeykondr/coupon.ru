@@ -1,9 +1,6 @@
 <html>
 <head>
     <title>Электронный купон. <? echo CHtml::encode($page->name); ?></title>
-
-
-
 <script src="http://api-maps.yandex.ru/2.0-stable/?load=package.full&lang=ru-RU" type="text/javascript"></script>
 <script type="text/javascript">
     // Как только будет загружен API и готов DOM, выполняем инициализацию

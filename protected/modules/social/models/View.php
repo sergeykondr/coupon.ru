@@ -84,7 +84,7 @@ class View extends ActiveRecord
     }
 
 
-    public function count($model_id, $object_id = null)
+    public function count($model_id='', $object_id = null)
     {
         if ($model_id instanceof ActiveRecord)
         {
