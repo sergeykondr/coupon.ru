@@ -18,7 +18,7 @@ class DiscountController extends Controller
 
     public function actionView($id)
     {
-        $page = Discount::model()->with('category')->findByPk($id);
+        $page = Discount::model()->with('category', 'metros', 'metrosRell')->findByPk($id);
         if (!$page)
         {
             $this->pageNotFound();
@@ -41,8 +41,11 @@ class DiscountController extends Controller
        // echo $page->category->name;
        // dump($page->category->attributes);
 
+        $metro = Metro::model()->findAll(
+            array('order' => 'name'));
+
         $this->render("viewPage", array(
-            "page" => $page, "similars" => $similars,
+            "page" => $page, "similars" => $similars, "metro" => $metro
         ));
     }
 
@@ -277,8 +280,8 @@ class DiscountController extends Controller
             )
         );
         */
-
     }
+
 
 }
 
