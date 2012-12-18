@@ -46,7 +46,6 @@ class Buy extends ActiveRecord
                 'condition'=>$this->queryActual()
             ),
             //'discount' => array(self::HAS_MANY, 'Discount', 'id'),
-
         );
         */
     }

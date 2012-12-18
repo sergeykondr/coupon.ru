@@ -25,6 +25,7 @@ class Metro extends ActiveRecord
         return array(
             //array('id', 'required'),
             //array('email', 'email'),
+            array('id, name', 'required'),
         );
 
     }
