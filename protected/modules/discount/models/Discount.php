@@ -76,6 +76,10 @@ class Discount extends ActiveRecord
                 'numerical',
                 'integerOnly' => true
             ),
+
+            array(
+                'metrosarray', 'required',
+            )
         );
     }
 
