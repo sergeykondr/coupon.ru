@@ -19,6 +19,9 @@ $this->widget('AdminGridView', array(
         ),
 
         'date_create',
+        array(
+            'class'=>'CButtonColumn',
+        ),
 
 	),
 ));
