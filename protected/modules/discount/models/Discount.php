@@ -78,7 +78,7 @@ class Discount extends ActiveRecord
             ),
 
             array(
-                'metrosarray', 'required', //add jopa
+                'metrosarray, jopa', 'required',
             )
         );
     }
@@ -211,6 +211,8 @@ class Discount extends ActiveRecord
             $metro->save();
         }
 
+
+        // при необходимости можно обратиться к атриубуту =$this->jopa
     }
     /**
      * @return array customized attribute labels (name=>label)
