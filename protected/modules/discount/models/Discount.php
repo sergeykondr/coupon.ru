@@ -78,7 +78,7 @@ class Discount extends ActiveRecord
             ),
 
             array(
-                'metrosarray, jopa', 'required',
+                'metrosarray', 'required', //add jopa
             )
         );
     }
