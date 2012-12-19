@@ -36,15 +36,17 @@ return array(
     ));
 
 */
-        'metros' => array(
+        'metrosarray' => array(
             'type'  => 'application.components.formElements.chosen.Chosen',
-            'name' => 'metrospost', // input name
+            //'name' => 'metrospost', // input name
             //'value' =>  1, // selection
             'multiple'=>true,
             'data' => CHtml::listData(Metro::model()->findAll(), 'id', 'name'),
+            /*
             'htmlOptions' => array(
                 'name' => 'metrosRell', // input name
             )
+            */
 
 
         ),

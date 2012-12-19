@@ -10,7 +10,8 @@ class Discount extends ActiveRecord
 {
     public $all_buy; //всего: накрутка + кол-во купивших реально
     public $cheat_now; //сколько надо накрутить
-    public $metrosarray; //для записи массива метро из $_POST[metrosRell]
+    public $metrosarray; //для записи массива метро
+    public $jopa;
     const PAGE_SIZE = 20;
 
 

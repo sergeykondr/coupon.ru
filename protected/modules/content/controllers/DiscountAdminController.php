@@ -64,8 +64,12 @@ class DiscountAdminController extends AdminController
         $model = Discount::model()->with('metrosRell', 'metros')->findByPk($id);
         $form  = new Form('content.DiscountForm', $model);
         $this->performAjaxValidation($model);
+
+        /*
         if(isset($_POST['metrosRell']))
             $model->metrosarray = $_POST['metrosRell'];
+        */
+
         if ($form->submitted() && $model->save())
         {
             $this->redirect(array(
