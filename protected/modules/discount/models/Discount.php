@@ -145,22 +145,6 @@ class Discount extends ActiveRecord
     }
 
 
-    public function afterSave()
-    {
-        //удаляем все сущ. метро
-        DiscountMetro::model()->deleteAll('discount_id=:id',array(':id'=>$this->id));
-        //добавляем новые из массива $this->metrosarray
-        foreach($this->metrosarray as $k=>$v)
-        {
-            $metro=new DiscountMetro();
-            $metro->discount_id=$this->id;
-            $metro->metro_id=$v;
-            $metro->save();
-        }
-
-    }
-
-
     public function search()
     {
         $criteria = new CDbCriteria;
@@ -209,6 +193,20 @@ class Discount extends ActiveRecord
     }
 
 
+    public function afterSave()
+    {
+        //удаляем все сущ. метро
+        DiscountMetro::model()->deleteAll('discount_id=:id',array(':id'=>$this->id));
+        //добавляем новые из массива $this->metrosarray
+        foreach($this->metrosarray as $k=>$v)
+        {
+            $metro=new DiscountMetro();
+            $metro->discount_id=$this->id;
+            $metro->metro_id=$v;
+            $metro->save();
+        }
+
+    }
     /**
      * @return array customized attribute labels (name=>label)
      */
