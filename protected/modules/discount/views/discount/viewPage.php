@@ -5,59 +5,6 @@ $this->page_title = $page->name; //заголовок <h1>
 
 <h4><? echo CHtml::encode($page->description); ?></h4>
 
-<?
-$list = CHtml::listData($metro, 'id', 'name');
-
-/*
-    $this->widget('application.components.formElements.chosen.Chosen',array(
-    'name' => 'metro', // input name
-    'value' => array(1, 2), // selection
-    'multiple'=>true,
-    'data' => $list,
-    ));
-*/
-Yii::import('application.components.formElements.chosen.Chosen');
-foreach($page->metrosRell as $gal)
-{
-echo $gal->metro_id." "; //1 2 3 4
-}
-echo $page->metrosRell[0]['metro_id'];
-
-$metrosss = CHtml::listData($page->metros, 'id', 'name');
-echo "<pre>";
-print_r($metrosss);
-echo "</pre>";
-echo Chosen::activeMultiSelect($page,'metros', CHtml::listData($metro, 'id', 'name'));
-echo "<br>".Chosen::activeMultiSelect($page,'metros',array('1'=>'первый','2'=>'второй','3'=>'третий', '4'=>'четвертый', '5'=>'пятый'));
-
-//echo CHtml::dropDownList('listname', 'F', array('M' => 'Male', 'F' => 'Female'));
-
-/*
-echo CHtml::dropDownList('categories', '',
-    $list,
-    array('empty' => '(Select a category)'));
-echo "ddddd<br>";
-*/
-//echo CHtml::value($page,"id");
-
-
-////////////// resolveName ////////////
-//$attr = '[id][name]';
-//echo CHtml::resolveName($page, $attr); //Discount[[id][name]]
-
-
-//echo CHtml::activeName($page, 'ter[id][name]');
-//echo get_class($page); //Discount
-//return get_class($model).'['.$attribute.']'; //Discount['id']
-
-//echo CHtml::activeDropDownList($page->metrosRell, 'id', $list);
-
-/*
-echo CHtml::activeDropDownList($page, 'category_id'
-    , array('0'=>'Нулевой','1'=>'первый','2'=>'второй','3'=>'третий'));
-*/
-?>
-
 <div class="row-fluid">
     <div class="span8">
         <div id="myCarousel" class="carousel slide carousel-hidden">

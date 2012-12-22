@@ -36,32 +36,17 @@ return array(
     ));
 
 */
-        'metrosarray' => array(
+        'metros' => array(
             'type'  => 'application.components.formElements.chosen.Chosen',
-            //'name' => 'metrospost', // input name
-            //'value' =>  1, // selection
+            //'name' => 'metrospost', input name (не работает)
+            //'value' =>  1,  selection (не работает)
             'multiple'=>true,
             'data' => CHtml::listData(Metro::model()->findAll(), 'id', 'name'),
-            /*
+
             'htmlOptions' => array(
-                'name' => 'metrosRell', // input name
+                'name' => 'Discount[metrosarray]', // принудительно присваиваем, иначе будет Discount[metros]
             )
-            */
 
-
-        ),
-
-        'jopa' => array(
-            'type'  => 'application.components.formElements.chosen.Chosen',
-            //'name' => 'metrospost', // input name
-            //'value' =>  1, // selection
-            'multiple'=>true,
-            'data' => CHtml::listData(Metro::model()->findAll(), 'id', 'name'),
-            /*
-            'htmlOptions' => array(
-                'name' => 'metrosRell', // input name
-            )
-            */
 
 
         ),

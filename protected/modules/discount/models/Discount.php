@@ -15,7 +15,6 @@ class Discount extends ActiveRecord
     const PAGE_SIZE = 20;
 
 
-
     public function name()
     {
         return 'Discount';
@@ -78,11 +77,20 @@ class Discount extends ActiveRecord
             ),
 
             array(
-                'metrosarray, jopa', 'required',
-            )
+                'metros', 'metrosvalid', //в DiscountForm это поле есть, но мы тамже его принудительно переименовали.
+            ),
+            array(
+                'metrosarray', 'required', // для него нет label ошибки (потому что в конструкторе форм по нормальному это поле не было объявлено)
+            ),
         );
     }
 
+
+    public function metrosvalid($attributes,$params)
+    {
+        if ($this->metrosarray == '')
+        $this->addError('metros', 'Заполните метро'); //пользуемся label у metros для вывода ошибки
+    }
 
     public function relations()
     {
