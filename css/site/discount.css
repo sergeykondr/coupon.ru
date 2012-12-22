@@ -1,9 +1,9 @@
-/*режем фотографии на слайдере*/
+/*режем фотографии на слайдере */
 .carousel-hidden {
 	overflow:hidden;
 	height: 364px;
 }
-/*����� well*/
+/*новый well*/
 .well {
 	padding:8px;
 	margin-bottom: 10px;
