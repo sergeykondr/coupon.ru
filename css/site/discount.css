@@ -1,0 +1,18 @@
+/*режем фотографии на слайдере*/
+.carousel-hidden {
+	overflow:hidden;
+	height: 364px;
+}
+/*����� well*/
+.well {
+	padding:8px;
+	margin-bottom: 10px;
+}
+
+.row-fluid [class*="span"] {
+	margin-left: 1.064102564102564%;
+}
+
+.row-fluid .span4 {
+	width: 32.623931623931625%;
+}
