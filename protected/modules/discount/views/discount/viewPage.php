@@ -3,7 +3,7 @@ $this->page_title = $page->name; //заголовок <h1>
 //echo CHtml::encode($page->text);
 ?>
 
-<h4><? echo CHtml::encode($page->description); ?></h4>
+<h4><? echo CHtml::encode($page->short_desc); ?></h4>
 
 <div class="row-fluid">
     <div class="span8">
@@ -51,6 +51,10 @@ $this->page_title = $page->name; //заголовок <h1>
     <div class="span4 well">
         <p>Скидка до <?=$page->discount;?> % за <?=$page->pricecoupon;?> Р.</p>
 
+        <?if ($page->actuality) //если акция актуальна, то выводим кнопку 'купить' с модальным окном
+        {?>
+
+
         <!-- Начало описания виджета модального окна -->
             <?php $this->beginWidget('bootstrap.widgets.BootModal', array('id'=>'buyModal')); ?>
                 <?
@@ -90,14 +94,25 @@ $this->page_title = $page->name; //заголовок <h1>
             'type'=>'primary',
             'htmlOptions'=>array('data-toggle'=>'modal'),
         )); ?>
-
-
-
-
         <br>
-        Уже купили: <? echo $page->cheat() + $page->numbers_buy;  ?><br>
+
+        <?} //конец блока if?>
+
+
+
+        Купили: <? echo $page->cheat() + $page->numbers_buy;  ?><br>
         Купон действует до: <?= Yii::app()->dateFormatter->format('d MMMM yyyy', $page->endvalid); ?><br>
-        До завершения осталось: <?=$page->expires('long');?> <br>
+        <? if ($page->actuality)
+        {
+            ?>До завершения осталось: <?=$page->expires('long');?> <br>
+        <?
+        }
+        else
+        {
+            ?><b>Акция завершена</b><?
+        }
+        ?>
+
 
     </div>
     <div class="span4 well">
@@ -155,6 +170,7 @@ $this->page_title = $page->name; //заголовок <h1>
                     //$parts = explode('{{cut}}', $page->text);
                     //echo array_shift($parts);
                     echo $page->text;
+                    echo $page->description;
                     ?>
                 </div>
                 <div class="tab-pane fade" id="second">
