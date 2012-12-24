@@ -41,6 +41,8 @@ class DiscountAdminController extends AdminController
          * (все модели которые передались в конструкторе, будут заполнены значениями из формы
          * далее модель сохраняется
          */
+        $submitted = $form->submitted();
+        /*
         if ($form->submitted() && $model->save())
         {
             $this->redirect(array(
@@ -48,6 +50,21 @@ class DiscountAdminController extends AdminController
                 'id' => $model->id
             ));
         }
+        */
+
+        if ($form->submitted())
+        {
+            $model->our = 1; //ставим отметку, что акция наша
+            if ($model->save())
+            {
+                $this->redirect(array(
+                    'view',
+                    'id' => $model->id
+                ));
+            }
+
+        }
+
         $this->render('create', array('form' => $form));
     }
 
