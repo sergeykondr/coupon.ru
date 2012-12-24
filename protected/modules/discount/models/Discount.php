@@ -13,6 +13,7 @@ class Discount extends ActiveRecord
     public $metrosarray; //для записи массива метро
     public $jopa;
     const PAGE_SIZE = 20;
+    public $actuality; //актуальна ли акция. используется для просмотра акции
 
 
     public function name()
@@ -57,10 +58,10 @@ class Discount extends ActiveRecord
     {
         return array(
             array(
-                'category_id, name, description,
+                'category_id, name, short_desc, description,
                 beginsell, endsell, beginvalid, endvalid,
                 company_name, company_url, company_tel, company_address, company_coordinates, company_time,
-                text, cheat, xml_kuponator',
+                text, cheat, kuponator_exp',
                 'required'
             ),
 
@@ -149,12 +150,14 @@ class Discount extends ActiveRecord
 
     public function beforeFind()
     {
-        //$userCriteria = /// нужный criteria для юзера
+        //выбираем только актуальные акции и упорядочиваем их по убыванию кол-ва купивших с учетом накрутки
+        /*
         $criteria=new CDbCriteria;
         $criteria->select='*, floor((cheat / ((UNIX_TIMESTAMP( endsell ) - UNIX_TIMESTAMP( beginsell ))/60/60)) * ((UNIX_TIMESTAMP( NOW() ) - UNIX_TIMESTAMP( beginsell ))/60/60)) as cheat_now, (floor((cheat / ((UNIX_TIMESTAMP( endsell ) - UNIX_TIMESTAMP( beginsell ))/60/60)) * ((UNIX_TIMESTAMP( NOW() ) - UNIX_TIMESTAMP( beginsell ))/60/60)) + numbers_buy) as all_buy';
         $criteria->condition='DATEDIFF( endsell, beginsell ) >1';
         $this->getDbCriteria()->mergeWith($criteria);
         parent::beforeFind();
+        */
     }
 
 
