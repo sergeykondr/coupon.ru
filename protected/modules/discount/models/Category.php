@@ -28,25 +28,25 @@ class Category extends ActiveRecord
 
     public function relations()
     {
-        $nowDate = $this->nowDate();
         return array(
             'discountCount'=>array(self::STAT, 'Discount', 'category_id',
                                 'condition'=>$this->queryActual()
             ),
-            //'discount' => array(self::HAS_MANY, 'Discount', 'id'),
         );
     }
 
 
+    //условие актуальных акций
     public function queryActual()
     {
         return "DATE(beginsell) <= '" . $this->nowDate() ."' AND DATE(endsell) >= '".$this->nowDate(). "'";
     }
 
 
+    //текущая дата
     private function nowDate()
     {
-        //текущая дата
+
         return date('Y-m-d H:i:s',time());
     }
 
