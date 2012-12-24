@@ -7,8 +7,14 @@ return array(
     ),
     'elements'             => array(
         'MetaTag' =>array('type'=>'meta_tags'),
+
         'name'    => array(
             'type' => 'text'
+        ),
+
+        'short_desc'    => array(
+            'type' => 'text',
+            //echo $form->textArea($model, 'Details', array('maxlength' => 300, 'rows' => 6, 'cols' => 50));
         ),
 
         'category_id' => array(
@@ -42,11 +48,9 @@ return array(
             //'value' =>  1,  selection (не работает)
             'multiple'=>true,
             'data' => CHtml::listData(Metro::model()->findAll(), 'id', 'name'),
-
             'htmlOptions' => array(
                 'name' => 'Discount[metrosarray]', // принудительно присваиваем, иначе будет Discount[metros]
             )
-
 
 
         ),
@@ -55,12 +59,6 @@ return array(
             'type'      => 'uploader_modal',
             'data_type' => 'image',
             'title'     => 'Фотогалерея'
-        ),
-
-
-        'description'    => array(
-            'type' => 'textarea',
-             //echo $form->textArea($model, 'Details', array('maxlength' => 300, 'rows' => 6, 'cols' => 50));
         ),
 
         //дата акции
@@ -128,7 +126,7 @@ return array(
             'type' => 'text'
         ),
 
-        'xml_kuponator'    => array(
+        'kuponator_exp'    => array(
             'type' => 'checkbox'
         ),
 
@@ -149,6 +147,11 @@ return array(
 
         'text'     => array(
             'type' => 'editor'
+        ),
+
+        'description'    => array(
+            'type' => 'editor',
+            //echo $form->textArea($model, 'Details', array('maxlength' => 300, 'rows' => 6, 'cols' => 50));
         ),
     ),
     'buttons'              => array(
