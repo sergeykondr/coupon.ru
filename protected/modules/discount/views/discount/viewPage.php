@@ -17,7 +17,7 @@ $this->page_title = $page->name; //заголовок <h1>
                 foreach($page->gallery as $gal)
                 {
                     ?>
-                    <div class="item<?=(!$i++) ? ' active">' : '">';
+                    <div class="item<?=(!$i++) ? ' active' : ''; echo '">';
                     /*
                     if ($i==0)
                     {
@@ -30,7 +30,7 @@ $this->page_title = $page->name; //заголовок <h1>
                     echo '</div>';
 
                 }
-            ?>
+                    ?>
                 <!--
                 <div class="item active">
                     <img src="http://alkupone.ru/system/picture/7616/huge_1346429445.jpg" alt="">
