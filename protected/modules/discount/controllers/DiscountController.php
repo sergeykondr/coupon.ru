@@ -22,18 +22,6 @@ class DiscountController extends Controller
         if (!$page)
             $this->pageNotFound();
 
-        //надо определить акция актуальна или завершена?
-        if(strtotime($page->beginsell) <= time() and strtotime($page->endsell) >= time())
-        {
-            //echo "актуальна";
-            $page->actuality = true;
-        }
-        else
-        {
-            $page->actuality = false;
-            //echo "не актуальна";
-        }
-
         //блок похожие акции
         //выбираем только актуальные акции и упорядочиваем их по убыванию кол-ва купивших с учетом накрутки
         $similars = new CActiveDataProvider('Discount', array(
@@ -49,7 +37,6 @@ class DiscountController extends Controller
             )
         ));
         $similars->setPagination(false);
-
         $metro = Metro::model()->findAll(
             array('order' => 'name'));
 
