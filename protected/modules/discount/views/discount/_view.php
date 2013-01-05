@@ -3,11 +3,22 @@
         <?
         $i=0; //счетчик для первой картинки
         $imghtml=''; //сюда пишем адрес первой картинки
-        foreach($data->gallery as $gal)
+
+        //если акция наша - отображаем первую картинку из галереи
+        //если импортированная - то ссылается на сайт
+        if ($data->our)
         {
-            $imghtml = CHtml::image($gal->getHref(),'',array('class'=>'img-rounded'));
-            break;
+            foreach($data->gallery as $gal)
+            {
+                $imghtml = CHtml::image($gal->getHref(),'',array('class'=>'img-rounded'));
+                break; //т.к. берем первую картинку
+            }
         }
+        else
+        {
+            $imghtml = CHtml::image($data->xml_imp_picture,'',array('class'=>'img-rounded'));
+        }
+
         echo CHtml::link($imghtml, $data->href, array('class' => 'page-title'));
         ?>
         <br>
