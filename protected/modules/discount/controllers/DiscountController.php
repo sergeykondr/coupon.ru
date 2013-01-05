@@ -47,7 +47,7 @@ class DiscountController extends Controller
 
 
     public function actionBuy($id)
-    {
+    {//
         $model = new Buy;
         if (isset($_POST['Buy']))
         {
