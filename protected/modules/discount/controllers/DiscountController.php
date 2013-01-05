@@ -47,10 +47,10 @@ class DiscountController extends Controller
         }
         else
         {
-
+            $this->render("viewDiscountXml", array(
+                "page" => $page, "similars" => $similars, "metro" => $metro
+            ));
         }
-
-
     }
 
 
