@@ -51,7 +51,7 @@ $this->page_title = $page->name; //заголовок <h1>
     <div class="span4 well">
         <p>Скидка до <?=$page->discount;?> % за <?=$page->pricecoupon;?> Р.</p>
 
-        <?if ($page->actuality) //если акция актуальна, то выводим кнопку 'купить' с модальным окном
+        <?if ($page->isActual()) //если акция актуальна, то выводим кнопку 'купить' с модальным окном
         {?>
 
 
@@ -102,7 +102,7 @@ $this->page_title = $page->name; //заголовок <h1>
 
         Купили: <? echo $page->cheat() + $page->numbers_buy;  ?><br>
         Купон действует до: <?= Yii::app()->dateFormatter->format('d MMMM yyyy', $page->endvalid); ?><br>
-        <? if ($page->actuality)
+        <? if ($page->isActual())
         {
             ?>До завершения осталось: <?=$page->expires('long');?> <br>
         <?
@@ -180,7 +180,26 @@ $this->page_title = $page->name; //заголовок <h1>
                     <p><?= CHtml::encode($page->company_name); ?></p>
                     <p><?= CHtml::link(CHtml::encode($page->company_url), $page->company_url); ?></p>
                     <p>тел.: <?= CHtml::encode($page->company_tel); ?></p>
-                    <p><?= CHtml::encode($page->company_address); ?></p>
+                    <p><? // echo CHtml::encode($page->company_address); ?>
+                        <?
+                        $pos = strpos($page->company_address, '||');
+                        if ($pos === false)
+                        {
+                            //не найдено. т.е. один адрес
+                            echo CHtml::encode($page->company_address);
+                        }
+                        else
+                        {
+                            //адресов много
+                            $parts = explode('||', $page->company_address);
+                            foreach ($parts as $k=>$v)
+                            {
+                                echo CHtml::encode($v) . '; ';
+                            }
+                        }
+                        ?>
+                    </p>
+
                     <p><?= CHtml::encode($page->company_time); ?></p>
                     <p>Метро: <?php echo implode(', ', CHtml::listData($page->metros, 'id', 'name')); ?></p>
                 </div>
