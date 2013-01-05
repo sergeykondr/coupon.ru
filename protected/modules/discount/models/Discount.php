@@ -1,17 +1,19 @@
 <?
 /**
  * @property $id
+ * @property $all_buy
  * @property $category_id
  * @property $numbers_buy
  * @property $price
  * @property $text
+ * @property $actuality
  */
 class Discount extends ActiveRecord
 {
     public $all_buy; //всего: накрутка + кол-во купивших реально
     public $cheat_now; //сколько надо накрутить
     public $metrosarray; //для записи массива метро
-    public $jopa;
+    //public $jopa;
     const PAGE_SIZE = 20;
     public $actuality; //актуальна ли акция. используется для просмотра акции
 
@@ -58,30 +60,50 @@ class Discount extends ActiveRecord
     {
         return array(
             array(
+                'short_desc,
+                company_coordinates, company_time,
+                text, cheat, kuponator_exp',
+                'required',  'on'=>'our_discount'
+            ),
+
+            array(
+                'category_id, name, description,
+                beginsell, endsell, beginvalid, endvalid,
+                company_name, company_url, company_tel, company_address',
+                'required',  'on'=>'our_discount, xml_discount'
+            ),
+
+            /*
+            array(
                 'category_id, name, short_desc, description,
                 beginsell, endsell, beginvalid, endvalid,
                 company_name, company_url, company_tel, company_address, company_coordinates, company_time,
                 text, cheat, kuponator_exp',
-                'required'
+                'required',  'on'=>'our_discount'
             ),
+            */
 
             array(
                 'name',
                 'length',
-                'max' => 130
+                'max' => 130,
+                'on'=>'our_discount',
              ),
 
             array(
-                'id, category_id, numbers_buy, price',
+                'category_id, numbers_buy, price',
                 'numerical',
-                'integerOnly' => true
+                'integerOnly' => true,
+                'on'=>'our_discount'
             ),
 
             array(
                 'metros', 'metrosvalid', //в DiscountForm это поле есть, но мы тамже его принудительно переименовали.
+                'on'=>'our_discount',
             ),
             array(
                 'metrosarray', 'required', // для него нет label ошибки (потому что в конструкторе форм по нормальному это поле не было объявлено)
+                'on'=>'our_discount',
             ),
         );
     }
@@ -91,6 +113,20 @@ class Discount extends ActiveRecord
     {
         if ($this->metrosarray == '')
         $this->addError('metros', 'Заполните метро'); //пользуемся label у metros для вывода ошибки
+    }
+
+
+    public function isActual()
+    {
+        //надо определить акция актуальна или завершена?
+        if(strtotime($this->beginsell) <= time() and strtotime($this->endsell) >= time())
+        {
+            return true; //актуальна
+        }
+        else
+        {
+            return false; //не актуальна
+        }
     }
 
     public function relations()
@@ -211,19 +247,20 @@ class Discount extends ActiveRecord
 
     public function afterSave()
     {
-        //удаляем все сущ. метро
-        DiscountMetro::model()->deleteAll('discount_id=:id',array(':id'=>$this->id));
-        //добавляем новые из массива $this->metrosarray
-        foreach($this->metrosarray as $k=>$v)
+        //если акция наша
+        if ($this->our==1)
         {
-            $metro=new DiscountMetro();
-            $metro->discount_id=$this->id;
-            $metro->metro_id=$v;
-            $metro->save();
+            //удаляем все сущ. метро
+            DiscountMetro::model()->deleteAll('discount_id=:id',array(':id'=>$this->id));
+            //добавляем новые из массива $this->metrosarray
+            foreach($this->metrosarray as $k=>$v)
+            {
+                $metro=new DiscountMetro();
+                $metro->discount_id=$this->id;
+                $metro->metro_id=$v;
+                $metro->save();
+            }
         }
-
-
-        // при необходимости можно обратиться к атриубуту =$this->jopa
     }
     /**
      * @return array customized attribute labels (name=>label)
