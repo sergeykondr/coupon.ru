@@ -68,6 +68,7 @@ class DiscountAdminController extends AdminController
         $this->render('create', array('form' => $form));
     }
 
+
     public function actionView($id)
     {
         $model = Discount::model()->findByPk($id);
