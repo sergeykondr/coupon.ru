@@ -37,17 +37,25 @@ class DiscountController extends Controller
             )
         ));
         $similars->setPagination(false);
-        $metro = Metro::model()->findAll(
-            array('order' => 'name'));
+        $metro = Metro::model()->findAll(array('order' => 'name'));
 
-        $this->render("viewPage", array(
-            "page" => $page, "similars" => $similars, "metro" => $metro
-        ));
+        if ($page->our)
+        {
+            $this->render("viewDiscountOur", array(
+                "page" => $page, "similars" => $similars, "metro" => $metro
+            ));
+        }
+        else
+        {
+
+        }
+
+
     }
 
 
     public function actionBuy($id)
-    {//
+    {
         $model = new Buy;
         if (isset($_POST['Buy']))
         {
