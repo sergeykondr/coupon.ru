@@ -1,7 +1,7 @@
 <?
 class XmlModule extends WebModule
 {
-    public static $active = true; //?
+    public static $active = true;
 
     public $icon = 'th-list';
 
