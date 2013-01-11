@@ -39,9 +39,7 @@ class XmlAdminController extends AdminController
         //$sxml = simplexml_load_file("http://cityradar.ru/kuponator.xml");
         //$sxml = simplexml_load_file("http://kuponator.ru/example.xml");
         $sxml = simplexml_load_file("http://cityradar.ru/kupongid.xml");
-
         $i=0; //счетчик для кол-ва импортированных дискаунтов
-
         foreach ($sxml->offers->offer as $offer)
         {
 
@@ -74,7 +72,7 @@ class XmlAdminController extends AdminController
             $model->company_url = $offer->supplier->url;
             $model->company_tel = $offer->supplier->tel;
             //address. foreach
-            $adres ='';
+            $adres =''; // склеиваем адрес, если их несколько через ||
             foreach ($offer->supplier->addresses->address as $address )
             {
                 $adres .= (!$adres) ? $address->name : '||' . $address->name;
@@ -82,8 +80,30 @@ class XmlAdminController extends AdminController
             $model->company_address = $adres;
 
             //сохраняем модель
-            if ($model->save())
-                $i++;
+            $model->save() && $i++;
+
+            //загружаем картинки на сервер
+            //$file      = CUploadedFile::getInstanceByName('file');
+            //echo $file->name;
+            $path = 'upload/mediaFiles/xml';
+            //ивлекаем имя картинки из url
+            $imgNameOriginal = substr($model->xml_imp_picture, strrpos($model->xml_imp_picture, '/') + 1);
+            $imgName = FileSystemHelper::vaultResolveCollision($path, $imgNameOriginal);
+            $fileImp = file_get_contents($model->xml_imp_picture, true);
+            file_put_contents('./' . $path . '/' . $imgName, $fileImp); //записываем в папку
+
+            //записываем информацию о картинке в MediaFile
+            $media = new MediaFile();
+            $media->object_id = $model->id;
+            $media->model_id = 'Discount';
+            $media->name = $imgName;
+            $media->title = $imgNameOriginal;
+            $media->tag = 'xml';
+            $media->order = 1;
+            $media->path = $path;
+            $media->types = 'img';
+            $media->save();
+
 
         }
        echo 'Всего было импортировано ' . $i . ' дискаунтов';
