@@ -15,7 +15,7 @@ class Discount extends ActiveRecord
     public $metrosarray; //для записи массива метро
     //public $jopa;
     const PAGE_SIZE = 20;
-    public $actuality; //актуальна ли акция. используется для просмотра акции
+    public $actuality; //актуальна ли акция. кеш. вззаимодействие с методом isActual
 
 
     public function name()
@@ -46,6 +46,10 @@ class Discount extends ActiveRecord
                     'class' => 'application.components.activeRecordBehaviors.FileManagerBehavior',
                     'tags' => array(
                         'gallery' => array(
+                            'title' => 'Галерея',
+                            'data_type' => 'image'
+                        ),
+                        'xml' => array(
                             'title' => 'Галерея',
                             'data_type' => 'image'
                         )
@@ -116,16 +120,23 @@ class Discount extends ActiveRecord
     }
 
 
+    //определяем акция актуальна или завершена?
     public function isActual()
     {
-        //надо определить акция актуальна или завершена?
+        if (isset ($this->actuality))
+            return $this->actuality;
+
         if(strtotime($this->beginsell) <= time() and strtotime($this->endsell) >= time())
         {
-            return true; //актуальна
+            //актуальна
+            $this->actuality = true;
+            return true;
         }
         else
         {
-            return false; //не актуальна
+            //не актуальна
+            $this->actuality = false;
+            return false;
         }
     }
 
@@ -212,6 +223,21 @@ class Discount extends ActiveRecord
             'pagination' =>array(
                 'pageSize' => self::PAGE_SIZE
             )
+        ));
+    }
+
+
+    public function similarSearch()
+    {
+        $criteria = new CDbCriteria;
+        $criteria->select = '*, floor((cheat / ((UNIX_TIMESTAMP( endsell ) - UNIX_TIMESTAMP( beginsell ))/60/60)) * ((UNIX_TIMESTAMP( NOW() ) - UNIX_TIMESTAMP( beginsell ))/60/60)) as cheat_now, (floor((cheat / ((UNIX_TIMESTAMP( endsell ) - UNIX_TIMESTAMP( beginsell ))/60/60)) * ((UNIX_TIMESTAMP( NOW() ) - UNIX_TIMESTAMP( beginsell ))/60/60)) + numbers_buy) as all_buy';
+        $criteria->order = 'all_buy DESC';
+        $criteria->limit = 5;
+        $criteria->condition = 'DATEDIFF( endsell, beginsell ) >1 AND category_id = ' . $this->category_id . ' AND id <>' . $this->id . ' AND ' . Category::model()->queryActual();
+
+        return new CActiveDataProvider($this, array(
+            'criteria'=>$criteria,
+            'pagination' => false,
         ));
     }
 

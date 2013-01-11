@@ -16,7 +16,8 @@
         }
         else
         {
-            $imghtml = CHtml::image($data->xml_imp_picture,'',array('class'=>'img-rounded'));
+
+            $imghtml = CHtml::image($data->xml[0]->getHref(),'',array('class'=>'img-rounded'));
         }
 
         echo CHtml::link($imghtml, $data->href, array('class' => 'page-title'));
