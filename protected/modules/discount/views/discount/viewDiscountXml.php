@@ -15,7 +15,8 @@ $this->page_title = $page->name; //заголовок <h1>
 
 
                 <div class="item active">
-                    <img src="<?=$page->xml_imp_picture;?>" alt="">
+                    <img src="<?=$page->xml[0]->getHref();?>" alt="">
+
                 </div>
                 <!--
                 <div class="item">
@@ -26,9 +27,10 @@ $this->page_title = $page->name; //заголовок <h1>
                 </div>
                 -->
             </div>
-            <!-- Carousel nav -->
+            <!-- Carousel nav
             <a class="carousel-control left" href="#myCarousel" data-slide="prev">‹</a>
             <a class="carousel-control right" href="#myCarousel" data-slide="next">›</a>
+            -->
         </div>
     </div>
     <div class="span4 well">
