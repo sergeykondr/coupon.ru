@@ -11,7 +11,6 @@ class DiscountController extends Controller
             'views'         => 'Просмотр акции',
             'category' => 'Просмотр категорий',
             'buy' => 'Покупка акции',
-
         );
     }
 
@@ -23,12 +22,15 @@ class DiscountController extends Controller
             $this->pageNotFound();
 
         //блок похожие акции
-        //выбираем только актуальные акции и упорядочиваем их по убыванию кол-ва купивших с учетом накрутки
-        $similars = new CActiveDataProvider('Discount', array(
+        //получаем cactivedataprovider
+        $similar = $page->similarSearch(); //выбираем только актуальные акции и упорядочиваем их по убыванию кол-ва купивших с учетом накрутки
+
+        /*
+         $similars = new CActiveDataProvider('Discount', array(
             'criteria' => array(
                 'select' => '*, floor((cheat / ((UNIX_TIMESTAMP( endsell ) - UNIX_TIMESTAMP( beginsell ))/60/60)) * ((UNIX_TIMESTAMP( NOW() ) - UNIX_TIMESTAMP( beginsell ))/60/60)) as cheat_now, (floor((cheat / ((UNIX_TIMESTAMP( endsell ) - UNIX_TIMESTAMP( beginsell ))/60/60)) * ((UNIX_TIMESTAMP( NOW() ) - UNIX_TIMESTAMP( beginsell ))/60/60)) + numbers_buy) as all_buy',
-                'order'     => 'all_buy DESC',
-                'limit'=>5,
+                'order'  => 'all_buy DESC',
+                'limit'  => 5,
                 //только те акции, у которых корректно заполенны endsell, beginsell AND из тоже категории AND исключаем текущуюа акцию AND только актуальные акции
                 'condition'=>'DATEDIFF( endsell, beginsell ) >1 AND category_id = ' . $page->category_id . ' AND id <>' . $page->id . ' AND ' . Category::model()->queryActual(),
             ),
@@ -37,20 +39,15 @@ class DiscountController extends Controller
             )
         ));
         $similars->setPagination(false);
-        $metro = Metro::model()->findAll(array('order' => 'name'));
+        */
 
-        if ($page->our)
-        {
-            $this->render("viewDiscountOur", array(
-                "page" => $page, "similars" => $similars, "metro" => $metro
-            ));
-        }
-        else
-        {
-            $this->render("viewDiscountXml", array(
-                "page" => $page, "similars" => $similars, "metro" => $metro
-            ));
-        }
+        $metro = Metro::model()->findAll(array('order' => 'name'));
+        //определяем, какой view надо использовать
+        $nameView = ($page->our) ? 'viewDiscountOur' : 'viewDiscountXml';
+        $this->render($nameView, array(
+            "page" => $page, "similars" => $similar, "metro" => $metro
+        ));
+
     }
 
 
