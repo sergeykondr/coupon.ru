@@ -47,7 +47,7 @@ $this->page_title = $page->name; //заголовок <h1>
 
 
 
-        Купили (нужно ли?): <? echo $page->cheat() + $page->numbers_buy;  ?><br>
+       <!-- Купили (нужно ли?): <? //echo $page->cheat() + $page->numbers_buy;  ?><br> -->
         Купон действует до: <?= Yii::app()->dateFormatter->format('d MMMM yyyy', $page->endvalid); ?><br>
         <? if ($page->isActual())
         {
@@ -66,7 +66,6 @@ $this->page_title = $page->name; //заголовок <h1>
         Поделиться в социальных сетях:<br>
        <script type="text/javascript" src="//yandex.st/share/share.js" charset="utf-8"></script>
        <div class="yashare-auto-init" data-yashareL10n="ru" data-yashareType="none" data-yashareQuickServices="yaru,vkontakte,facebook,twitter,odnoklassniki,moimir,lj"></div>
-
     </div>
 </div>
 
@@ -75,7 +74,6 @@ $this->page_title = $page->name; //заголовок <h1>
     // Как только будет загружен API и готов DOM, выполняем инициализацию
     var myMap;
     ymaps.ready(init);
-
 
     function init () {
         myMap = new ymaps.Map("map", {
@@ -122,7 +120,10 @@ $this->page_title = $page->name; //заголовок <h1>
                 </div>
                 <div class="tab-pane fade" id="second">
 
-                    <div id="map" style="width:662px;height:400px"></div>
+                    <? if (!CHtml::encode($page->company_coordinates)=='')
+                        echo '<div id="map" style="width:662px;height:400px"></div>';
+                    ?>
+
 
                     <p><?= CHtml::encode($page->company_name); ?></p>
                     <p><?= CHtml::link(CHtml::encode($page->company_url), $page->company_url); ?></p>
@@ -148,7 +149,11 @@ $this->page_title = $page->name; //заголовок <h1>
                     </p>
 
                     <p><?= CHtml::encode($page->company_time); ?></p>
-                    <p>Метро: <?php echo implode(', ', CHtml::listData($page->metros, 'id', 'name')); ?></p>
+
+                    <? if  (CHtml::listData($page->metros, 'id', 'name'))
+                        echo '<p>Метро: ' . implode(', ', CHtml::listData($page->metros, 'id', 'name')) . '</p>'; ;
+                    ?>
+                    <!-- <p>Метро: <?php // echo implode(', ', CHtml::listData($page->metros, 'id', 'name')); ?></p> -->
                 </div>
                 <div class="tab-pane fade" id="third">
                     <p>Комментарии</p>
