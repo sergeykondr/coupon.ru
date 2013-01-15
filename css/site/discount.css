@@ -16,3 +16,15 @@
 .row-fluid .span4 {
 	width: 32.623931623931625%;
 }
+
+/* для картинки в категориях*/
+.img_category {
+    height: 205px;
+    overflow:hidden;
+}
+
+/* для текстового блока под картинкой в категориях*/
+.body_category {
+    height: 65px;
+    overflow:hidden;
+}
