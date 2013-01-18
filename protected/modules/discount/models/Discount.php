@@ -14,7 +14,7 @@ class Discount extends ActiveRecord
     public $cheat_now; //сколько надо накрутить
     public $metrosarray; //для записи массива метро
     //public $jopa;
-    const PAGE_SIZE = 20;
+    //const PAGE_SIZE = 20;
     public $actuality; //актуальна ли акция. кеш. вззаимодействие с методом isActual
 
 
@@ -106,8 +106,9 @@ class Discount extends ActiveRecord
                 'on'=>'our_discount',
             ),
             array(
-                'metrosarray', 'required', // для него нет label ошибки (потому что в конструкторе форм по нормальному это поле не было объявлено)
-                'on'=>'our_discount',
+                //нужно чтоб записывалось сюда при ред. нашего дискаута и xml дискаунта. Можно ли тут делать атрибут safe
+                'metrosarray', 'safe', // для него нет label ошибки (потому что в конструкторе форм по нормальному это поле не было объявлено)
+                //'on'=>'our_discount',
             ),
         );
     }
@@ -208,9 +209,15 @@ class Discount extends ActiveRecord
     }
 
 
-    public function search()
+    /*
+     * Список дискаунтов для страницы админки "УПРАВЛЕНИЕ ДИСКАУНТАМИ"
+     * Возвращает свои (по умолчанию) или импортирванные xml
+     *
+     */
+    public function search($type='our')
     {
         $criteria = new CDbCriteria;
+        $criteria->condition = ($type == 'our') ? 'our = 1' : 'our = 0';
         $criteria->compare('id', $this->id, true);
         $criteria->compare('category_id', $this->category_id, true);
         $criteria->compare('name', $this->name, true);
@@ -221,7 +228,7 @@ class Discount extends ActiveRecord
         return new ActiveDataProvider(get_class($this), array(
             'criteria'   => $criteria,
             'pagination' =>array(
-                'pageSize' => self::PAGE_SIZE
+                'pageSize' => 30
             )
         ));
     }
@@ -273,19 +280,34 @@ class Discount extends ActiveRecord
 
     public function afterSave()
     {
-        //если акция наша
-        if ($this->our==1)
+        //если акция наша. !акции не нашей тоже можно присвоить метро!!!
+        if ($this->scenario=='our_discount')
         {
-            //удаляем все сущ. метро
-            DiscountMetro::model()->deleteAll('discount_id=:id',array(':id'=>$this->id));
-            //добавляем новые из массива $this->metrosarray
-            foreach($this->metrosarray as $k=>$v)
-            {
-                $metro=new DiscountMetro();
-                $metro->discount_id=$this->id;
-                $metro->metro_id=$v;
-                $metro->save();
-            }
+            $this->reSpecifyMetro();
+        }
+        else
+        {
+            //если метро указаны, то присваиваем
+            if ($this->metrosarray)
+                $this->reSpecifyMetro();
+
+        }
+    }
+
+    /*
+     * Удаляет все текущие метро и записывает новые, которые лежат в metrosarray
+     */
+    private function reSpecifyMetro()
+    {
+        //удаляем все сущ. метро
+        DiscountMetro::model()->deleteAll('discount_id=:id',array(':id'=>$this->id));
+        //добавляем новые из массива $this->metrosarray
+        foreach($this->metrosarray as $k=>$v)
+        {
+            $metro=new DiscountMetro();
+            $metro->discount_id=$this->id;
+            $metro->metro_id=$v;
+            $metro->save();
         }
     }
     /**

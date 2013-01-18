@@ -1,33 +1,20 @@
 <?
+
 $this->widget('AdminGridView', array(
     'id'           => 'page-grid',
-    'dataProvider' => $model->search(),
+    'dataProvider' => $model->search('xml'),
     'filter'       => $model,
     'columns' => array(
         array(
-            'name' => 'id',
-            'type' => 'raw',
-            'header'=>'id покупки',
+            'name' => 'name',
+            'type' => 'raw'
         ),
 
-        'email',
-        'date',
-        'discount_id',
-
-        /*
-        array
-        (
-            'name'=>'date',
-            'htmlOptions'=>array('style'=>'text-align: center'),
-            'value'=>'date_format(date_create($data->date), "Y-m-d H:i:s")',
-        ),
-        */
-
-        /*
+        'beginsell',
+        'xml_imp_id',
         array(
             'class'=>'CButtonColumn',
         ),
-        */
     ),
 ));
 ?>

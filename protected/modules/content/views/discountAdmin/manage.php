@@ -5,7 +5,7 @@ $this->tabs = array(
 
 $this->widget('AdminGridView', array(
     'id'           => 'page-grid',
-    'dataProvider' => $model->search(),
+    'dataProvider' => $model->search('our'),
     'filter'       => $model,
     'columns' => array(
         array(

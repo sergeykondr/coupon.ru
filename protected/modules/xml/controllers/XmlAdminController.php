@@ -5,9 +5,10 @@ class XmlAdminController extends AdminController
     public static function actionsTitles()
     {
         return array(
+            "view"        => t("Просмотр import xml"),
             "manage"      => t("Управление import xml"),
             "create"      => t("Import xml"),
-            "view"        => t("Просмотр import xml"),
+            "view2"        => t("Просмотр import xml"),
             "update"      => t("Редактирование import xml"),
             //"delete"      => t("Удаление страницы"),
             "getJsonData" => t("Получение данных страницы (JSON)")
@@ -15,18 +16,17 @@ class XmlAdminController extends AdminController
     }
 
 
+    //показываем импортированные xml
     public function actionManage()
     {
-        $model = new Buy;
+        $model = new Discount('search_xml');
         $model->unsetAttributes();
 
-        /*
-        if (isset($_GET['Page']))
+        if (isset($_GET['Discount']))
         {
-            $model->attributes = $_GET['Page'];
+            $model->attributes = $_GET['Discount'];
         }
-        */
-
+        //application.modules.content.views.discountAdmin.manage
         $this->render('manage', array(
             "model" => $model
         ));
@@ -79,6 +79,9 @@ class XmlAdminController extends AdminController
             }
             $model->company_address = $adres;
 
+            //указываем ближайшие метро
+            // функционал в разработке
+
             //сохраняем модель
             $model->save() && $i++;
 
@@ -122,40 +125,37 @@ class XmlAdminController extends AdminController
 
     public function actionView($id)
     {
-        $model = $this->loadModel($id);
-
-        if ($model === null)
-        {
-            $this->pageNotFound();
-        }
-
-        if (isset($_GET['json']))
-        {
-            echo CJSON::encode($model);
-        }
-        else
-        {
-            $this->render('view', array('model' => $model));
-        }
+       echo $id;
     }
 
 
+    public function actionView2($id)
+    {
+        $model = Discount::model()->findByPk($id);
+        $this->render('view', array('model' => $model));
+    }
+
     public function actionUpdate($id)
     {
-        $model = $this->loadModel($id);
-        $form  = new Form('content.PageForm', $model);
-
+        $model = Discount::model()->with('metrosRell', 'metros')->findByPk($id);
+        $model->scenario='xml_discount'; //указываем сценарий валидации
+        $form  = new Form('content.DiscountForm', $model);
         $this->performAjaxValidation($model);
+
+        /*
+        if(isset($_POST['metrosRell']))
+            $model->metrosarray = $_POST['metrosRell'];
+        */
 
         if ($form->submitted() && $model->save())
         {
             $this->redirect(array(
-                'view',
+                'view2',
                 'id' => $model->id
             ));
         }
 
-        $this->render('update', array(
+        $this->render('application.modules.content.views.discountAdmin.update', array(
             'form' => $form,
         ));
     }

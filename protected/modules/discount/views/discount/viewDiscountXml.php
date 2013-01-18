@@ -16,7 +16,6 @@ $this->page_title = $page->name; //заголовок <h1>
 
                 <div class="item active">
                     <img src="<?=$page->xml[0]->getHref();?>" alt="">
-
                 </div>
                 <!--
                 <div class="item">

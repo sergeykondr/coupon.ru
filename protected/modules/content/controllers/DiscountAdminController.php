@@ -16,7 +16,7 @@ class DiscountAdminController extends AdminController
 
     public function actionManage()
     {
-        $model = new Discount('search');
+        $model = new Discount();
         $model->unsetAttributes();
 
         if (isset($_GET['Discount']))
@@ -32,7 +32,7 @@ class DiscountAdminController extends AdminController
 
     public function actionCreate()
     {
-        $model = new Discount();
+        $model = new Discount('our_discount');
         $form  = new Form('content.DiscountForm', $model); // в конструктор передается модель
         $this->performAjaxValidation($model);
 
@@ -80,6 +80,7 @@ class DiscountAdminController extends AdminController
     public function actionUpdate($id)
     {
         $model = Discount::model()->with('metrosRell', 'metros')->findByPk($id);
+        $model->scenario='our_discount'; //указываем сценарий валидации
         $form  = new Form('content.DiscountForm', $model);
         $this->performAjaxValidation($model);
 

@@ -85,7 +85,6 @@ class DiscountController extends Controller
                     }
                     $page->numbers_buy ++;
                     $page->save();
-
                 }
                 else
                 {
