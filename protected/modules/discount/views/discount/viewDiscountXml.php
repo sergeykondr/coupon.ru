@@ -114,7 +114,16 @@ $this->page_title = $page->name; //заголовок <h1>
                     //$parts = explode('{{cut}}', $page->text);
                     //echo array_shift($parts);
                     echo $page->text;
-                    echo $page->description;
+
+                    //перед <ul><li>
+                    echo '<ul><li>';
+                    $descript = $page->description;
+                    $countLi = substr_count($descript, ';') - 1;
+                    $descript = str_replace(';', ';</li><li>', $descript, $countLi);
+                    echo $descript;
+                    echo '</li></ul>';
+
+
                     ?>
                 </div>
                 <div class="tab-pane fade" id="second">
