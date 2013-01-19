@@ -107,6 +107,14 @@ class XmlAdminController extends AdminController
             $media->types = 'img';
             $media->save();
 
+            //записываем SEO теги
+            $metatags = new MetaTag();
+            $metatags->model_id = 'Discount';
+            $metatags->object_id = $model->id;
+            $metatags->title = $offer->name;
+            $metatags->keywords = 'москва, ' . $offer->supplier->name;
+            $metatags->description = $offer->name . 'Купон на скидку. Отзывы об акции.';
+            $metatags->save();
 
         }
        echo 'Всего было импортировано ' . $i . ' дискаунтов';

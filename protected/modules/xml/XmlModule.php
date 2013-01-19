@@ -38,7 +38,6 @@ class XmlModule extends WebModule
         return array(
             'Список импорт. xml'   => Yii::app()->createUrl('/xml/xmlAdmin/manage'),
             'Импортировать xml'   => Yii::app()->createUrl('/xml/xmlAdmin/create'),
-
         );
     }
 }
