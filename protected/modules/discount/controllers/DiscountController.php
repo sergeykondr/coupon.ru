@@ -17,35 +17,19 @@ class DiscountController extends Controller
 
     public function actionView($id)
     {
-        $page = Discount::model()->with('category', 'metros', 'metrosRell')->findByPk($id);
-        if (!$page)
+        $discount = Discount::model()->with('category', 'metros', 'metrosRell')->findByPk($id);
+        if (!$discount)
             $this->pageNotFound();
-
+        $this->setMetaTags($discount);
         //блок похожие акции
         //получаем cactivedataprovider
-        $similar = $page->similarSearch(); //выбираем только актуальные акции и упорядочиваем их по убыванию кол-ва купивших с учетом накрутки
-
-        /*
-         $similars = new CActiveDataProvider('Discount', array(
-            'criteria' => array(
-                'select' => '*, floor((cheat / ((UNIX_TIMESTAMP( endsell ) - UNIX_TIMESTAMP( beginsell ))/60/60)) * ((UNIX_TIMESTAMP( NOW() ) - UNIX_TIMESTAMP( beginsell ))/60/60)) as cheat_now, (floor((cheat / ((UNIX_TIMESTAMP( endsell ) - UNIX_TIMESTAMP( beginsell ))/60/60)) * ((UNIX_TIMESTAMP( NOW() ) - UNIX_TIMESTAMP( beginsell ))/60/60)) + numbers_buy) as all_buy',
-                'order'  => 'all_buy DESC',
-                'limit'  => 5,
-                //только те акции, у которых корректно заполенны endsell, beginsell AND из тоже категории AND исключаем текущуюа акцию AND только актуальные акции
-                'condition'=>'DATEDIFF( endsell, beginsell ) >1 AND category_id = ' . $page->category_id . ' AND id <>' . $page->id . ' AND ' . Category::model()->queryActual(),
-            ),
-            'pagination' => array(
-                'pageSize' => '5'
-            )
-        ));
-        $similars->setPagination(false);
-        */
+        $similar = $discount->similarSearch(); //выбираем только актуальные акции и упорядочиваем их по убыванию кол-ва купивших с учетом накрутки
 
         $metro = Metro::model()->findAll(array('order' => 'name'));
         //определяем, какой view надо использовать
-        $nameView = ($page->our) ? 'viewDiscountOur' : 'viewDiscountXml';
+        $nameView = ($discount->our) ? 'viewDiscountOur' : 'viewDiscountXml';
         $this->render($nameView, array(
-            "page" => $page, "similars" => $similar, "metro" => $metro
+            "page" => $discount, "similars" => $similar, "metro" => $metro
         ));
 
     }
@@ -127,19 +111,11 @@ class DiscountController extends Controller
 
     public function actionIndex()
     {
-        $this->pageTitle = 'Гланая страница';
-        /*
-        $data_provider = new CActiveDataProvider('Page', array(
-            'criteria' => array(
-                'condition' => "status = '" . Page::STATUS_PUBLISHED . "'",
-                'order'     => 'date_create DESC',
-                'with'      => array('tags')
-            ),
-            'pagination' => array(
-                'pageSize' => '10'
-            )
-        ));
-        */
+        //$this->pageTitle = 'Гланая страница';
+        //$text =
+        $modelCat = Category::model()->findByPk(11); //это у нас главная страница
+        $this->setMetaTags($modelCat);
+
         $data_provider = new CActiveDataProvider('Discount', array(
             'criteria' => array(
                 'order'     => 'beginsell DESC',
@@ -151,7 +127,7 @@ class DiscountController extends Controller
         ));
 
         $this->render('index', array(
-            'data_provider' => $data_provider,
+            'data_provider' => $data_provider, 'text' => $modelCat->text
         ));
 
     }
@@ -163,7 +139,7 @@ class DiscountController extends Controller
 
         if($modelCat===null)
             throw new CHttpException(404,'Страница не найдена');
-
+        $this->setMetaTags($modelCat);
         $activeDataProvider = new CActiveDataProvider(Discount::model()->with('category')->inCategory($modelCat->id), array(
                 'criteria' => array(
                     'order'     => 'beginsell DESC',
@@ -176,7 +152,7 @@ class DiscountController extends Controller
         );
 
         $this->render('index', array(
-            'data_provider' => $activeDataProvider,
+            'data_provider' => $activeDataProvider, 'text' => $modelCat->text
         ));
     }
 
@@ -189,14 +165,16 @@ class DiscountController extends Controller
         $menu = array();
         //записываем первое меню - 'Все' (его нет в БД)
         $menu[] = array(
-            'label' => 'Все',
+            'label' => $categories[10]->name, //ссылка на главную страницу
             'url'   => array('/discount/discount/index')
         );
         //записываем всё остальное меню
         //указываем экшен, который обрабатывает запросы
-        $urlPart = '/discount/discount/category'; //'category/'
+        $urlPart = '/discount/discount/category';
         foreach ($categories as $name)
         {
+            if ($name->id == 11) //пропускаем ссылку на главную страницу
+                continue;
             //обращаемся к модели категорий по id, узнаем кол-во акций
             $count = Category::model()->with('discountCount')->findByPk($name->id);
             $menu[] = array(

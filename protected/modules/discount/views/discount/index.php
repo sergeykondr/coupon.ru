@@ -12,3 +12,9 @@
     ?>
 
 </div>
+<div class="row-fluid">
+    <? if  (isset($text))
+    echo $text;
+    ?>
+
+</div>

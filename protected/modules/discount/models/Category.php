@@ -22,7 +22,30 @@ class Category extends ActiveRecord
 
     public function rules()
     {
+        return array(
+            array(
+                'name', 'required'
+            ),
+            array(
+                'text', 'safe'
+            ),
+            array(
+                'name, url',
+                'safe',
+                'on'=>'search'
+            ),
+        );
+    }
 
+
+    public function behaviors()
+    {
+        return CMap::mergeArray(
+            parent::behaviors(),
+            array(
+                'MetaTag' => array('class' => 'application.components.activeRecordBehaviors.MetaTagBehavior'),
+            )
+        );
     }
 
 
@@ -50,5 +73,19 @@ class Category extends ActiveRecord
         return date('Y-m-d H:i:s',time());
     }
 
+
+    public function search()
+    {
+        $criteria = new CDbCriteria;
+        $criteria->compare('name', $this->id, true);
+        $criteria->compare('url', $this->url, true);
+
+        return new ActiveDataProvider(get_class($this), array(
+            'criteria'   => $criteria,
+            'pagination' =>array(
+                'pageSize' => 30
+            )
+        ));
+    }
 
 }

@@ -280,6 +280,7 @@ class Discount extends ActiveRecord
 
     public function afterSave()
     {
+        parent::afterSave();
         //если акция наша. !акции не нашей тоже можно присвоить метро!!!
         if ($this->scenario=='our_discount')
         {

@@ -6,7 +6,8 @@ return array(
         'clientOptions' => array('validateOnSubmit' => true),
     ),
     'elements'             => array(
-        'MetaTag' =>array('type'=>'meta_tags'),
+
+
 
         'name'    => array(
             'type' => 'text'
@@ -153,6 +154,8 @@ return array(
             'type' => 'editor',
             //echo $form->textArea($model, 'Details', array('maxlength' => 300, 'rows' => 6, 'cols' => 50));
         ),
+
+        'MetaTag' =>array('type'=>'meta_tags'),
     ),
     'buttons'              => array(
         'submit' => array(

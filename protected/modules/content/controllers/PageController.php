@@ -39,7 +39,7 @@ class PageController extends Controller
         $menu = array();
         //записываем первое меню - 'Все' (его нет в БД)
         $menu[] = array(
-            'label' => 'Все',
+            'label' => $categories[10]->name, //ссылка на главную страницу
             'url'   => array('/discount/discount/index')
         );
         //записываем всё остальное меню
@@ -47,6 +47,8 @@ class PageController extends Controller
         $urlPart = '/discount/discount/category';
         foreach ($categories as $name)
         {
+            if ($name->id == 11) //пропускаем ссылку на главную страницу
+                continue;
             //обращаемся к модели категорий по id, узнаем кол-во акций
             $count = Category::model()->with('discountCount')->findByPk($name->id);
             $menu[] = array(
