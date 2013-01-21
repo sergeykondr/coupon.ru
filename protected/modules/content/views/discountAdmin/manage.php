@@ -8,11 +8,11 @@ $this->widget('AdminGridView', array(
     'dataProvider' => $model->search('our'),
     'filter'       => $model,
     'columns' => array(
+        'id',
         array(
             'name' => 'name',
             'type' => 'raw'
         ),
-
         'beginsell',
         array(
             'class'=>'CButtonColumn',

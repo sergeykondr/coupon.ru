@@ -18,7 +18,6 @@
             }
             else
             {
-
                 $imghtml = CHtml::image($data->xml[0]->getHref(),'',array('class'=>'img-rounded'));
             }
 

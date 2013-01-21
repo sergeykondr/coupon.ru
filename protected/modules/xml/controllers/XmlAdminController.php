@@ -190,7 +190,10 @@ foreach ($discountsModel as $k => $v)
         $endvalid->appendChild($dom->createTextNode($v->endvalid));
         //добавление элемента <picture> в <offer>
         $picture = $offer->appendChild($dom->createElement('picture'));
-        $picture->appendChild($dom->createTextNode('picture!!!')); //???????
+        $urlPic = '';
+        if (isset($v->gallery[0]))
+               $urlPic = 'http://freeskidka.ru' . $v->gallery[0]->getHref();
+        $picture->appendChild($dom->createTextNode($urlPic));
         //добавление элемента <price> в <offer>
         $price = $offer->appendChild($dom->createElement('price'));
         $price->appendChild($dom->createTextNode($v->price));

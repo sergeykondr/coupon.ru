@@ -111,8 +111,7 @@ class DiscountController extends Controller
 
     public function actionIndex()
     {
-        //$this->pageTitle = 'Гланая страница';
-        //$text =
+        //находим главную страницу в моделе категории для назначения тегов
         $modelCat = Category::model()->findByPk(11); //это у нас главная страница
         $this->setMetaTags($modelCat);
 
