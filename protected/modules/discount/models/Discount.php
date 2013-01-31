@@ -17,6 +17,11 @@ class Discount extends ActiveRecord
     //const PAGE_SIZE = 20;
     public $actuality; //актуальна ли акция. кеш. вззаимодействие с методом isActual
 
+    const PATH_XML_IMG = 'upload/mediaFiles/xml';
+    const PATH_XML_IMG_CROP = 'upload/mediaFiles/xml_crop';
+    const PRE_NAME_XML_IMG_CROP = '310x205_crop_';
+
+
 
     public function name()
     {
@@ -294,6 +299,28 @@ class Discount extends ActiveRecord
 
         }
     }
+
+
+    public function createCropCatImage()
+    {
+        //првоерка есть ли cropImage
+        //если нет: обратиться к модели mediafile и получить name
+
+
+        //Делаем crop
+        $image = Yii::app()->image->load('./' . self::PATH_XML_IMG . '/' . $imgName);
+        //делаем чтоб в ширину - 310, в высоту - 205
+        if  ( $image->width / $image->height > 310/205 )
+        {
+            $image->resize(NULL, 205)->crop(310, 205, 'top')->quality(75);
+        }
+        else
+        {
+            $image->resize(310, NULL)->crop(310, 205, 'top')->quality(75);
+        }
+        $image->save('./' . self::PATH_CROP . '/' . self::NAME_CROP . $imgName); //$image->save();
+    }
+
 
     /*
      * Удаляет все текущие метро и записывает новые, которые лежат в metrosarray

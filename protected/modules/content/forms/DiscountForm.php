@@ -52,8 +52,6 @@ return array(
             'htmlOptions' => array(
                 'name' => 'Discount[metrosarray]', // принудительно присваиваем, иначе будет Discount[metros]
             )
-
-
         ),
 
         'gallery'    => array(

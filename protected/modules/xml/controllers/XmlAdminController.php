@@ -90,11 +90,28 @@ class XmlAdminController extends AdminController
             //$file      = CUploadedFile::getInstanceByName('file');
             //echo $file->name;
             $path = 'upload/mediaFiles/xml';
+            $pathCrop = 'upload/mediaFiles/xml_crop';
             //ивлекаем имя картинки из url
             $imgNameOriginal = substr($model->xml_imp_picture, strrpos($model->xml_imp_picture, '/') + 1);
             $imgName = FileSystemHelper::vaultResolveCollision($path, $imgNameOriginal);
             $fileImp = file_get_contents($model->xml_imp_picture, true);
             file_put_contents('./' . $path . '/' . $imgName, $fileImp); //записываем в папку
+
+            /*
+           //Делаем crop
+            $image = Yii::app()->image->load('./' . $path . '/' . $imgName);
+            //делаем чтоб в ширину - 310, в высоту - 205
+            if  ( $image->width / $image->height > 310/205 )
+            {
+                $image->resize(NULL, 205)->crop(310, 205, 'top')->quality(75);
+            }
+            else
+            {
+                $image->resize(310, NULL)->crop(310, 205, 'top')->quality(75);
+            }
+            $image->save('./' . $pathCrop . '/' . '310x205_crop_' . $imgName); //$image->save();
+            */
+
 
             //записываем информацию о картинке в MediaFile
             $media = new MediaFile();
@@ -241,6 +258,24 @@ foreach ($discountsModel as $k => $v)
         $dom->save('./xmlout.xml'); // сохранение файла
 
         echo 'файл доступен по адресу /xmlout.xml';
+
+
+        /*
+        $img = ImageHelper::thumb('./testimg', '123.jpg', array(
+            'width'  => 310,
+            'height' => 100
+        ));
+        return $img->__toString();
+        */
+
+        //через CHtml::image
+        //echo CHtml::image('./testimg/123.jpg','alt',array('height'=>'200','width'=>'200'));
+        //echo CHtml::image(Yii::app()->request->getBaseUrl() . '/testimg/123.jpg','alt',array('height'=>'200','width'=>'200'));
+
+
+
+
+
     }
 
 

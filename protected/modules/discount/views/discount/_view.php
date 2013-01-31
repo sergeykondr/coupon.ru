@@ -18,7 +18,12 @@
             }
             else
             {
-                $imghtml = CHtml::image($data->xml[0]->getHref(),'',array('class'=>'img-rounded'));
+                if (isset($data->xml[0]))
+                $imghtml = CHtml::image('/' . 'upload/mediaFiles/xml_crop/' . '310x205_crop_' . $data->xml[0]->name,'',array('class'=>'img-rounded'));
+
+                //$imghtml = CHtml::image('/' . 'upload/mediaFiles/xml_crop/' . '310x205_crop_' . $data->xml[0]->name,'',array('class'=>'img-rounded'));
+
+
             }
 
             echo CHtml::link($imghtml, $data->href, array('class' => 'page-title'));
