@@ -2,6 +2,12 @@
 
 class XmlAdminController extends AdminController
 {
+    public $fileXmlLoad; //загружаемый xml файл
+    public $urlsImage = array(); //массив url картинок
+    public $urlsImageContent; //массив url и контента картинок
+    public $cityRadar = 'http://cityradar.ru/kupongid.xml';
+
+
     public static function actionsTitles()
     {
         return array(
@@ -34,19 +40,42 @@ class XmlAdminController extends AdminController
     }
 
 
-    public function actionImport()
+    public function xmlLoad()
     {
-        //импорт xml
-        $sxml = simplexml_load_file("http://cityradar.ru/kupongid.xml");
-        $i=0; //счетчик для кол-ва импортированных дискаунтов
-        $urlsImage = array(); //для записи url картинок
-        foreach ($sxml->offers->offer as $offer)
+        $this->fileXmlLoad = simplexml_load_file($this->cityRadar);
+    }
+
+
+    //получение url и контента картинок для несуществющих дискаунтов
+    public function loadImage()
+    {
+        if (empty($this->fileXmlLoad))
+            $this->xmlLoad();
+        foreach ($this->fileXmlLoad->offers->offer as $offer)
         {
             //только купоны для Москвы
             if ($offer->region != "Москва")
                 continue;
+            //если id дискаунта такой уже есть, то пропускаем
+            if (Discount::model()->findByAttributes(array('xml_imp_id'=>$offer->id)))
+                continue;
+            //url картинок
+            $this->urlsImage[] = (string)$offer->picture;
+        }
+        //получение контента картинок
+        $this->urlsImageContent = CurlHelper::multi($this->urlsImage);
+    }
 
-            //если id дискаунта такой уже есть, то не импортируем!!!
+    public function actionImport()
+    {
+        $this->loadImage();
+        $i = 0;
+        foreach ($this->fileXmlLoad->offers->offer as $offer)
+        {
+            //только купоны для Москвы
+            if ($offer->region != "Москва")
+                continue;
+            //если id дискаунта такой уже есть, то не импортируем
             if (Discount::model()->findByAttributes(array('xml_imp_id'=>$offer->id)))
                 continue;
 
@@ -62,7 +91,8 @@ class XmlAdminController extends AdminController
             $model->endsell = (string)$offer->endsell;
             $model->beginvalid = (string)$offer->beginvalid;
             $model->endvalid = (string)$offer->endvalid;
-            $model->xml_imp_picture = $offer->picture;
+            $model->xml_imp_picture = (string)$offer->picture; //лишнее?
+            $this->urlsImage[] = (string)$offer->picture;
             $model->price = $offer->price;
             $model->discount = $offer->discount;
             $model->discountprice = $offer->discountprice;
@@ -78,59 +108,16 @@ class XmlAdminController extends AdminController
                     }
                     $model->company_address = $adres;
 
-            //указываем ближайшие метро. функционал в разработке
-
             //сохраняем модель
-            $model->save() && $i++ && $urlsImage[] = $offer->picture; //записываем url картинки в массив $urls
+            $model->save() && $i++ ;
 
-            //загружаем картинки на сервер
-            //$file      = CUploadedFile::getInstanceByName('file');
-            //echo $file->name;
-            $path = 'upload/mediaFiles/xml';
-            $pathCrop = 'upload/mediaFiles/xml_crop';
-            //ивлекаем имя картинки из url
+            // указываем ближайшие метро. функционал в разработке
 
-            //$imgNameOriginal = substr($model->xml_imp_picture, strrpos($model->xml_imp_picture, '/') + 1);
-            $arrayUrlImage = explode("/", $model->xml_imp_picture);
-            $imgNameOriginal = end($arrayUrlImage);
-            $imgName = FileSystemHelper::vaultResolveCollision($path, $imgNameOriginal); //определяем уникальное имя для указанной папки
+            //загружаем картинки
+            $this->addPictureImport($model->xml_imp_picture, $model->id);
 
-            $imageUrls = CurlHelper::multi($urlsImage);
-            $fileImp = file_get_contents($model->xml_imp_picture, true);
-            file_put_contents('./' . $path . '/' . $imgName, $fileImp); //записываем в папку
-
-
-
-            /*
-           //Делаем crop
-            $image = Yii::app()->image->load('./' . $path . '/' . $imgName);
-            //делаем чтоб в ширину - 310, в высоту - 205
-            if  ( $image->width / $image->height > 310/205 )
-            {
-                $image->resize(NULL, 205)->crop(310, 205, 'top')->quality(75);
-            }
-            else
-            {
-                $image->resize(310, NULL)->crop(310, 205, 'top')->quality(75);
-            }
-            $image->save('./' . $pathCrop . '/' . '310x205_crop_' . $imgName); //$image->save();
-            */
-
-            $imgName = '123';
-            $imgNameOriginal = 'sdf';
-            //записываем информацию о картинке в MediaFile
-            $media = new MediaFile();
-            $media->object_id = $model->id;
-            $media->model_id = 'Discount';
-            $media->name = $imgName;
-            $media->title = $imgNameOriginal;
-            $media->tag = 'xml';
-            $media->order = 1;
-            $media->path = $path;
-            $media->types = 'img';
-            $media->save();
-
-            //записываем SEO теги
+            //3) записываем SEO теги: $model->id; $offer->name; $offer->supplier->name;
+            $this->addMetaTegImport()
             $metatags = new MetaTag();
             $metatags->model_id = 'Discount';
             $metatags->object_id = $model->id;
@@ -140,6 +127,8 @@ class XmlAdminController extends AdminController
             $metatags->save();
 
         }
+
+
        echo 'Всего было импортировано ' . $i . ' дискаунтов';
         /*
             if ($form->submitted() && $model->save())
@@ -151,6 +140,38 @@ class XmlAdminController extends AdminController
             }
             $this->render('create', array('form' => $form));
         */
+    }
+
+    /**
+     * загружаем картинки на сервер
+     * @param $urlPicture - url картинки на чужом сайта
+     * @param $discountId - id дискаунта в нашей базе
+     */
+    public function addPictureImport($urlPicture, $discountId)
+    {
+        $arrayUrlImage = explode("/", $urlPicture);
+        $imgNameOriginal = end($arrayUrlImage);
+        $imgName = FileSystemHelper::vaultResolveCollision(Discount::PATH_XML_IMG, $imgNameOriginal); //определяем уникальное имя для указанной папки
+        file_put_contents(YiiBase::getPathOfAlias('webroot') . '/'. Discount::PATH_XML_IMG . '/' . $imgName , $this->urlsImageContent[$urlPicture]); //записываем в текущ. папку
+        unset($this->urlsImageContent[$urlPicture]); // удаляем элемент с картинкой
+
+        // записываем информацию о картинке в MediaFile
+        $media = new MediaFile();
+        $media->object_id = $discountId;
+        $media->model_id = 'Discount';
+        $media->name = $imgName;
+        $media->title = $imgNameOriginal;
+        $media->tag = 'xml';
+        $media->order = 1;
+        $media->path = Discount::PATH_XML_IMG;
+        $media->types = 'img';
+        $media->save();
+    }
+
+
+    public function addMetaTegImport()
+    {
+
     }
 
 
@@ -251,8 +272,9 @@ class XmlAdminController extends AdminController
                             // КОНЕЦ цикла добавления каждого offer
         }
         $dom->formatOutput = true;
-        $dom->save('./xmlout.xml'); // сохранение в файл
+        $dom->save(YiiBase::getPathOfAlias('webroot') . DIRECTORY_SEPARATOR . 'xmlout.xml'); // сохранение в файл
         echo 'файл доступен по адресу /xmlout.xml';
+
         /*
         $img = ImageHelper::thumb('./testimg', '123.jpg', array(
             'width'  => 310,
@@ -260,7 +282,6 @@ class XmlAdminController extends AdminController
         ));
         return $img->__toString();
         */
-
         //через CHtml::image
         //echo CHtml::image('./testimg/123.jpg','alt',array('height'=>'200','width'=>'200'));
         //echo CHtml::image(Yii::app()->request->getBaseUrl() . '/testimg/123.jpg','alt',array('height'=>'200','width'=>'200'));
