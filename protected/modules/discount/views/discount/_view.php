@@ -2,7 +2,7 @@
     <div class="span4 well">
         <div class="img_category">
         <?
-            $imghtml = CHtml::image(Yii::app()->request->getBaseUrl(true) . $data->urlImageCrop(),'',array('class'=>'img-rounded'));
+            $imghtml = CHtml::image(Yii::app()->request->getBaseUrl(true) . $data->urlImageCropShow(),'',array('class'=>'img-rounded'));
             echo CHtml::link($imghtml, $data->href, array('class' => 'page-title'));
         ?>
             </div>

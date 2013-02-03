@@ -298,21 +298,9 @@ class Discount extends ActiveRecord
     }
 
 
-    public function urlImageCrop()
+    public function urlImageCropShow()
     {
-        //узнать наш дискаунт или нет
-        /*
-        $mediaFileTag = ($this->our) ? 'gallery' : 'xml[0]';
-        if ($this->our)
-        {
-            //проверка есть ли cropImage по предполагаемому path. Если есть - возвращаем url картинки
-            $path = self::PATH_XML_IMG_CROP . '/' . $this->preNameCrop() . $this->$mediaFileTag[0]->name;
-            if (file_exists('./' . $path ))
-                return '/'. $path;
-            //если нет - то делаем кроп
-            return $this->createCropImage();
-        }
-        */
+        //найти модель с записями где находится картинка
         $mediaFile=MediaFile::model()->findByAttributes(array('object_id'=>$this->id, 'model_id'=>'Discount'));
         if($mediaFile===null)
             return '/upload/mediaFiles/no_image_310x205.jpg';
