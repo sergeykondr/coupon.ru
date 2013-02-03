@@ -16,5 +16,4 @@
     <? if  (isset($text))
     echo $text;
     ?>
-    crop
 </div>

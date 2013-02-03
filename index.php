@@ -11,7 +11,7 @@ ini_set('session.cookie_lifetime', 60 * 60 * 24 * 30);
 
 define('DS', DIRECTORY_SEPARATOR);
 
-$_SERVER['DOCUMENT_ROOT'] = __DIR__ .'/';
+$_SERVER['DOCUMENT_ROOT'] = dirname(__FILE__) .'/';
 
 $_SERVER['DOCUMENT_ROOT'] = str_replace(array('\\', '/'), DS, $_SERVER['DOCUMENT_ROOT']);
 

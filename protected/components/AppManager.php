@@ -128,7 +128,8 @@ class AppManager
                 continue;
             }
 
-            $actions[$class] = $class::actionsTitles();
+            //$actions[$class] = $class::actionsTitles();
+            $actions[$class] = call_user_func( array( $class, actionsTitles()) );
         }
 
         return $actions;

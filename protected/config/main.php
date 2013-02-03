@@ -96,6 +96,7 @@ return array(
         'text'         => array(
             'class' => 'application.components.TextComponent'
         ),
+        /*
         'request' => array(
             'class' => 'HttpRequest',
             'enableCsrfValidation' => false,
@@ -105,6 +106,7 @@ return array(
             ),
             'csrfTokenName' => 'token',
         ),
+        */
         'urlManager'   => array(
             'urlFormat'      => 'path',
             'showScriptName' => false,

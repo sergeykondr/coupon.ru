@@ -1,6 +1,12 @@
 AddDefaultCharset utf-8
 AddCharset utf-8 .html .css .js .xml .json .rss .atom
 
+# время выполенения скрипта
+php_value max_execution_time 300
+php_value memory_limit 128M
+#Для отображения ошибок PHP в браузер
+php_value display_errors 1
+
 
 # for Media module
 # XSendFile on
