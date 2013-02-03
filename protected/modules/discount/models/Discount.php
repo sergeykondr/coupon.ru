@@ -13,14 +13,11 @@ class Discount extends ActiveRecord
     public $all_buy; //всего: накрутка + кол-во купивших реально
     public $cheat_now; //сколько надо накрутить
     public $metrosarray; //для записи массива метро
-    //public $jopa;
-    //const PAGE_SIZE = 20;
     public $actuality; //актуальна ли акция. кеш. вззаимодействие с методом isActual
-
     const PATH_XML_IMG = 'upload/mediaFiles/xml';
     const PATH_XML_IMG_CROP = 'upload/mediaFiles/xml_crop';
-    const PRE_NAME_XML_IMG_CROP = '310x205_crop_';
-
+    const IMG_CROP_WIDTH = 310;
+    const IMG_CROP_HEIGHT = 205;
 
 
     public function name()
@@ -182,7 +179,7 @@ class Discount extends ActiveRecord
 
         $date1 = new DateTime($this->getAttribute('endsell'));
         $date2 = new DateTime('now');
-        $interval = $date1->diff($date2);
+        $interval = date_diff($date1, $date2); // PHP>=5.3 $interval = $date1->date_diff($date2);
         $str=array();
         if ($interval->format('%m'))
             $str[] = $interval->format('%m'). ' мес. ';
@@ -301,26 +298,58 @@ class Discount extends ActiveRecord
     }
 
 
-    public function createCropCatImage()
+    public function urlImageCrop()
     {
-        //првоерка есть ли cropImage
-        //если нет: обратиться к модели mediafile и получить name
-
-
-        //Делаем crop
-        $image = Yii::app()->image->load('./' . self::PATH_XML_IMG . '/' . $imgName);
-        //делаем чтоб в ширину - 310, в высоту - 205
-        if  ( $image->width / $image->height > 310/205 )
+        //узнать наш дискаунт или нет
+        /*
+        $mediaFileTag = ($this->our) ? 'gallery' : 'xml[0]';
+        if ($this->our)
         {
-            $image->resize(NULL, 205)->crop(310, 205, 'top')->quality(75);
+            //проверка есть ли cropImage по предполагаемому path. Если есть - возвращаем url картинки
+            $path = self::PATH_XML_IMG_CROP . '/' . $this->preNameCrop() . $this->$mediaFileTag[0]->name;
+            if (file_exists('./' . $path ))
+                return '/'. $path;
+            //если нет - то делаем кроп
+            return $this->createCropImage();
+        }
+        */
+        $mediaFile=MediaFile::model()->findByAttributes(array('object_id'=>$this->id, 'model_id'=>'Discount'));
+        if($mediaFile===null)
+            return '/upload/mediaFiles/no_image_310x205.jpg';
+        $path = self::PATH_XML_IMG_CROP . '/' . $this->preNameCrop() . $mediaFile->name;
+        if (file_exists('./' . $path ))
+            return '/'. $path;
+        //если нет - то делаем кроп
+        return $this->createCropImage($mediaFile->getHref(), $mediaFile->name);
+
+    }
+
+
+    public function createCropImage($href, $name)
+    {
+        //обращаемся к модели mediafile (через behaviors) и получаем пусть с именем.
+        $image = Yii::app()->image->load(YiiBase::getPathOfAlias('webroot') . $href);
+        //делаем crop c нужными пропорциями
+        if  ( $image->width / $image->height > self::IMG_CROP_WIDTH / self::IMG_CROP_HEIGHT )
+        {
+            $image->resize(NULL, self::IMG_CROP_HEIGHT)->crop(self::IMG_CROP_WIDTH, self::IMG_CROP_HEIGHT, 'top')->quality(75);
         }
         else
         {
-            $image->resize(310, NULL)->crop(310, 205, 'top')->quality(75);
+            $image->resize(self::IMG_CROP_WIDTH, NULL)->crop(self::IMG_CROP_WIDTH, self::IMG_CROP_HEIGHT, 'top')->quality(75);
         }
-        $image->save('./' . self::PATH_CROP . '/' . self::NAME_CROP . $imgName); //$image->save();
+
+        $url =   '/' . self::PATH_XML_IMG_CROP . '/' . $this->preNameCrop() .  $name;
+        $image->save('./' .$url);
+        return $url;
     }
 
+
+    //приставка в имени crop файла. т.к. имя кроп файла = приставка + само имя
+    private function preNameCrop()
+    {
+        return self::IMG_CROP_WIDTH . 'x' . self::IMG_CROP_HEIGHT . '_crop_'; //приставка 310x205_crop_
+    }
 
     /*
      * Удаляет все текущие метро и записывает новые, которые лежат в metrosarray
