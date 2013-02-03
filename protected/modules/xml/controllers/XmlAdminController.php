@@ -80,12 +80,11 @@ class XmlAdminController extends AdminController
                 continue;
 
             $model = new Discount('xml_discount');
-            //echo "bid: " . $offer->bid . "<br>";
             $model->xml_imp_id = $offer->id;
             $model->category_id = 10;//категория разное
             $model->our = 0; //false - акция не наша
             $model->xml_imp_url = $offer->url;
-            $model->name = $offer->name;
+            $model->name = $offer->name; //Название дискаунта
             $model->description = $offer->description;
             $model->beginsell = (string)$offer->beginsell;
             $model->endsell = (string)$offer->endsell;
@@ -100,7 +99,7 @@ class XmlAdminController extends AdminController
                 $model->company_name = $offer->supplier->name;
                 $model->company_url = $offer->supplier->url;
                 $model->company_tel = $offer->supplier->tel;
-                    //address. foreach
+                    //адреса компании
                     $adres =''; // склеиваем адрес, если их несколько через ||
                     foreach ($offer->supplier->addresses->address as $address )
                     {
@@ -117,15 +116,7 @@ class XmlAdminController extends AdminController
             $this->addPictureImport($model->xml_imp_picture, $model->id);
 
             //3) записываем SEO теги: $model->id; $offer->name; $offer->supplier->name;
-            $this->addMetaTegImport()
-            $metatags = new MetaTag();
-            $metatags->model_id = 'Discount';
-            $metatags->object_id = $model->id;
-            $metatags->title = $offer->name;
-            $metatags->keywords = 'москва, ' . $offer->supplier->name;
-            $metatags->description = $offer->name . 'Купон на скидку. Отзывы об акции.';
-            $metatags->save();
-
+            $this->addMetaTegImport($model->id, $offer->name, $offer->supplier->name);
         }
 
 
@@ -169,9 +160,16 @@ class XmlAdminController extends AdminController
     }
 
 
-    public function addMetaTegImport()
+    //записываем сео теги
+    public function addMetaTegImport($discountId, $discountName, $companyName)
     {
-
+        $metatags = new MetaTag();
+        $metatags->model_id = 'Discount';
+        $metatags->object_id = $discountId;
+        $metatags->title = $discountName;
+        $metatags->keywords = 'москва, ' . $companyName;
+        $metatags->description = $companyName . 'Купон на скидку. Отзывы об акции.';
+        $metatags->save();
     }
 
 
