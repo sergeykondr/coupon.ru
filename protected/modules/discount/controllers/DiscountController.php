@@ -45,6 +45,7 @@ class DiscountController extends Controller
             {
                 $model->discount_id = $id;
                 $model->date = $model->nowDate();
+                $model->cypher = $model->getIdCypher();
 
                 $page = Discount::model()->with('category')->findByPk($id);
 
@@ -62,6 +63,7 @@ class DiscountController extends Controller
                     //добавляем новую покупку.
                     $model->save();
                     $buyCurrentId = $model->id; //узнаем id новой покупки
+                    ////$cypher = $model->cypher; что делать с шифром???????????????????????????????????
                     //счетчик купивших в discount +1
                     if (!$page)
                     {
@@ -85,7 +87,7 @@ class DiscountController extends Controller
                     $this->pageNotFound();
                 }
                 $this->renderPartial("viewCoupon", array(
-                    "page" => $page, "similars" => $similars, "buyCurrentId" => $buyCurrentId,
+                    "page" => $page, "similars" => $similars, "buyCurrentId" => $buyCurrentId, "cypher" => $cypher //?????? шифр
                 ));
             }
         }

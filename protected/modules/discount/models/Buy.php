@@ -64,6 +64,7 @@ class Buy extends ActiveRecord
         $criteria->compare('email', $this->email, true);
         $criteria->compare('date', $this->date, true);
         $criteria->compare('discount_id', $this->discount_id, true);
+        $criteria->compare('cypher', $this->cypher, true);
 
         return new ActiveDataProvider(get_class($this), array(
             'criteria'   => $criteria,
@@ -72,4 +73,20 @@ class Buy extends ActiveRecord
             )
         ));
     }
+
+
+    public function getIdCypher($id='none')
+    {
+        if ($id=='none')
+        {
+            return base_convert($this->getAttribute('id'),10,3);
+        }
+        else
+        {
+            return base_convert($id,10,3);
+        }
+
+
+    }
+
 }

@@ -36,25 +36,14 @@
 <body>
     <h2>Электронный купон</h2>
     <h3>Данный купон необходимо предъявить на месте для получения скидки или услуги</h3>
-    <h4><? echo CHtml::encode($page->name); ?></h4>
-    <h4><? echo CHtml::encode($page->description); ?></h4>
+    <h4><? echo $page->name; ?></h4>
+    <h4><? echo $page->description; ?></h4>
     <?//id покупки из buy (в 3ичной системе исчисления) - категория дискаунта - колво реально купивших купон?>
-    <p>Код купона: <? echo base_convert("$buyCurrentId",10,3).'-'.$page->category_id.'-'.$page->numbers_buy ?></p>
-
-
+    <p>Код купона: <? echo $cypher .' - '.$page->category_id.' - '.$page->numbers_buy ?></p>
     <p>Купон действует до: <?= Yii::app()->dateFormatter->format('d MMMM yyyy', $page->endvalid); ?></p>
     <p>Телефон: <?= CHtml::encode($page->company_tel); ?></p>
     <p>Адрес: <?= CHtml::encode($page->company_address); ?></p>
     <p>Карта</p>
     <div id="map" style="width:662px;height:400px"></div>
-
-
-
-    <?
-    $this->page_title = $page->name; //заголовок <h1>
-    //echo CHtml::encode($page->text);
-    ?>
-
-    <h4><? echo CHtml::encode($page->description); ?></h4>
 </body>
 </html>

@@ -1,4 +1,8 @@
+
 <?
+echo 'Покупка - это сгенерированный купон. На каждом купоне есть код.
+<br>Пример кода купона: 210 - 5 - 1.
+<br>где: 210 - шифр покупки; 5 - id категории; 1 - номер покупателя данного дискаунта';
 $this->widget('AdminGridView', array(
     'id'           => 'page-grid',
     'dataProvider' => $model->search(),
@@ -9,10 +13,17 @@ $this->widget('AdminGridView', array(
             'type' => 'raw',
             'header'=>'id покупки',
         ),
+        array(
+            'name' => 'cypher',
+            'type' => 'raw',
+            'header'=>'Шифр id покупки',
+        ),
+
 
         'email',
         'date',
         'discount_id',
+
 
         /*
         array
