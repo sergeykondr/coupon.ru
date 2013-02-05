@@ -163,8 +163,7 @@ $this->page_title = $page->name; //заголовок <h1>
                     ?>
                     <!-- <p>Метро: <?php // echo implode(', ', CHtml::listData($page->metros, 'id', 'name')); ?></p> -->
                 </div>
-                <div class="tab-pane fade" id="third">
-                    <p>Комментарии</p>
+                <div class="tab-pane fade" id="third" style="overflow:hidden">
                     <!-- Put this script tag to the <head> of your page -->
                     <script type="text/javascript" src="//vk.com/js/api/openapi.js?76"></script>
 
@@ -175,7 +174,7 @@ $this->page_title = $page->name; //заголовок <h1>
                     <!-- Put this div tag to the place, where the Comments block will be -->
                     <div id="vk_comments"></div>
                     <script type="text/javascript">
-                        VK.Widgets.Comments("vk_comments", {limit: 10, width: "496", attach: false});
+                        VK.Widgets.Comments("vk_comments", {limit: 10, width: "660", attach: false});
                     </script>
                 </div>
             </div>
