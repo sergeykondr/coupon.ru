@@ -18,8 +18,6 @@ $this->widget('AdminGridView', array(
             'type' => 'raw',
             'header'=>'Шифр id покупки',
         ),
-
-
         'email',
         'date',
         'discount_id',

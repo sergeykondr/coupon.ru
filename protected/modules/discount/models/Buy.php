@@ -2,6 +2,7 @@
 
 class Buy extends ActiveRecord
 {
+
     public function name()
     {
         return 'Buy';
@@ -27,12 +28,17 @@ class Buy extends ActiveRecord
 	 2	email
 	 3	date
 	 4	discount_id
+     5  cypher
          */
         return array(
             array('email', 'required'),
             array('email', 'email'),
+            array('cypher', 'safe'),
+            array(
+                'id, cypher, email, date, discount_id', 'safe',
+                'on'=> 'search'
+            ),
         );
-
     }
 
 
@@ -75,17 +81,32 @@ class Buy extends ActiveRecord
     }
 
 
-    public function getIdCypher($id='none')
+    public function generateCypherId($id)
     {
+        return base_convert($id,10,3);
+
+        /*
         if ($id=='none')
         {
-            return base_convert($this->getAttribute('id'),10,3);
+            $this->cypher = base_convert($this->getAttribute('id'),10,3);
         }
         else
         {
             return base_convert($id,10,3);
         }
+        */
+    }
 
+
+    public function afterSave()
+    {
+        /*
+            //после сохранения необходимо указать шифр дискаунта
+            $buy = Buy::model()->findByPk($this->id);
+            $buy->cypher = $this->generateCypherId($buy->id);
+            $buy->save();
+            $this->useafterSave = true;
+        */
 
     }
 

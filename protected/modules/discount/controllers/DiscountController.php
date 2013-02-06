@@ -37,16 +37,15 @@ class DiscountController extends Controller
 
     public function actionBuy($id)
     {
-        $model = new Buy;
+
         if (isset($_POST['Buy']))
         {
+            $model = new Buy;
             $model->attributes = $_POST['Buy'];
             if($model->validate())
             {
                 $model->discount_id = $id;
                 $model->date = $model->nowDate();
-                $model->cypher = $model->getIdCypher();
-
                 $page = Discount::model()->with('category')->findByPk($id);
 
                 /*проверка покупался ли купон ранее
@@ -63,7 +62,12 @@ class DiscountController extends Controller
                     //добавляем новую покупку.
                     $model->save();
                     $buyCurrentId = $model->id; //узнаем id новой покупки
-                    ////$cypher = $model->cypher; что делать с шифром???????????????????????????????????
+
+                    //находим только что сохраненную запись и пишем в неё шифр
+                    $model = Buy::model()->findByPk($buyCurrentId);
+                    $model->cypher = $model->generateCypherId($buyCurrentId);
+                    $model->save();
+
                     //счетчик купивших в discount +1
                     if (!$page)
                     {
@@ -87,7 +91,7 @@ class DiscountController extends Controller
                     $this->pageNotFound();
                 }
                 $this->renderPartial("viewCoupon", array(
-                    "page" => $page, "similars" => $similars, "buyCurrentId" => $buyCurrentId, "cypher" => $cypher //?????? шифр
+                    "discount" => $page, "similars" => $similars, "cypher" => $model->generateCypherId($buyCurrentId),
                 ));
             }
         }
@@ -102,7 +106,6 @@ class DiscountController extends Controller
 
         // echo $page->category->name;
         // dump($page->category->attributes);
-
         $this->render("viewPage", array(
             "page" => $page
         ));
@@ -240,5 +243,7 @@ class DiscountController extends Controller
             )
         );
         */
+
     }
+
 }

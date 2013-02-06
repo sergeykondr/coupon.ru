@@ -17,7 +17,7 @@ class BuyAdminController extends AdminController
 
     public function actionManage()
     {
-        $model = new Buy;
+        $model = new Buy('search');
         $model->unsetAttributes();
 
         /*

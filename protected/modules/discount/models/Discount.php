@@ -143,6 +143,7 @@ class Discount extends ActiveRecord
         }
     }
 
+
     public function relations()
     {
         return array(
