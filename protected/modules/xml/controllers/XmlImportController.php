@@ -1,17 +1,17 @@
-#!/usr/local/bin/php
 <?
 class XmlImportController extends Controller
 {
     public $fileXmlLoad; //загружаемый xml файл
     public $urlsImage = array(); //массив url картинок
     public $urlsImageContent; //массив url и контента картинок
+    //public $cityRadar = 'http://fun2mass.ru/kuponator.xml';
     public $cityRadar = 'http://cityradar.ru/kupongid.xml';
 
 
     public static function actionsTitles()
     {
         return array(
-            'import'         => 'Импрт дискаунтов',
+            'import'         => 'Импорт дискаунтов',
             /*
             'index'        => 'Все акции',
             'views'         => 'Просмотр акции',
@@ -47,6 +47,7 @@ class XmlImportController extends Controller
         //получение контента картинок
         $this->urlsImageContent = CurlHelper::multi($this->urlsImage);
     }
+
 
     public function actionImport()
     {
