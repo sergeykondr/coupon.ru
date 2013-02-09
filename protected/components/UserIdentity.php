@@ -43,7 +43,7 @@ class UserIdentity extends CUserIdentity
      */
     public static function checkPassword($internal, $external)
     {
-        return $internal = crypt($external, $internal); //return $internal == crypt($external, $internal);
+        return $internal = crypt($external, $internal); // ранее было: return $internal == crypt($external, $internal);
     }
 
     public function authenticate($admin_panel = false)
