@@ -20,12 +20,10 @@ class BuyAdminController extends AdminController
         $model = new Buy('search');
         $model->unsetAttributes();
 
-        /*
-        if (isset($_GET['Page']))
+        if (isset($_GET['Buy']))
         {
-            $model->attributes = $_GET['Page'];
+            $model->attributes = $_GET['Buy'];
         }
-        */
 
         $this->render('manage', array(
             "model" => $model

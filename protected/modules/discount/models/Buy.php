@@ -35,7 +35,11 @@ class Buy extends ActiveRecord
             array('email', 'email'),
             array('cypher', 'safe'),
             array(
-                'id, cypher, email, date, discount_id', 'safe',
+                'id, cypher, email, discount_id', 'safe',
+                'on'=> 'search'
+            ),
+            array(
+                'date', 'date',
                 'on'=> 'search'
             ),
         );
@@ -67,10 +71,10 @@ class Buy extends ActiveRecord
     {
         $criteria = new CDbCriteria;
         $criteria->compare('id', $this->id, true);
+        $criteria->compare('cypher', $this->cypher, true);
         $criteria->compare('email', $this->email, true);
         $criteria->compare('date', $this->date, true);
         $criteria->compare('discount_id', $this->discount_id, true);
-        $criteria->compare('cypher', $this->cypher, true);
 
         return new ActiveDataProvider(get_class($this), array(
             'criteria'   => $criteria,
