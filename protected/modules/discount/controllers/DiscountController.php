@@ -10,7 +10,8 @@ class DiscountController extends Controller
             'index'        => 'Все акции',
             'views'         => 'Просмотр акции',
             'category' => 'Просмотр категорий',
-            'buy' => 'Покупка акции',
+            'buy' => 'Покупка своей акции',
+            'xmlbuy' => 'Покупка xml акции',
         );
     }
 
@@ -35,6 +36,7 @@ class DiscountController extends Controller
     }
 
 
+    //покупка своего купона
     public function actionBuy($id)
     {
 
@@ -96,6 +98,9 @@ class DiscountController extends Controller
             }
         }
 
+
+
+
         //$this->redirect(array('site/index'));
         /*
         $page = Discount::model()->with('category')->findByPk($id);
@@ -111,6 +116,48 @@ class DiscountController extends Controller
         ));
         */
 
+    }
+
+
+    //покупка XML (импортированного) дискаунта
+    public function actionXmlbuy($id)
+    {
+        if (isset($_POST['Buy']))
+        {
+            $model = new Buy;
+            $model->attributes = $_POST['Buy'];
+            if($model->validate())
+            {
+                $model->discount_id = $id;
+                $model->date = $model->nowDate();
+                $discount = Discount::model()->findByPk($id);
+
+                /*проверка покупался ли купон ранее
+                если запись с таким e-mail и discountid существует,
+                то просто показываем купон, без заведения новой строчки в БД buy (покупка)
+                */
+                $buyIsExist=Buy::model()->find(array(
+                    'condition'=>'email=:email AND discount_id=:discountID',
+                    'params'=>array(':email'=>$model->email,':discountID'=>$id),
+                ));
+                //если такой покупки еще нет, то делаем соответствующие записи
+                if (!$buyIsExist)
+                {
+                    //добавляем новую покупку.
+                    $model->save();
+
+                    //счетчик купивших в discount +1
+                    if (!$discount)
+                    {
+                        $this->pageNotFound();
+                    }
+                    $discount->numbers_buy ++;
+                    $discount->save();
+                }
+
+                $this->redirect($discount->xml_imp_url);
+            }
+        }
     }
 
 

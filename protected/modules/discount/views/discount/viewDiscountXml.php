@@ -35,24 +35,61 @@ $this->page_title = $page->name; //заголовок <h1>
     <div class="span4 well">
         <p>Скидка до <?=$page->discount;?> % за <?=$page->pricecoupon;?> Р.</p>
 
-        <? if ($page->isActual()) //если акция актуальна, то выводим кнопку 'купить' с модальным окном
-        { ?>
-
-
-        <a href="<?=$page->xml_imp_url;?>">Купить</a>
-        <br>
-
-        <?} //конец блока if?>
-
-
-
        <!-- Купили (нужно ли?): <? //echo $page->cheat() + $page->numbers_buy;  ?><br> -->
         Купон действует до: <?= Yii::app()->dateFormatter->format('d MMMM yyyy', $page->endvalid); ?><br>
         <? if ($page->isActual())
-        {
-            ?>До завершения осталось: <?=$page->expires('long');?> <br>
-        <?
-        }
+
+
+
+        {?>
+            <!-- Начало описания виджета модального окна -->
+            <?php $this->beginWidget('bootstrap.widgets.BootModal', array('id'=>'buyModal')); ?>
+            <?
+            $qForm = new Buy;
+            $form = $this->beginWidget('CActiveForm', array(
+                'id' => 'EmailForm',
+                'enableClientValidation' => true,
+                'clientOptions' => array(
+                    'validateOnSubmit' => true,
+                ),
+                'action' => array('/discount/xmlbuy/'.$page->id),
+            ));
+            ?>
+            <div class="modal-header">
+                <a class="close" data-dismiss="modal">&times;</a>
+                <h3>Приобретение купона</h3>
+            </div>
+            <div class="modal-body">
+                <?php echo $form->errorSummary($qForm); ?>
+                <?php echo $form->labelEx($qForm,'email'); ?>
+                <?php echo $form->textField($qForm,'email', array('size'=>35)); ?>
+                <?php echo $form->error($qForm,'email'); ?>
+                <?//php echo $form->textFieldRow($model, 'textField', array('class'=>'span3')); ?>
+                <?php // echo CHtml::submitButton('Отправить'); ?>
+            </div>
+
+            <div class="modal-footer">
+                <?php $this->widget('bootstrap.widgets.BootButton', array('buttonType'=>'submit', 'label'=>'Получить купон')); ?>
+            </div>
+            <?php $this->endWidget(); ?>
+            <?php $this->endWidget(); ?>
+            <!-- Конец описания виджета модального окна -->
+
+            <?php $this->widget('bootstrap.widgets.BootButton', array(
+            'label'=>'Купить',
+            'url'=>'#buyModal',
+            'type'=>'primary',
+            'htmlOptions'=>array('data-toggle'=>'modal'),
+        )); ?>
+            <br>
+
+
+
+
+
+
+            До завершения осталось: <?=$page->expires('long');?> <br>
+            <?} //конец блока if
         else
         {
             ?><b>Акция завершена</b><?

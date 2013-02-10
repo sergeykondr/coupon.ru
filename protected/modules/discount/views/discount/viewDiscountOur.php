@@ -53,8 +53,6 @@ $this->page_title = $page->name; //заголовок <h1>
 
         <?if ($page->isActual()) //если акция актуальна, то выводим кнопку 'купить' с модальным окном
         {?>
-
-
         <!-- Начало описания виджета модального окна -->
             <?php $this->beginWidget('bootstrap.widgets.BootModal', array('id'=>'buyModal')); ?>
                 <?

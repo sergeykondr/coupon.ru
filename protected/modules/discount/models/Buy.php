@@ -33,7 +33,6 @@ class Buy extends ActiveRecord
         return array(
             array('email', 'required'),
             array('email', 'email'),
-            array('cypher', 'safe'),
             array(
                 'id, cypher, email, discount_id', 'safe',
                 'on'=> 'search'
