@@ -5,13 +5,15 @@ class XmlImportController extends Controller
     public $urlsImage = array(); //массив url картинок
     public $urlsImageContent; //массив url и контента картинок
     //public $cityRadar = 'http://fun2mass.ru/kuponator.xml';
-    public $cityRadar = 'http://cityradar.ru/kupongid.xml';
+    //public $cityRadar = 'http://cityradar.ru/kupongid.xml';
 
 
     public static function actionsTitles()
     {
         return array(
-            'import'         => 'Импорт дискаунтов',
+            'cityradarImport'         => 'Импорт дискаунтов Cityradar',
+            'fan2massImport'          => 'Импорт дискаунтов Fan2mass',
+
             /*
             'index'        => 'Все акции',
             'views'         => 'Просмотр акции',
@@ -22,14 +24,8 @@ class XmlImportController extends Controller
     }
 
 
-    public function xmlLoad()
-    {
-        $this->fileXmlLoad = simplexml_load_file($this->cityRadar);
-    }
-
-
     //получение url и контента картинок для несуществющих дискаунтов
-    public function loadImage()
+    private function loadHrefImage()
     {
         if (empty($this->fileXmlLoad))
             $this->xmlLoad();
@@ -37,22 +33,43 @@ class XmlImportController extends Controller
         {
             //только купоны для Москвы
             if ($offer->region != "Москва")
-                continue;
+                continue; // или удалить этот элемент
             //если id дискаунта такой уже есть, то пропускаем
             if (Discount::model()->findByAttributes(array('xml_imp_id'=>$offer->id)))
                 continue;
             //url картинок
             $this->urlsImage[] = (string)$offer->picture;
         }
+    }
+
+
+    private function LoadContentImage()
+    {
         //получение контента картинок
         $this->urlsImageContent = CurlHelper::multi($this->urlsImage);
     }
 
 
-    public function actionImport()
+
+    public function actionCityradarImport()
     {
-        $this->loadImage();
+        $this->ImportXml('http://cityradar.ru/kupongid.xml');
+    }
+
+
+    public function actionFan2massImport()
+    {
+        $this->ImportXml('http://fun2mass.ru/kuponator.xml');
+    }
+
+    private function ImportXml($url)
+    {
+        $this->fileXmlLoad = simplexml_load_file($url);
+
+        //загружаем картинки
+        $this->loadHrefImage();
         $i = 0;
+        $discountSave = array();
         foreach ($this->fileXmlLoad->offers->offer as $offer)
         {
             //только купоны для Москвы
@@ -69,10 +86,10 @@ class XmlImportController extends Controller
             $model->xml_imp_url = $offer->url;
             $model->name = $offer->name; //Название дискаунта
             $model->description = $offer->description;
-            $model->beginsell = (string)$offer->beginsell;
-            $model->endsell = (string)$offer->endsell;
-            $model->beginvalid = (string)$offer->beginvalid;
-            $model->endvalid = (string)$offer->endvalid;
+            $model->beginsell = date('Y-m-d H:i:s', strtotime($offer->beginsell));
+            $model->endsell = date('Y-m-d H:i:s', strtotime($offer->endsell));
+            $model->beginvalid = date('Y-m-d H:i:s', strtotime($offer->beginvalid));
+            $model->endvalid = date('Y-m-d H:i:s', strtotime($offer->endvalid));
             $model->xml_imp_picture = (string)$offer->picture; //лишнее?
             $this->urlsImage[] = (string)$offer->picture;
             $model->price = $offer->price;
@@ -92,18 +109,18 @@ class XmlImportController extends Controller
             $model->company_address = $adres;
 
             //сохраняем модель
-            $model->save() && $i++ ;
-
-            // указываем ближайшие метро. функционал в разработке
-
-            //загружаем картинки
-            $this->addPictureImport($model->xml_imp_picture, $model->id);
-
-            //3) записываем SEO теги: $model->id; $offer->name; $offer->supplier->name;
-            $this->addMetaTegImport($model->id, $offer->name, $offer->supplier->name);
+            if ($model->save())
+            {
+                $i++ ;
+                $discountSave[$i]['discountid'] = $model->id;
+                $discountSave[$i]['urlimage'] = (string)$offer->picture;
+                // указываем ближайшие метро. функционал в разработке
+                //3) записываем SEO теги: $model->id; $offer->name; $offer->supplier->name;
+                $this->addMetaTegImport($model->id, $offer->name, $offer->supplier->name);
+            }
         }
 
-
+        $this->addPicturesImport($discountSave);
         echo 'Всего было импортировано ' . $i . ' дискаунтов';
         /*
             if ($form->submitted() && $model->save())
@@ -122,25 +139,51 @@ class XmlImportController extends Controller
      * @param $urlPicture - url картинки на чужом сайта
      * @param $discountId - id дискаунта в нашей базе
      */
-    public function addPictureImport($urlPicture, $discountId)
+    private function addPicturesImport($discountSave)
     {
-        $arrayUrlImage = explode("/", $urlPicture);
-        $imgNameOriginal = end($arrayUrlImage);
-        $imgName = FileSystemHelper::vaultResolveCollision(Discount::PATH_XML_IMG, $imgNameOriginal); //определяем уникальное имя для указанной папки
-        file_put_contents(YiiBase::getPathOfAlias('webroot') . '/'. Discount::PATH_XML_IMG . '/' . $imgName , $this->urlsImageContent[$urlPicture]); //записываем в текущ. папку
-        unset($this->urlsImageContent[$urlPicture]); // удаляем элемент с картинкой
+        //разбить. грузить кратинки вместе. сохранять
+        $discountChunk = array_chunk($discountSave, 150);
 
-        // записываем информацию о картинке в MediaFile
-        $media = new MediaFile();
-        $media->object_id = $discountId;
-        $media->model_id = 'Discount';
-        $media->name = $imgName;
-        $media->title = $imgNameOriginal;
-        $media->tag = 'xml';
-        $media->order = 1;
-        $media->path = Discount::PATH_XML_IMG;
-        $media->types = 'img';
-        $media->save();
+        foreach ($discountChunk as $k => $v)
+        {
+            $urlsImages = array();
+            //собираем в единый массив url картинок
+            foreach ($v as $coupon)
+            {
+                $urlsImages[] = $coupon['urlimage'];
+                //$coupon->urlimage;
+            }
+
+            //грузим весь массив картинок
+            //unset($this->urlsImageContent); //уничтожаем переменную для очистки памяти
+            $this->urlsImageContent = array();
+            $this->urlsImageContent = CurlHelper::multi($urlsImages);
+
+
+            //сохраняем каждую картинку поочередно и заполняем модель MediaFile
+            foreach ($v as $coupon)
+            {
+                $arrayUrlImage = explode("/", $coupon['urlimage']);
+                $imgNameOriginal = end($arrayUrlImage);
+                $imgName = FileSystemHelper::vaultResolveCollision(Discount::PATH_XML_IMG, $imgNameOriginal); //определяем уникальное имя для указанной папки
+                file_put_contents(YiiBase::getPathOfAlias('webroot') . '/'. Discount::PATH_XML_IMG . '/' . $imgName , $this->urlsImageContent[$coupon['urlimage']]); //записываем в текущ. папку
+
+                list($path, $imgNamenew) = FileSystemHelper::moveToVault(Discount::PATH_XML_IMG . '/' . $imgName, Discount::PATH_XML_IMG, true);
+                unset($this->urlsImageContent[$coupon['urlimage']]); // удаляем элемент с картинкой
+
+                // записываем информацию о картинке в MediaFile
+                $media = new MediaFile();
+                $media->object_id = $coupon['discountid'];
+                $media->model_id = 'Discount';
+                $media->name = $imgNamenew;
+                $media->title = $imgNameOriginal;
+                $media->tag = 'xml';
+                $media->order = 1;
+                $media->path = $path;
+                $media->types = 'img';
+                $media->save();
+            }
+        }
     }
 
 

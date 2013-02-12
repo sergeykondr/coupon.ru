@@ -94,7 +94,7 @@ class Discount extends ActiveRecord
                 'name',
                 'length',
                 'max' => 130,
-                'on'=>'our_discount',
+                'on'=>'our_discount,  xml_discount',
              ),
 
             array(

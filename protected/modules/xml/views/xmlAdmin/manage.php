@@ -12,6 +12,7 @@ $this->widget('AdminGridView', array(
 
         'beginsell',
         'xml_imp_id',
+        'xml_imp_url',
         array(
             'class'=>'CButtonColumn',
         ),

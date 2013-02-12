@@ -110,7 +110,8 @@ return array(
         'urlManager'   => array(
             'urlFormat'      => 'path',
             'showScriptName' => false,
-            'class'          => 'UrlManager'
+            'class'          => 'UrlManager',
+            //'caseSensitive' => false,
         ),
 
         'errorHandler' => array(
