@@ -16,6 +16,7 @@ class Discount extends ActiveRecord
     public $actuality; //актуальна ли акция. кеш. вззаимодействие с методом isActual
     const PATH_XML_IMG = 'upload/mediaFiles/xml';
     const PATH_XML_IMG_CROP = 'upload/mediaFiles/xml_crop';
+    const PATH_OUR_IMG_CROP = 'upload/mediaFiles/our_crop'; //для кропа наших дискаунтов
     const IMG_CROP_WIDTH = 310;
     const IMG_CROP_HEIGHT = 205;
 
@@ -305,18 +306,22 @@ class Discount extends ActiveRecord
         $mediaFile=MediaFile::model()->findByAttributes(array('object_id'=>$this->id, 'model_id'=>'Discount'));
         if($mediaFile===null)
             return '/upload/mediaFiles/no_image_310x205.jpg';
-        $path = self::PATH_XML_IMG_CROP . '/' . $this->preNameCrop() . $mediaFile->name;
-        if (file_exists('./' . $path ))
+
+        //если акция наша - то один путь для кропа. если не наша - то другой
+        $imgCropPath = ($this->our) ? self::PATH_OUR_IMG_CROP : self::PATH_XML_IMG_CROP;
+
+        $path = $imgCropPath . '/' . $this->preNameCrop() . $mediaFile->name;
+        if (file_exists('./' . $path )) //проверка на существование кропа
             return '/'. $path;
         //если нет - то делаем кроп
-        return $this->createCropImage($mediaFile->getHref(), $mediaFile->name);
-
+        if (file_exists('./' . $mediaFile->getHref())) //проверка на существование картинки для кропа
+        return $this->createCropImage($mediaFile->getHref(), $mediaFile->name, $imgCropPath);
     }
 
 
-    public function createCropImage($href, $name)
+    public function createCropImage($href, $name, $imgCropPath)
     {
-        //обращаемся к модели mediafile (через behaviors) и получаем пусть с именем.
+        //обращаемся к модели mediafile (через behaviors) и получаем путь с именем.
         $image = Yii::app()->image->load(YiiBase::getPathOfAlias('webroot') . $href);
         //делаем crop c нужными пропорциями
         if  ( $image->width / $image->height > self::IMG_CROP_WIDTH / self::IMG_CROP_HEIGHT )
@@ -328,9 +333,10 @@ class Discount extends ActiveRecord
             $image->resize(self::IMG_CROP_WIDTH, NULL)->crop(self::IMG_CROP_WIDTH, self::IMG_CROP_HEIGHT, 'top')->quality(75);
         }
 
-        $url =   '/' . self::PATH_XML_IMG_CROP . '/' . $this->preNameCrop() .  $name;
-        $image->save('./' .$url);
-        return $url;
+        $path =   $imgCropPath . '/' . $this->preNameCrop() .  $name;
+        $image->save('./' . $path);
+        list($pathCrop, $nameCrop) = FileSystemHelper::moveToVault($path, $imgCropPath, true);
+        return '/' . $pathCrop . '/' . $nameCrop;
     }
 
 
