@@ -2,6 +2,8 @@
 
 class Metro extends ActiveRecord
 {
+    public $distance; //дистанция для определния расстояния до метро
+
     public function name()
     {
         return 'Metro';

@@ -18,7 +18,17 @@ class DiscountController extends Controller
 
     public function actionView($id)
     {
+
+
         $discount = Discount::model()->with('category', 'metros', 'metrosRell')->findByPk($id);
+        /*
+        $discount = Discount::model()->with('category', 'metros', 'metrosRell')->find(array(
+            'select'=>'*, X(t.company_coordinates) AS xcoord, Y(t.company_coordinates) AS ycoord',
+            'condition'=>'t.id=:id',
+            'params'=>array(':id'=>$id),
+        ));
+        */
+
         if (!$discount)
             $this->pageNotFound();
         $this->setMetaTags($discount);

@@ -7,8 +7,6 @@ return array(
     ),
     'elements'             => array(
 
-
-
         'name'    => array(
             'type' => 'text'
         ),
@@ -117,7 +115,7 @@ return array(
         ),
         '<br><p>Узнать координаты можно <a  target="_blank" href="http://api.yandex.ru/maps/tools/getlonglat/">тут</a></p>',
 
-        'company_coordinates'    => array(
+        'coord_write'    => array(
             'type' => 'text'
         ),
 

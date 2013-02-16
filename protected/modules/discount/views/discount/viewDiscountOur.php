@@ -130,12 +130,12 @@ $this->page_title = $page->name; //заголовок <h1>
 
     function init () {
         myMap = new ymaps.Map("map", {
-            center: [37.631534,55.763964],
-            zoom: 10
+            center: [<? echo CHtml::encode($page->ycoord) . ',' . CHtml::encode($page->xcoord) ; ?>],
+            zoom: 13
         }),
             // При создании метки указываем ее свойства:  текст для отображения в иконке и содержимое балуна,
             // который откроется при нажатии на эту метку
-            myPlacemark = new ymaps.Placemark([<?= CHtml::encode($page->company_coordinates); ?>], {
+            myPlacemark = new ymaps.Placemark([<? echo CHtml::encode($page->ycoord) . ',' . CHtml::encode($page->xcoord) ; ?>], {
                 // Свойства
                 balloonContent: '<?= CHtml::encode($page->company_address); ?>'
                 //iconContent: 'Щелкни по мне',
@@ -149,6 +149,9 @@ $this->page_title = $page->name; //заголовок <h1>
 
         // Добавляем метку на карту
         myMap.geoObjects.add(myPlacemark);
+        myMap.controls.add('zoomControl');
+        myMap.controls.add('scaleLine');
+        myMap.controls.add('mapTools');
 
     }
 </script>

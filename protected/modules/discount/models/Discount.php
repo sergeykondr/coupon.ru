@@ -24,6 +24,7 @@ class Discount extends ActiveRecord
     const IMG_CROP_HEIGHT = 205;
 
 
+
     public function name()
     {
         return 'Discount';
@@ -97,11 +98,17 @@ class Discount extends ActiveRecord
                 'name',
                 'length',
                 'max' => 130,
-                'on'=>'our_discount,  xml_discount',
+                'on'=>'our_discount, xml_discount',
              ),
 
             array(
-                'category_id, numbers_buy, price',
+                'price, discount, discountprice, pricecoupon',
+                'numerical',
+                'on'=>'our_discount, xml_discount'
+            ),
+
+            array(
+                'category_id, numbers_buy',
                 'numerical',
                 'integerOnly' => true,
                 'on'=>'our_discount'
@@ -113,8 +120,8 @@ class Discount extends ActiveRecord
             ),
 
             array(
-                'coord_write', 'safe',
-                'on'=>'xml_discount',
+                'coord_write', 'coordsvalid', 'our'=>$this->our,
+                'on'=>'xml_discount, our_discount',
             ),
 
             array(
@@ -135,16 +142,22 @@ class Discount extends ActiveRecord
 
     public function coordsvalid($attributes,$params)
     {
-        /*
-        if ($this->coord_write[0] <40 and $this->coord_write[0] > 35 and  $this->coord_write[1]<58 and $this->coord_write[1]>54 )
+
+        // на входе: "long, lat". преобразовываем строку в массив
+        $coords = explode(",", $this->coord_write);
+
+        if ($coords[0] <40 and $coords[0] > 35 and  $coords[1]<58 and $coords[1]>54 )
         {
-            //$this->coord_write = $coords;
+            $this->coord_write = array($coords[0],$coords[1]);
         }
         else
         {
+            if ($params['our'])
+            {
+                $this->addError($attributes, 'Введите коодинаты правильно!');
+            }
             $this->coord_write = NULL; //если координаты не правильные - не записываем их
         }
-        */
     }
 
 
@@ -226,6 +239,13 @@ class Discount extends ActiveRecord
 
     public function beforeFind()
     {
+
+        // select xcoord и ycoord
+        $criteria=new CDbCriteria;
+        $criteria->select='*, X(t.company_coordinates) AS xcoord, Y(t.company_coordinates) AS ycoord';
+        $this->getDbCriteria()->mergeWith($criteria);
+        parent::beforeFind();
+
         //выбираем только актуальные акции и упорядочиваем их по убыванию кол-ва купивших с учетом накрутки
         /*
         $criteria=new CDbCriteria;
@@ -235,6 +255,25 @@ class Discount extends ActiveRecord
         parent::beforeFind();
         */
     }
+
+
+    public function afterFind()
+    {
+
+        // select xcoord и ycoord
+        $this->coord_write = $this->ycoord . ',' . $this->xcoord;
+        parent::afterFind();
+
+        //выбираем только актуальные акции и упорядочиваем их по убыванию кол-ва купивших с учетом накрутки
+        /*
+        $criteria=new CDbCriteria;
+        $criteria->select='*, floor((cheat / ((UNIX_TIMESTAMP( endsell ) - UNIX_TIMESTAMP( beginsell ))/60/60)) * ((UNIX_TIMESTAMP( NOW() ) - UNIX_TIMESTAMP( beginsell ))/60/60)) as cheat_now, (floor((cheat / ((UNIX_TIMESTAMP( endsell ) - UNIX_TIMESTAMP( beginsell ))/60/60)) * ((UNIX_TIMESTAMP( NOW() ) - UNIX_TIMESTAMP( beginsell ))/60/60)) + numbers_buy) as all_buy';
+        $criteria->condition='DATEDIFF( endsell, beginsell ) >1';
+        $this->getDbCriteria()->mergeWith($criteria);
+        parent::beforeFind();
+        */
+    }
+
 
 
     /*
@@ -289,6 +328,12 @@ class Discount extends ActiveRecord
         return $date;
     }
     */
+
+    public function getCoords()
+    {
+
+        return "$this->xcoord ,asdf $this->ycoord";
+    }
 
     public function uploadFiles()
     {
@@ -392,7 +437,7 @@ class Discount extends ActiveRecord
     {
         if (parent::beforeSave())
         {
-            if (is_array($this->coord_write) && $this->coord_write[0] <40 and $this->coord_write[0] > 35 and  $this->coord_write[1]<58 and $this->coord_write[1]>54 )
+            if (is_array($this->coord_write) )
             {
                 //$model->coord_write = $coords;
                 //$x = $this->coord_write[1];

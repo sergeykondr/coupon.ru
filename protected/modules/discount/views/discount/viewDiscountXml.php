@@ -35,7 +35,7 @@ $this->page_title = $page->name; //заголовок <h1>
     <div class="span4 well">
         <p>Скидка до <?=$page->discount;?> % за <?=$page->pricecoupon;?> Р.</p>
 
-       <!-- Купили (нужно ли?): <? //echo $page->cheat() + $page->numbers_buy;  ?><br> -->
+       Купили: <? echo $page->cheat() + $page->numbers_buy;  ?><br>
         Купон действует до: <?= Yii::app()->dateFormatter->format('d MMMM yyyy', $page->endvalid); ?><br>
         <? if ($page->isActual())
 
@@ -113,12 +113,12 @@ $this->page_title = $page->name; //заголовок <h1>
 
     function init () {
         myMap = new ymaps.Map("map", {
-            center: [37.631534,55.763964],
-            zoom: 10
+            center: [<? echo CHtml::encode($page->ycoord) . ',' . CHtml::encode($page->xcoord) ; ?>],
+            zoom: 13
         }),
             // При создании метки указываем ее свойства:  текст для отображения в иконке и содержимое балуна,
             // который откроется при нажатии на эту метку
-            myPlacemark = new ymaps.Placemark([<?= CHtml::encode($page->company_coordinates); ?>], {
+            myPlacemark = new ymaps.Placemark([<? echo CHtml::encode($page->ycoord) . ',' . CHtml::encode($page->xcoord) ; ?>], {
                 // Свойства
                 balloonContent: '<?= CHtml::encode($page->company_address); ?>'
                 //iconContent: 'Щелкни по мне',
@@ -132,6 +132,9 @@ $this->page_title = $page->name; //заголовок <h1>
 
         // Добавляем метку на карту
         myMap.geoObjects.add(myPlacemark);
+        myMap.controls.add('zoomControl');
+        myMap.controls.add('scaleLine');
+        myMap.controls.add('mapTools');
 
     }
 </script>
@@ -165,7 +168,7 @@ $this->page_title = $page->name; //заголовок <h1>
                 </div>
                 <div class="tab-pane fade" id="second">
 
-                    <? if (!CHtml::encode($page->company_coordinates)=='')
+                    <? if (!CHtml::encode($page->xcoord)=='')
                         echo '<div id="map" style="width:662px;height:400px"></div>';
                     ?>
 

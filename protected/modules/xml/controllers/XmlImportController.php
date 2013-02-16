@@ -100,13 +100,39 @@ class XmlImportController extends Controller
             $model->company_name = $offer->supplier->name;
             $model->company_url = $offer->supplier->url;
             $model->company_tel = $offer->supplier->tel;
+
             //адреса компании
             $adres =''; // склеиваем адрес, если их несколько через ||
+            $adres1='';
             foreach ($offer->supplier->addresses->address as $address )
             {
                 $adres .= (!$adres) ? $address->name : '||' . $address->name;
+                if ($adres1=='') //записываем первый адрес для определния координат
+                $adres1 = (string)$address->name;
             }
             $model->company_address = $adres;
+
+            //вычисляем координаты-GPS
+            //если чтото записано в координатах
+            if (strlen($offer->supplier->addresses->address[0]->coordinates)>4)
+            {
+                $coords = (string)$offer->supplier->addresses->address[0]->coordinates;
+                $coords = str_replace(' ', '', trim($coords)); //long, lat
+                //$coords = explode(",", $coords);
+                $model->coord_write = $coords; //тут строка!
+            }
+            else
+            {
+                //узнаем координаты, если они не указаны.
+                $model->coord_write = YandexmapHepler::getGeoCoordinates($adres1); // [0] - долгота (long), [1] - широта (lat)
+                /*
+                 *
+                 $coords = YandexmapHepler::getGeoCoordinates($adres1); // [0] - долгота (long), [1] - широта (lat)
+                if (is_array($coords)) //значит там лежат координаты, записываем их в модель
+                    $model->coord_write = $coords;
+                */
+            }
+
 
             //сохраняем модель
             if ($model->save())
@@ -114,14 +140,38 @@ class XmlImportController extends Controller
                 $i++ ;
                 $discountSave[$i]['discountid'] = $model->id;
                 $discountSave[$i]['urlimage'] = (string)$offer->picture;
+
                 // указываем ближайшие метро. функционал в разработке
+                /*
+                if (is_array($coords))  //если координаты найдены
+                {
+                    $metros = Metro::model()->findAll(array(
+                        'select'=>"* ,  ROUND( 6372797 * ACOS( COS( RADIANS( $coords[1] ) ) * COS( RADIANS( X( coordinates ) ) ) * COS( RADIANS( Y( coordinates ) ) - RADIANS( $coords[0] ) ) + SIN( RADIANS( $coords[1] ) ) * SIN( RADIANS( X( coordinates ) ) ) ) ) AS distance",
+                        'condition'=>"MBRWITHIN(  `coordinates` , GEOMFROMTEXT( 'Polygon((55.879931  37.285465, 55.895366  37.944645,55.545006  38.068241, 55.549678  37.277225, 55.879931  37.285465))' ) ) ",
+                        'limit' => 3,
+                        //'params'=>array(':id'=>$id),
+                    ));
+
+                    echo $metros[0]->distance . ' ';
+                    echo $metros[0]->name . '<br> ';
+
+
+                    echo $metros[1]->distance . ' ';
+                    echo $metros[1]->name .  '<br> ';
+
+                    echo $metros[2]->distance . ' ';
+                    echo $metros[2]->name .  '<br> ';
+                   }
+                */
+
+
                 //3) записываем SEO теги: $model->id; $offer->name; $offer->supplier->name;
                 $this->addMetaTegImport($model->id, $offer->name, $offer->supplier->name);
             }
         }
 
         $this->addPicturesImport($discountSave);
-        echo 'Всего было импортировано ' . $i . ' дискаунтов';
+        echo 'C '. $url . ' было импортировано ' . $i . ' дискаунтов';
         /*
             if ($form->submitted() && $model->save())
             {
@@ -133,6 +183,9 @@ class XmlImportController extends Controller
             $this->render('create', array('form' => $form));
         */
     }
+
+
+
 
     /**
      * загружаем картинки на сервер
@@ -158,7 +211,6 @@ class XmlImportController extends Controller
             //unset($this->urlsImageContent); //уничтожаем переменную для очистки памяти
             $this->urlsImageContent = array();
             $this->urlsImageContent = CurlHelper::multi($urlsImages);
-
 
             //сохраняем каждую картинку поочередно и заполняем модель MediaFile
             foreach ($v as $coupon)
