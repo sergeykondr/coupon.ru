@@ -10,9 +10,12 @@
  */
 class Discount extends ActiveRecord
 {
-    public $all_buy; //всего: накрутка + кол-во купивших реально
+    public $all_buy; //всего: накрутка + кол-во купивших реально - из as
+    public $xcoord; //коодинаты select as. для чтения координат
+    public $ycoord; //коодинаты select as. для чтения координат
     public $cheat_now; //сколько надо накрутить
     public $metrosarray; //для записи массива метро
+    public $coord_write; //массив кординат для записи
     public $actuality; //актуальна ли акция. кеш. вззаимодействие с методом isActual
     const PATH_XML_IMG = 'upload/mediaFiles/xml';
     const PATH_XML_IMG_CROP = 'upload/mediaFiles/xml_crop';
@@ -68,7 +71,7 @@ class Discount extends ActiveRecord
         return array(
             array(
                 'short_desc,
-                company_coordinates, company_time,
+                company_time,
                 text, cheat, kuponator_exp',
                 'required',  'on'=>'our_discount'
             ),
@@ -108,6 +111,12 @@ class Discount extends ActiveRecord
                 'metros', 'metrosvalid', //в DiscountForm это поле есть, но мы тамже его принудительно переименовали.
                 'on'=>'our_discount',
             ),
+
+            array(
+                'coord_write', 'safe',
+                'on'=>'xml_discount',
+            ),
+
             array(
                 //нужно чтоб записывалось сюда при ред. нашего дискаута и xml дискаунта. Можно ли тут делать атрибут safe
                 'metrosarray', 'safe', // для него нет label ошибки (потому что в конструкторе форм по нормальному это поле не было объявлено)
@@ -121,6 +130,21 @@ class Discount extends ActiveRecord
     {
         if ($this->metrosarray == '')
         $this->addError('metros', 'Заполните метро'); //пользуемся label у metros для вывода ошибки
+    }
+
+
+    public function coordsvalid($attributes,$params)
+    {
+        /*
+        if ($this->coord_write[0] <40 and $this->coord_write[0] > 35 and  $this->coord_write[1]<58 and $this->coord_write[1]>54 )
+        {
+            //$this->coord_write = $coords;
+        }
+        else
+        {
+            $this->coord_write = NULL; //если координаты не правильные - не записываем их
+        }
+        */
     }
 
 
@@ -282,24 +306,6 @@ class Discount extends ActiveRecord
     }
 
 
-    public function afterSave()
-    {
-        parent::afterSave();
-        //если акция наша. !акции не нашей тоже можно присвоить метро!!!
-        if ($this->scenario=='our_discount')
-        {
-            $this->reSpecifyMetro();
-        }
-        else
-        {
-            //если метро указаны, то присваиваем
-            if ($this->metrosarray)
-                $this->reSpecifyMetro();
-
-        }
-    }
-
-
     public function urlImageCropShow()
     {
         //найти модель с записями где находится картинка
@@ -361,6 +367,62 @@ class Discount extends ActiveRecord
             $metro->metro_id=$v;
             $metro->save();
         }
+    }
+
+
+    public function afterSave()
+    {
+        parent::afterSave();
+        //если акция наша. !акции не нашей тоже можно присвоить метро!!!
+        if ($this->scenario=='our_discount')
+        {
+            $this->reSpecifyMetro();
+        }
+        else
+        {
+            //если метро указаны, то присваиваем
+            if ($this->metrosarray)
+                $this->reSpecifyMetro();
+
+        }
+    }
+
+
+    public function beforeSave()
+    {
+        if (parent::beforeSave())
+        {
+            if (is_array($this->coord_write) && $this->coord_write[0] <40 and $this->coord_write[0] > 35 and  $this->coord_write[1]<58 and $this->coord_write[1]>54 )
+            {
+                //$model->coord_write = $coords;
+                //$x = $this->coord_write[1];
+                //$y = $this->coord_write[0];
+                list($long, $lat) = $this->coord_write;
+                $this->company_coordinates = new CDbExpression("GEOMFROMTEXT(  \"POINT($lat $long)\", 0 )"); //координаты заданы в правильных рамках
+            }
+            else
+            {
+                //$this->coord_write =; //если координаты не определены или не правильные - не записываем их
+                $this->company_coordinates =  NULL;
+            }
+
+
+            return true;
+        }
+        /*
+        if ($this->coord_write[0] <40 and $coords[0] > 35 and  $coords[1]<58 and $coords[1]>54 )
+        {
+            $model->coord_write = $coords;
+        }
+        else
+        {
+            $model->coord_write = NULL; //если координаты не правильные - не записываем их
+        }
+        */
+
+        //преобразование массива в запрос
+        //$this->company_coordinates = 234234;//new CDbExpression("GEOMFROMTEXT(  \"POINT($this->coord_write[1] $this->coord_write[0] )\", 0 )"); //координаты заданы в правильных рамках
+
     }
     /**
      * @return array customized attribute labels (name=>label)
