@@ -33,14 +33,11 @@ $this->page_title = $page->name; //заголовок <h1>
         </div>
     </div>
     <div class="span4 well">
-        <p>Скидка до <?=$page->discount;?> % за <?=$page->pricecoupon;?> Р.</p>
-
-       Купили: <? echo $page->cheat() + $page->numbers_buy;  ?><br>
+        Купили: <? echo $page->cheat() + $page->numbers_buy;  ?> <i class="icon-tags"></i><br>
         Купон действует до: <?= Yii::app()->dateFormatter->format('d MMMM yyyy', $page->endvalid); ?><br>
+    </div>
+    <div class="span4 well blueborder" style="font-size: 14px; text-align: center; font-weight: bold;">
         <? if ($page->isActual())
-
-
-
         {?>
             <!-- Начало описания виджета модального окна -->
             <?php $this->beginWidget('bootstrap.widgets.BootModal', array('id'=>'buyModal')); ?>
@@ -74,30 +71,31 @@ $this->page_title = $page->name; //заголовок <h1>
             <?php $this->endWidget(); ?>
             <?php $this->endWidget(); ?>
             <!-- Конец описания виджета модального окна -->
-
-            <?php $this->widget('bootstrap.widgets.BootButton', array(
+            Скидка до <?=$page->discount;?> % за <?=$page->pricecoupon;?> р.&nbsp;&nbsp;&nbsp;<?php $this->widget('bootstrap.widgets.BootButton', array(
             'label'=>'Купить',
             'url'=>'#buyModal',
             'type'=>'primary',
             'htmlOptions'=>array('data-toggle'=>'modal'),
         )); ?>
             <br>
+            <?} //конец блока if?>
 
-
-
-
-
-
-            До завершения осталось: <?=$page->expires('long');?> <br>
-            <?} //конец блока if
-        else
-        {
-            ?><b>Акция завершена</b><?
-        }
+    </div>
+    <div class="span4 well" >
+        <? if ($page->isActual())
+    {
+        ?>До завершения осталось: <?=$page->expires('long');?> <br>
+        <?
+    }
+    else
+    {
+        ?><b>Акция завершена</b><?
+    }
         ?>
 
 
     </div>
+
     <div class="span4 well">
         Поделиться в социальных сетях:<br>
        <script type="text/javascript" src="//yandex.st/share/share.js" charset="utf-8"></script>

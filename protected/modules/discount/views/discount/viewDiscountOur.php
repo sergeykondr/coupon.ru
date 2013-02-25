@@ -49,8 +49,10 @@ $this->page_title = $page->name; //заголовок <h1>
         </div>
     </div>
     <div class="span4 well">
-        <p>Скидка до <?=$page->discount;?> % за <?=$page->pricecoupon;?> Р.</p>
-
+        Купили: <? echo $page->cheat() + $page->numbers_buy;  ?> <i class="icon-tags"></i><br>
+        Купон действует до: <?= Yii::app()->dateFormatter->format('d MMMM yyyy', $page->endvalid); ?><br>
+    </div>
+    <div class="span4 well blueborder" style="font-size: 14px; text-align: center; font-weight: bold;">
         <?if ($page->isActual()) //если акция актуальна, то выводим кнопку 'купить' с модальным окном
         {?>
         <!-- Начало описания виджета модального окна -->
@@ -86,7 +88,7 @@ $this->page_title = $page->name; //заголовок <h1>
             <?php $this->endWidget(); ?>
         <!-- Конец описания виджета модального окна -->
 
-        <?php $this->widget('bootstrap.widgets.BootButton', array(
+            Скидка до <?=$page->discount;?>% за <?=$page->pricecoupon;?> р.&nbsp;&nbsp;&nbsp;<?php $this->widget('bootstrap.widgets.BootButton', array(
           'label'=>'Купить',
            'url'=>'#buyModal',
             'type'=>'primary',
@@ -98,8 +100,8 @@ $this->page_title = $page->name; //заголовок <h1>
 
 
 
-        Купили: <? echo $page->cheat() + $page->numbers_buy;  ?><br>
-        Купон действует до: <?= Yii::app()->dateFormatter->format('d MMMM yyyy', $page->endvalid); ?><br>
+    </div>
+    <div class="span4 well" >
         <? if ($page->isActual())
         {
             ?>До завершения осталось: <?=$page->expires('long');?> <br>
@@ -113,6 +115,7 @@ $this->page_title = $page->name; //заголовок <h1>
 
 
     </div>
+
     <div class="span4 well">
         Поделиться в социальных сетях:<br>
        <script type="text/javascript" src="//yandex.st/share/share.js" charset="utf-8"></script>

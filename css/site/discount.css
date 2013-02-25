@@ -46,3 +46,7 @@
 	margin: 10px 0px 10px;
 	font-size: 20px;
 }
+
+.blueborder {
+border: solid #0088CC;
+}
