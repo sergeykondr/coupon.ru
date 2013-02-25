@@ -23,7 +23,7 @@
                 <center>Осталось:  <?=$data->expires('short');?></center>
             </div>
             <div class="span6">
-                <center>Купили:  <? echo $data->cheat() + $data->numbers_buy;  ?></center>
+                <center>Купили:  <? echo $data->cheat() + $data->numbers_buy;  ?> <i class="icon-tags"></i></center>
                 <!-- <br clear="all"/> -->
             </div>
 
