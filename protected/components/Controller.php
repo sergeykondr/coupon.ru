@@ -61,13 +61,17 @@ abstract class Controller extends CController implements ControllerInterface
 
     public function topMenuItems()
     {
+
         return array(
+            /*
             array(
                 'label' => t('Как это работает'),
                 'url'   => array('/page/1')
             ),
+            */
 
         );
+
     }
 
 

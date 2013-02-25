@@ -6,7 +6,8 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </a>
-            <a href="/" class="brand">freeskidka.ru</a>
+            <!--<div class="zalivka">123</div><div class="zalivka2">123</div>-->
+            <a href="/" class="brand">Freeskidka</a>
             <div class="nav-collapse">
                 <?
                 $this->widget('BootMenu', array(
