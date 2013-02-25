@@ -195,7 +195,7 @@ class XmlImportController extends Controller
     private function addPicturesImport($discountSave)
     {
         //разбить. грузить кратинки вместе. сохранять
-        $discountChunk = array_chunk($discountSave, 150);
+        $discountChunk = array_chunk($discountSave, 60);
 
         foreach ($discountChunk as $k => $v)
         {

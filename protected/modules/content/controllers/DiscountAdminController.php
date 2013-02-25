@@ -16,7 +16,7 @@ class DiscountAdminController extends AdminController
 
     public function actionManage()
     {
-        $model = new Discount();
+        $model = new Discount('search');
         $model->unsetAttributes();
 
         if (isset($_GET['Discount']))

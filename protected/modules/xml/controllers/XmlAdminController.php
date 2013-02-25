@@ -28,7 +28,7 @@ class XmlAdminController extends AdminController
     //показываем импортированные xml
     public function actionManage()
     {
-        $model = new Discount('search_xml');
+        $model = new Discount('search');
         $model->unsetAttributes();
 
         if (isset($_GET['Discount']))

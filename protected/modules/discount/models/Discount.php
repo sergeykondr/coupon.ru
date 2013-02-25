@@ -129,6 +129,11 @@ class Discount extends ActiveRecord
                 'metrosarray', 'safe', // для него нет label ошибки (потому что в конструкторе форм по нормальному это поле не было объявлено)
                 //'on'=>'our_discount',
             ),
+
+            array(
+                'id, name, beginsell, xml_imp_id, xml_imp_url', 'safe',
+                'on'=> 'search'
+            ),
         );
     }
 
@@ -291,6 +296,8 @@ class Discount extends ActiveRecord
         $criteria->compare('numbers_buy', $this->numbers_buy, true);
         $criteria->compare('price', $this->price, true);
         $criteria->compare('text', $this->text, true);
+        $criteria->compare('xml_imp_id', $this->xml_imp_id, true);
+        $criteria->compare('xml_imp_url', $this->xml_imp_url, true);
 
         return new ActiveDataProvider(get_class($this), array(
             'criteria'   => $criteria,
