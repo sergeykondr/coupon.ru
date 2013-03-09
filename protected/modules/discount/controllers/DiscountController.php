@@ -179,7 +179,7 @@ class DiscountController extends Controller
 
         $data_provider = new CActiveDataProvider('Discount', array(
             'criteria' => array(
-                'order'     => 'beginsell DESC',
+                'order'     => 'id DESC', //'beginsell DESC',
                 'condition'=>Category::model()->queryActual(),
             ),
             'pagination' => array(
@@ -203,7 +203,7 @@ class DiscountController extends Controller
         $this->setMetaTags($modelCat);
         $activeDataProvider = new CActiveDataProvider(Discount::model()->with('category')->inCategory($modelCat->id), array(
                 'criteria' => array(
-                    'order'     => 'beginsell DESC',
+                    'order'     => 'id DESC', //'beginsell DESC',
                     'condition'=>Category::model()->queryActual(),
                 ),
                 'pagination' => array(

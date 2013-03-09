@@ -4,8 +4,7 @@ class XmlImportController extends Controller
     public $fileXmlLoad; //загружаемый xml файл
     public $urlsImage = array(); //массив url картинок
     public $urlsImageContent; //массив url и контента картинок
-    //public $cityRadar = 'http://fun2mass.ru/kuponator.xml';
-    //public $cityRadar = 'http://cityradar.ru/kupongid.xml';
+    private $descHtmlKuponator;
 
 
     public static function actionsTitles()
@@ -13,13 +12,6 @@ class XmlImportController extends Controller
         return array(
             'cityradarImport'         => 'Импорт дискаунтов Cityradar',
             'fan2massImport'          => 'Импорт дискаунтов Fan2mass',
-
-            /*
-            'index'        => 'Все акции',
-            'views'         => 'Просмотр акции',
-            'category' => 'Просмотр категорий',
-            'buy' => 'Покупка акции',
-            */
         );
     }
 
@@ -85,7 +77,20 @@ class XmlImportController extends Controller
             $model->our = 0; //false - акция не наша
             $model->xml_imp_url = $offer->url;
             $model->name = $offer->name; //Название дискаунта
-            $model->description = $offer->description;
+
+            if ($url == 'http://fun2mass.ru/kuponator.xml')
+            {
+                $descArray = $this->renderDescArrayKuponator(strip_tags($offer->description));
+                $this->renderDescHtmlKuponator($descArray); //результат метода записывается в $this->descHtmlKuponator
+                $model->description =  $this->descHtmlKuponator;
+                $this->descHtmlKuponator=''; //обнуляем значение
+            }
+            else
+            {
+                //для описания CityRadar
+                $model->description = $this->renderDescHtmlCityRadar($offer->description);
+            }
+
             $model->beginsell = date('Y-m-d H:i:s', strtotime($offer->beginsell));
             $model->endsell = date('Y-m-d H:i:s', strtotime($offer->endsell));
             $model->beginvalid = date('Y-m-d H:i:s', strtotime($offer->beginvalid));
@@ -250,5 +255,103 @@ class XmlImportController extends Controller
         $metatags->description = $companyName . 'Купон на скидку. Отзывы об акции.';
         $metatags->save();
     }
+
+
+    private function renderDescArrayKuponator($inputStr)
+    {
+        $inputArray = explode ("\n",$inputStr);
+        $inputArray = array_reverse($inputArray);
+        $stack = new SplStack();
+        foreach ($inputArray as $value)
+        {
+            $stack->push($value);
+        }
+
+        $discount = array();
+        $firstCh = -1; //первый элемент массива. -1 т.к. прибавим +1, если будет строка без таба
+        $state = 'p0';
+        while(!$stack->isEmpty())
+        {
+            switch($state) {
+                case 'p0':
+                    $str =  $stack->pop(); // выводим из очереди
+                    if (preg_match ('/\t\t/', $str) && strlen($str)>10)
+                    {
+                        $state = 'p2';
+                    }
+                    elseif (preg_match ('/\t+/', $str) && strlen($str)>4)
+                    {
+                        $state = 'p1';
+                    }
+                    elseif (preg_match ('/^[a-zA-Zа-яА-Я]+/', $str) && strlen($str)>4)
+                    {
+                        $state = 'p3';
+                    }
+                    else
+                    {
+                        $state = 'p4';
+                    }
+                    $stack->push($str); // помещаем в очередь (в начало массива)
+                    break;
+                case 'p2':
+                    //2 таба';
+                    if (!isset($discount[$firstCh]['items']))
+                    {
+                        $state = 'p1';
+                        break;
+                    }
+                    $last = count($discount[$firstCh]['items']) - 1;
+                    $discount[$firstCh]['items'][$last]['items'][] = array('label' => $stack->pop());
+                    $state = 'p0';
+                    break;
+                case 'p1':
+                    //1 таб';
+                    $discount[$firstCh]['items'][] = array('label' => $stack->pop());
+                    $state = 'p0';
+                    break;
+                case 'p3':
+                    // без таба
+                    $firstCh++;
+                    $discount[$firstCh]['label'] = $stack->pop();
+                    $state = 'p0';
+                    break;
+                case 'p4':
+                    //другое
+                    $stack->pop();
+                    $state = 'p0';
+                    break;
+            }
+        }
+        return $discount;
+    }
+
+
+    private function renderDescHtmlKuponator($items)
+    {
+        $this->descHtmlKuponator .=  '<ul>';
+        foreach ($items as $v)
+        {
+            $this->descHtmlKuponator .='<li>';
+            $this->descHtmlKuponator .= $v['label'];
+            if (isset($v['items']))
+                $this->renderDescHtmlKuponator($v['items']);
+            $this->descHtmlKuponator .= '</li>';
+        }
+        $this->descHtmlKuponator .= '</ul>';
+        //return $this->descHtmlKuponator;
+    }
+
+
+    private function renderDescHtmlCityRadar($description)
+    {
+        $ret = '<ul>';
+        foreach( explode(';', $description) as $elem)
+        {
+            $ret .= CHtml::tag('li', array(), $elem);
+        }
+        $ret.= '</ul>';
+        return $ret;
+    }
+
 
 }
