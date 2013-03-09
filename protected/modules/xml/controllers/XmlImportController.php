@@ -80,7 +80,9 @@ class XmlImportController extends Controller
 
             if ($url == 'http://fun2mass.ru/kuponator.xml')
             {
-                $descArray = $this->renderDescArrayKuponator(strip_tags($offer->description));
+                $descStr = strip_tags($offer->description);
+                $descStr = addslashes($descStr);
+                $descArray = $this->renderDescArrayKuponator($descStr);
                 $this->renderDescHtmlKuponator($descArray); //результат метода записывается в $this->descHtmlKuponator
                 $model->description =  $this->descHtmlKuponator;
                 $this->descHtmlKuponator=''; //обнуляем значение
@@ -332,6 +334,7 @@ class XmlImportController extends Controller
         foreach ($items as $v)
         {
             $this->descHtmlKuponator .='<li>';
+            if (isset($v['label']))
             $this->descHtmlKuponator .= $v['label'];
             if (isset($v['items']))
                 $this->renderDescHtmlKuponator($v['items']);
