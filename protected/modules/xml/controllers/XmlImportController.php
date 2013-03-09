@@ -81,7 +81,7 @@ class XmlImportController extends Controller
             if ($url == 'http://fun2mass.ru/kuponator.xml')
             {
                 $descStr = strip_tags($offer->description);
-                $descStr = addslashes($descStr);
+                $descStr =  CHtml::encode($descStr);
                 $descArray = $this->renderDescArrayKuponator($descStr);
                 $this->renderDescHtmlKuponator($descArray); //результат метода записывается в $this->descHtmlKuponator
                 $model->description =  $this->descHtmlKuponator;
