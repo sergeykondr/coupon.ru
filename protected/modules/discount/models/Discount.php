@@ -366,14 +366,18 @@ class Discount extends ActiveRecord
             return '/upload/mediaFiles/no_image_310x205.jpg';
 
         //если акция наша - то один путь для кропа. если не наша - то другой
-        $imgCropPath = ($this->our) ? self::PATH_OUR_IMG_CROP : self::PATH_XML_IMG_CROP;
+        //$imgCropPath = ($this->our) ? self::PATH_OUR_IMG_CROP : self::PATH_XML_IMG_CROP;
+        //path: upload/mediaFiles/xml/ed
+        //path: upload/mediaFiles/b2
 
-        $path = $imgCropPath . '/' . $this->preNameCrop() . $mediaFile->name;
-        if (file_exists('./' . $path )) //проверка на существование кропа
-            return '/'. $path;
+
+        //$path = $imgCropPath . '/' . $this->preNameCrop() . $mediaFile->name;
+        $pathCrop = $mediaFile->path . '/'. $this->preNameCrop() . $mediaFile->name;
+        if (file_exists('./' . $pathCrop )) //проверка на существование кропа
+            return '/'. $pathCrop;
         //если нет - то делаем кроп
         if (file_exists('./' . $mediaFile->getHref())) //проверка на существование картинки для кропа
-        return $this->createCropImage($mediaFile->getHref(), $mediaFile->name, $imgCropPath);
+        return $this->createCropImage($mediaFile->getHref(), $mediaFile->name, $mediaFile->path);
     }
 
 
@@ -392,9 +396,10 @@ class Discount extends ActiveRecord
         }
 
         $path =   $imgCropPath . '/' . $this->preNameCrop() .  $name;
-        $image->save('./' . $path);
-        list($pathCrop, $nameCrop) = FileSystemHelper::moveToVault($path, $imgCropPath, true);
-        return '/' . $pathCrop . '/' . $nameCrop;
+        if ($image->save('./' . $path))
+            return '/' . $path;
+        //list($pathCrop, $nameCrop) = FileSystemHelper::moveToVault($path, $imgCropPath, true);
+
     }
 
 
