@@ -5,6 +5,7 @@ class XmlImportController extends Controller
     public $urlsImage = array(); //массив url картинок
     public $urlsImageContent; //массив url и контента картинок
     private $descHtmlKuponator;
+    const LOAD_IMAGE_TOGETHER = 50;
 
 
     public static function actionsTitles()
@@ -202,7 +203,7 @@ class XmlImportController extends Controller
     private function addPicturesImport($discountSave)
     {
         //разбить. грузить кратинки вместе. сохранять
-        $discountChunk = array_chunk($discountSave, 60);
+        $discountChunk = array_chunk($discountSave, self::LOAD_IMAGE_TOGETHER);
 
         foreach ($discountChunk as $k => $v)
         {
