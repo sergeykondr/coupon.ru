@@ -76,7 +76,20 @@
         <hr>
 
         <footer>
-            <p>&copy; Company 2012</p>
+            <div class="row-fluid">
+                <div class="span12 well">
+                    <div class="span4">
+                        <p>&copy; Company 2013</p>
+
+                    </div>
+                    <div class="span4">
+                        <p>&copy; Company 2013</p>
+                    </div>
+                    <div class="span4">
+                        <p>&copy; Company 2013</p>
+                    </div>
+                </div>
+            </div>
         </footer>
     </div>
     <!-- Yandex.Metrika counter -->
