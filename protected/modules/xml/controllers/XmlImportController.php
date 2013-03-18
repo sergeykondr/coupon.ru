@@ -121,7 +121,7 @@ class XmlImportController extends Controller
 
             //вычисляем координаты-GPS
             //если чтото записано в координатах
-            if (strlen($offer->supplier->addresses->address[0]->coordinates)>4)
+            if (isset($offer->supplier->addresses->address[0]->coordinates) && strlen($offer->supplier->addresses->address[0]->coordinates)>4)
             {
                 $coords = (string)$offer->supplier->addresses->address[0]->coordinates;
                 $coords = str_replace(' ', '', trim($coords)); //long, lat
