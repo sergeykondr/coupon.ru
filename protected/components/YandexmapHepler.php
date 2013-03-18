@@ -4,27 +4,42 @@ class YandexMapHepler
     public static function getGeoCoordinates($address)
     {
         $params = array(
-            'geocode' => $address, // адрес
-            'format'  => 'json',                          // формат ответа
-            'results' => 1,                               // количество выводимых результатов
-            //'key'     => '...',                           // ваш api key
+            'geocode' => $address, // пїЅпїЅпїЅпїЅпїЅ
+            'format'  => 'json',                          // пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
+            'results' => 1,                               // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+            //'key'     => '...',                           // пїЅпїЅпїЅ api key
         );
-        $response = json_decode(file_get_contents('http://geocode-maps.yandex.ru/1.x/?' . http_build_query($params, '', '&')));
 
-        if ($response->response->GeoObjectCollection->metaDataProperty->GeocoderResponseMetaData->found > 0)
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, 'http://geocode-maps.yandex.ru/1.x/?' . http_build_query($params, '', '&'));
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        $output = curl_exec($ch);
+        $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE); //get the code of request
+        curl_close($ch);
+
+        if($httpCode == 400)
+            return 'not found'; ////
+
+        if($httpCode == 200) //is ok?
         {
-            // GeoObject->Point->pos = 37.617761 55.755773 (коориднаты через пробел)
-            $coordinates = explode(" ", $response->response->GeoObjectCollection->featureMember[0]->GeoObject->Point->pos); // получаем массив, [0] - долгота, [1] - широта
-            return ($coordinates[0] . ',' . $coordinates[1]); //  // [0] - долгота, [1] - широта. возвращ. через запятую
-            /*
-            return array($coordinates[0],
-                         $coordinates[1]
-                   );
-            */
-        }
-        else
-        {
-            return 'not found';
+
+            $response = json_decode($output);
+
+            if ($response->response->GeoObjectCollection->metaDataProperty->GeocoderResponseMetaData->found > 0)
+            {
+                // GeoObject->Point->pos = 37.617761 55.755773 (пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ)
+                $coordinates = explode(" ", $response->response->GeoObjectCollection->featureMember[0]->GeoObject->Point->pos); // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ, [0] - пїЅпїЅпїЅпїЅпїЅпїЅпїЅ, [1] - пїЅпїЅпїЅпїЅпїЅпїЅ
+                return ($coordinates[0] . ',' . $coordinates[1]); //  // [0] - пїЅпїЅпїЅпїЅпїЅпїЅпїЅ, [1] - пїЅпїЅпїЅпїЅпїЅпїЅ. пїЅпїЅпїЅпїЅпїЅпїЅпїЅ. пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+                /*
+                return array($coordinates[0],
+                             $coordinates[1]
+                       );
+                */
+            }
+            else
+            {
+                return 'not found';
+            }
         }
     }
 
