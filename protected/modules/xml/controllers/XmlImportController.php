@@ -179,7 +179,7 @@ class XmlImportController extends Controller
         }
 
         $this->addPicturesImport($discountSave);
-        echo 'C '. $url . ' было импортировано ' . $i . ' дискаунтов';
+        echo $i . ' discounts has been imported from ' . $url;
         /*
             if ($form->submitted() && $model->save())
             {
