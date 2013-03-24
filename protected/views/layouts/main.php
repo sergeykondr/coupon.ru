@@ -85,18 +85,18 @@
                     <div class="span4 footer_block"">
                         <strong>О компании</strong>
                         <ul>
-                            <li><a href="#">О нас</a></li>
-                            <li><a href="#">Контакты</li>
+                            <li><a href="/page/1">О нас</a></li>
+                            <li><a href="/page/2">Контакты</li>
                         </ul>
                     </div>
                     <div class="span4 footer_block">
-                        <a href="#"><strong>Партнерам</strong></a>
+                        <a href="/page/3"><strong>Партнерам</strong></a>
                     </div>
                     <div class="span4 footer_block">
                         <strong>Поддержка</strong>
                         <ul>
-                            <li><a href="#">Задать вопрос</a></li>
-                            <li><a href="#">Публичная оферта</a></li>
+                            <li><a href="/page/4">Задать вопрос</a></li>
+                            <li><a href="/page/5">Публичная оферта</a></li>
                         </ul>
                     </div>
                 </div>
