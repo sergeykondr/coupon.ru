@@ -5,11 +5,13 @@ class DiscountAdminController extends AdminController
     public static function actionsTitles()
     {
         return array(
-            "manage"      => t("Управление дискаунтами"), //new
-            "create"      => t("Добавление дискаунта"), //new
-            "view"        => t("Просмотр дискаунта"), //new
-            "update"      => t("Редактирование дискаунта"), //new
+            "manage"      => t("Управление дискаунтами"),
+            "create"      => t("Добавление дискаунта"),
+            "view"        => t("Просмотр дискаунта"),
+            "update"      => t("Редактирование дискаунта"),
+            "delete"      => t("Удаление дискаунта"),
             "getJsonData" => t("Получение данных страницы (JSON)")
+
         );
     }
 
@@ -27,6 +29,18 @@ class DiscountAdminController extends AdminController
         $this->render('manage', array(
             "model" => $model
         ));
+    }
+
+
+    public function actionDelete($id)
+    {
+        $this->loadModel($id)->delete();
+
+        if (!isset($_GET['ajax']))
+        {
+            $this->redirect(isset($_POST['returnUrl']) ? $_POST['returnUrl'] : array('admin'));
+        }
+
     }
 
 
