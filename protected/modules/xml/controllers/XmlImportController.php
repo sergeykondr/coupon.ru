@@ -104,7 +104,7 @@ class XmlImportController extends Controller
             $model->discount = $offer->discount;
             $model->discountprice = $offer->discountprice;
             $model->pricecoupon = $offer->pricecoupon;
-            $model->cheat = rand(100, 3000);
+            $model->cheat = rand(50, 500);
             $model->company_name = $offer->supplier->name;
             $model->company_url = $offer->supplier->url;
             $model->company_tel = $offer->supplier->tel;
