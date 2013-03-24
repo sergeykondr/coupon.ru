@@ -90,7 +90,10 @@
                         </ul>
                     </div>
                     <div class="span4 footer_block">
-                        <a href="/page/3"><strong>Партнерам</strong></a>
+                        <strong>Партнерам</strong>
+                        <ul>
+                            <li><a href="/page/3">Для бизнеса</a></li>
+                        </ul>
                     </div>
                     <div class="span4 footer_block">
                         <strong>Поддержка</strong>

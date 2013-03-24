@@ -50,3 +50,8 @@
 .blueborder {
 border: solid #0088CC;
 }
+
+/*верхнее меню*/
+.top-phone {
+    font-size: 18px; padding-top: 10px;
+}

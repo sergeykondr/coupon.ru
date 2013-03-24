@@ -7,7 +7,8 @@
                 <span class="icon-bar"></span>
             </a>
             <!--<div class="zalivka">123</div><div class="zalivka2">123</div>-->
-            <a href="/" class="brand">Freeskidka</a>
+            <a href="/" class="brand">FreeSkidka</a>
+            <p class="pull-right top-phone">+7 (499) 713-66-15</p>
             <div class="nav-collapse">
                 <?
                 $this->widget('BootMenu', array(
@@ -16,6 +17,7 @@
                 ?>
 
             </div>
+
         </div>
     </div>
 </div>
