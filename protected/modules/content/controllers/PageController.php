@@ -121,7 +121,7 @@ class PageController extends Controller
 
     public function actionView($id)
     {
-        $page = Page::model()->language()->findByPk($id);
+        $page = Page::model()->findByPk($id);
         if (!$page)
         {
             $this->pageNotFound();

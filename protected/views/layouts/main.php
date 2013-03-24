@@ -74,19 +74,30 @@
             -->
         </div>
         <hr>
-
+        <style>
+            .footer_block {
+                padding-left: 80px
+            }
+        </style>
         <footer>
             <div class="row-fluid">
                 <div class="span12 well">
-                    <div class="span4">
-                        <p>&copy; Company 2013</p>
-
+                    <div class="span4 footer_block"">
+                        <strong>О компании</strong>
+                        <ul>
+                            <li><a href="#">О нас</a></li>
+                            <li><a href="#">Контакты</li>
+                        </ul>
                     </div>
-                    <div class="span4">
-                        <p>&copy; Company 2013</p>
+                    <div class="span4 footer_block">
+                        <a href="#"><strong>Партнерам</strong></a>
                     </div>
-                    <div class="span4">
-                        <p>&copy; Company 2013</p>
+                    <div class="span4 footer_block">
+                        <strong>Поддержка</strong>
+                        <ul>
+                            <li><a href="#">Задать вопрос</a></li>
+                            <li><a href="#">Публичная оферта</a></li>
+                        </ul>
                     </div>
                 </div>
             </div>
@@ -118,4 +129,4 @@
     </script>
     <noscript><div><img src="//mc.yandex.ru/watch/20127475" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
     <!-- /Yandex.Metrika counter -->
-</div>
+</body>
