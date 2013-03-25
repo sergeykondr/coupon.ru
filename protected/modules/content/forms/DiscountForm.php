@@ -42,7 +42,7 @@ return array(
 
 */
         'metros' => array(
-            'type'  => 'application.components.formElements.chosen.Chosen',
+            'type'  => 'application.components.formElements.Chosen.Chosen',
             //'name' => 'metrospost', input name (не работает)
             //'value' =>  1,  selection (не работает)
             'multiple'=>true,
