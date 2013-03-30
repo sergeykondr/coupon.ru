@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<title><? echo $this->pageTitle ?></title>
-<meta charset="utf-8">
+    <title><? echo $this->pageTitle ?></title>
+    <meta charset="utf-8">
     <? /*<meta name="description" content="< echo $this->meta_description >">
     <meta name="keywords" content="< echo $this->meta_keywords >">
     <meta name="author" content=""> */?>
@@ -58,11 +58,11 @@
         <div class="row-fluid">
             <div class="span12 well">
                 <? if ($this->page_title): ?>
-                    <h1><?= $this->page_title ?></h1>
+                <h1><?= $this->page_title ?></h1>
                 <? endif ?>
 
                 <? foreach (Yii::app()->user->getFlashes() as $type => $msg): ?>
-                    <div class="alert alert-<?= $type ?>"><?= $msg ?></div>
+                <div class="alert alert-<?= $type ?>"><?= $msg ?></div>
                 <? endforeach ?>
 
                 <?= $content ?>
@@ -83,53 +83,53 @@
             <div class="row-fluid">
                 <div class="span12 well">
                     <div class="span4 footer_block"">
-                        <strong>Рћ РєРѕРјРїР°РЅРёРё</strong>
-                        <ul>
-                            <li><a href="/page/1">Рћ РЅР°СЃ</a></li>
-                            <li><a href="/page/2">РљРѕРЅС‚Р°РєС‚С‹</li>
-                        </ul>
-                    </div>
-                    <div class="span4 footer_block">
-                        <strong>РџР°СЂС‚РЅРµСЂР°Рј</strong>
-                        <ul>
-                            <li><a href="/page/3">Р”Р»СЏ Р±РёР·РЅРµСЃР°</a></li>
-                        </ul>
-                    </div>
-                    <div class="span4 footer_block">
-                        <strong>РџРѕРґРґРµСЂР¶РєР°</strong>
-                        <ul>
-                            <li><a href="/page/4">Р—Р°РґР°С‚СЊ РІРѕРїСЂРѕСЃ</a></li>
-                            <li><a href="/page/5">РџСѓР±Р»РёС‡РЅР°СЏ РѕС„РµСЂС‚Р°</a></li>
-                        </ul>
-                    </div>
+                    <strong>О компании</strong>
+                    <ul>
+                        <li><a href="/page/1">О нас</a></li>
+                        <li><a href="/page/2">Контакты</a></li>
+                    </ul>
+                </div>
+                <div class="span4 footer_block">
+                    <strong>Партнерам</strong>
+                    <ul>
+                        <li><a href="/page/3">Для бизнеса</a></li>
+                    </ul>
+                </div>
+                <div class="span4 footer_block">
+                    <strong>Поддержка</strong>
+                    <ul>
+                        <li><a href="/page/4">Задать вопрос</a></li>
+                        <li><a href="/page/5">Публичная оферта</a></li>
+                    </ul>
                 </div>
             </div>
-        </footer>
     </div>
-    <!-- Yandex.Metrika counter -->
-    <script type="text/javascript">
-        (function (d, w, c) {
-            (w[c] = w[c] || []).push(function() {
-                try {
-                    w.yaCounter20127475 = new Ya.Metrika({id:20127475,
-                        clickmap:true,
-                        trackLinks:true,
-                        accurateTrackBounce:true});
-                } catch(e) { }
-            });
+    </footer>
+</div>
+<!-- Yandex.Metrika counter -->
+<script type="text/javascript">
+    (function (d, w, c) {
+        (w[c] = w[c] || []).push(function() {
+            try {
+                w.yaCounter20127475 = new Ya.Metrika({id:20127475,
+                    clickmap:true,
+                    trackLinks:true,
+                    accurateTrackBounce:true});
+            } catch(e) { }
+        });
 
-            var n = d.getElementsByTagName("script")[0],
+        var n = d.getElementsByTagName("script")[0],
                 s = d.createElement("script"),
                 f = function () { n.parentNode.insertBefore(s, n); };
-            s.type = "text/javascript";
-            s.async = true;
-            s.src = (d.location.protocol == "https:" ? "https:" : "http:") + "//mc.yandex.ru/metrika/watch.js";
+        s.type = "text/javascript";
+        s.async = true;
+        s.src = (d.location.protocol == "https:" ? "https:" : "http:") + "//mc.yandex.ru/metrika/watch.js";
 
-            if (w.opera == "[object Opera]") {
-                d.addEventListener("DOMContentLoaded", f, false);
-            } else { f(); }
-        })(document, window, "yandex_metrika_callbacks");
-    </script>
-    <noscript><div><img src="//mc.yandex.ru/watch/20127475" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
-    <!-- /Yandex.Metrika counter -->
+        if (w.opera == "[object Opera]") {
+            d.addEventListener("DOMContentLoaded", f, false);
+        } else { f(); }
+    })(document, window, "yandex_metrika_callbacks");
+</script>
+<noscript><div><img src="//mc.yandex.ru/watch/20127475" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+<!-- /Yandex.Metrika counter -->
 </body>
