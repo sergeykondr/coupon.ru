@@ -67,7 +67,7 @@ class Category extends ActiveRecord
 
 
     //текущая дата
-    private function nowDate()
+    public function nowDate()
     {
 
         return date('Y-m-d H:i:s',time());

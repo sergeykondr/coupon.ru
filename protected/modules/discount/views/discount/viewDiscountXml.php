@@ -10,13 +10,25 @@ $this->page_title = $page->name; //заголовок <h1>
         <div id="myCarousel" class="carousel slide carousel-hidden">
             <!-- Carousel items -->
             <div class="carousel-inner">
+                <?
+                $i=0; //счетчик для первой картинки
+                foreach($page->xml as $gal)
+                {
+                    ?>
+                        <div class="item<?=(!$i++) ? ' active' : ''; echo '">';
+                    /*
+                    if ($i==0)
+                    {
+                        echo ' active';
+                       $i++;
+                    }
+                    echo '">';
+                    */
+                    echo CHtml::image($gal->getHref());
+                    echo '</div>';
 
-
-
-
-                <div class="item active">
-                    <img src="<?=$page->xml[0]->getHref();?>" alt="">
-                </div>
+                }
+                ?>
                 <!--
                 <div class="item">
                     <img src="http://alkupone.ru/system/picture/7615/sport_paragliding_harness.jpg" alt="">

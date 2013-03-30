@@ -10,6 +10,8 @@ class MediaFileAdminController extends AdminController
             "existFiles"   => "Скачать файл",
             "savePriority" => "Скачать файл",
             "updateAttr"   => "Скачать файл",
+            "deleteoldpict"   => "удалить",
+
         );
     }
 
@@ -143,4 +145,33 @@ class MediaFileAdminController extends AdminController
 
         $this->render('manage', array('model' => $model));
     }
+
+
+    public function actionDeleteoldpict()
+    {
+        //выбираем все старые дискаунты
+        $criteria=new CDbCriteria;
+        $criteria->select='id';  // выбираем только поле 'title'
+        //только чужие акции с истекшим сроком продажи
+        $criteria->condition="our = 0 AND DATE(endsell) < '" . Yii::app()->dateFormatter->format('yyyy-MM-dd HH:mm:ss', time()) . "'";
+        $oldDiscounts = Discount::model()->findAll($criteria);
+        $countDel=0;
+        echo 'discount id where pictured deleted:<br>';
+        foreach($oldDiscounts as $discount)
+        {
+            echo $discount->id.'<br>';
+            $discountMediaFile = MediaFile::model()->findByAttributes(array('object_id'=>$discount->id, 'model_id'=>'Discount'));
+            if(!$discountMediaFile==null)
+            {
+                $discountMediaFile->delete();
+                $countDel++;
+            }
+        }
+        echo $countDel . ' discount pictures has been deleted';
+    }
+
+
+
+
+
 }

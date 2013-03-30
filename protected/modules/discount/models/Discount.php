@@ -22,6 +22,9 @@ class Discount extends ActiveRecord
     const PATH_OUR_IMG_CROP = 'upload/mediaFiles/our_crop'; //для кропа наших дискаунтов
     const IMG_CROP_WIDTH = 310;
     const IMG_CROP_HEIGHT = 205;
+    const NO_CROP_IMAGE = '/upload/mediaFiles/no_image_310x205.jpg';
+    const NO_IMAGE = '/upload/mediaFiles/no_image_310x205.jpg';
+
 
 
 
@@ -80,8 +83,8 @@ class Discount extends ActiveRecord
             array(
                 'category_id, name, description,
                 beginsell, endsell, beginvalid, endvalid,
-                company_name, company_url, company_tel, company_address',
-                'required',  'on'=>'our_discount, xml_discount'
+                company_name, company_address',
+                'required',  'on'=>'our_discount, xml_discount', 'strict' => true,
             ),
 
             /*
@@ -125,8 +128,7 @@ class Discount extends ActiveRecord
             ),
 
             array(
-                //нужно чтоб записывалось сюда при ред. нашего дискаута и xml дискаунта. Можно ли тут делать атрибут safe
-                'metrosarray', 'safe', // для него нет label ошибки (потому что в конструкторе форм по нормальному это поле не было объявлено)
+                'metrosarray, company_tel, company_url', 'safe', // для него нет label ошибки (потому что в конструкторе форм по нормальному это поле не было объявлено)
                 //'on'=>'our_discount',
             ),
 
@@ -363,7 +365,8 @@ class Discount extends ActiveRecord
         //найти модель с записями где находится картинка
         $mediaFile=MediaFile::model()->findByAttributes(array('object_id'=>$this->id, 'model_id'=>'Discount'));
         if($mediaFile===null)
-            return '/upload/mediaFiles/no_image_310x205.jpg';
+            return self::NO_CROP_IMAGE;
+            //return ;
 
         //если акция наша - то один путь для кропа. если не наша - то другой
         //$imgCropPath = ($this->our) ? self::PATH_OUR_IMG_CROP : self::PATH_XML_IMG_CROP;
@@ -377,7 +380,7 @@ class Discount extends ActiveRecord
             return '/'. $pathCrop;
         //если нет - то делаем кроп
         if (file_exists('./' . $mediaFile->getHref())) //проверка на существование картинки для кропа
-        return $this->createCropImage($mediaFile->getHref(), $mediaFile->name, $mediaFile->path);
+            return $this->createCropImage($mediaFile->getHref(), $mediaFile->name, $mediaFile->path);
     }
 
 
@@ -404,7 +407,7 @@ class Discount extends ActiveRecord
 
 
     //приставка в имени crop файла. т.к. имя кроп файла = приставка + само имя
-    private function preNameCrop()
+    public function preNameCrop()
     {
         return self::IMG_CROP_WIDTH . 'x' . self::IMG_CROP_HEIGHT . '_crop_'; //приставка 310x205_crop_
     }
@@ -481,6 +484,8 @@ class Discount extends ActiveRecord
         //$this->company_coordinates = 234234;//new CDbExpression("GEOMFROMTEXT(  \"POINT($this->coord_write[1] $this->coord_write[0] )\", 0 )"); //координаты заданы в правильных рамках
 
     }
+
+
     /**
      * @return array customized attribute labels (name=>label)
      */

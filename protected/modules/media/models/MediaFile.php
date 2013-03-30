@@ -355,11 +355,18 @@ class MediaFile extends ActiveRecord
     {
         if (parent::beforeDelete())
         {
-            if (is_file(self::UPLOAD_PATH . $this->name))
+            if (is_file($this->path .'/'. $this->name))
             {
-                FileSystemHelper::deleteFileWithSimilarNames(self::UPLOAD_PATH . '/crop', $this->name);
-                FileSystemHelper::deleteFileWithSimilarNames(self::UPLOAD_PATH . '/watermark', $this->name);
-                @unlink('./' . self::UPLOAD_PATH . $this->name);
+                //FileSystemHelper::deleteFileWithSimilarNames(self::UPLOAD_PATH . '/crop', $this->name);
+                //FileSystemHelper::deleteFileWithSimilarNames(self::UPLOAD_PATH . '/watermark', $this->name);
+                @unlink('./' . $this->path .'/'. $this->name);
+            }
+
+            if (is_file($this->path .'/310x205_crop_'. $this->name))
+            {
+                //FileSystemHelper::deleteFileWithSimilarNames(self::UPLOAD_PATH . '/crop', $this->name);
+                //FileSystemHelper::deleteFileWithSimilarNames(self::UPLOAD_PATH . '/watermark', $this->name);
+                @unlink('./' . $this->path .'/310x205_crop_'. $this->name);
             }
 
             return true;
@@ -416,7 +423,15 @@ class MediaFile extends ActiveRecord
 
     public function getHref()
     {
-        return '/' . $this->path . '/' . $this->name;
+        if ($this->path && $this->name)
+        {
+            return '/' . $this->path . '/' . $this->name;
+        }
+        else
+        {
+            return Discount::NO_IMAGE;
+        }
+
     }
 
 

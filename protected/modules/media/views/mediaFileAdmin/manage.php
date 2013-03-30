@@ -47,6 +47,9 @@ function getFileLink($data)
     }
 }
 
+$this->tabs = array(
+    'Удалить картинки от старых дискаунтов' => $this->createUrl('deleteoldpict')
+);
 
 $this->widget('AdminGridView', array(
     'id'           => 'mediaFile-grid',
@@ -55,7 +58,7 @@ $this->widget('AdminGridView', array(
     'columns'      => array(
         array(
             'name'   => 'title',
-            'value'  => 'getFileLink($data);',
+            'value'  => '$data->title',
             'type'   => 'raw',
             'filter' => false
         ),
