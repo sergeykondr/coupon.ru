@@ -83,23 +83,23 @@
             <div class="row-fluid">
                 <div class="span12 well">
                     <div class="span4 footer_block"">
-                    <strong>О компании</strong>
+                    <strong>Рћ РєРѕРјРїР°РЅРёРё</strong>
                     <ul>
-                        <li><a href="/page/1">О нас</a></li>
-                        <li><a href="/page/2">Контакты</a></li>
+                        <li><a href="/page/1">Рћ РЅР°СЃ</a></li>
+                        <li><a href="/page/2">РљРѕРЅС‚Р°РєС‚С‹</a></li>
                     </ul>
                 </div>
                 <div class="span4 footer_block">
-                    <strong>Партнерам</strong>
+                    <strong>РџР°СЂС‚РЅРµСЂР°Рј</strong>
                     <ul>
-                        <li><a href="/page/3">Для бизнеса</a></li>
+                        <li><a href="/page/3">Р”Р»СЏ Р±РёР·РЅРµСЃР°</a></li>
                     </ul>
                 </div>
                 <div class="span4 footer_block">
-                    <strong>Поддержка</strong>
+                    <strong>РџРѕРґРґРµСЂР¶РєР°</strong>
                     <ul>
-                        <li><a href="/page/4">Задать вопрос</a></li>
-                        <li><a href="/page/5">Публичная оферта</a></li>
+                        <li><a href="/page/4">Р—Р°РґР°С‚СЊ РІРѕРїСЂРѕСЃ</a></li>
+                        <li><a href="/page/5">РџСѓР±Р»РёС‡РЅР°СЏ РѕС„РµСЂС‚Р°</a></li>
                     </ul>
                 </div>
             </div>
