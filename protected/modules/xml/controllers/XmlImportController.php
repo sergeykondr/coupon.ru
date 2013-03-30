@@ -72,134 +72,132 @@ class XmlImportController extends Controller
             if (Discount::model()->findByAttributes(array('xml_imp_id'=>$offer->id)))
                 continue;
 
-            $model = new Discount('xml_discount');
-            $model->xml_imp_id = $offer->id;
-            $model->category_id = 10;//категория разное
-            $model->our = 0; //false - акция не наша
-            $model->xml_imp_url = $offer->url;
-            $model->name = $offer->name; //Название дискаунта
-
-            if ($url == 'http://fun2mass.ru/kuponator.xml')
+            $connection=Yii::app()->db; //начинаем транзакцию
+            $transaction=$connection->beginTransaction();
+            try
             {
-                $descStr = strip_tags($offer->description);
-                //$descStr =  CHtml::encode($descStr);
-                $descArray = $this->renderDescArrayKuponator($descStr);
-                $this->renderDescHtmlKuponator($descArray); //результат метода записывается в $this->descHtmlKuponator
-                $model->description =  $this->descHtmlKuponator;
-                $this->descHtmlKuponator=''; //обнуляем значение
-            }
-            else
-            {
-                //для описания CityRadar
-                $model->description = $this->renderDescHtmlCityRadar($offer->description);
-            }
+                $model = new Discount('xml_discount');
+                $model->xml_imp_id = $offer->id;
+                $model->category_id = 10;//категория разное
+                $model->our = 0; //false - акция не наша
+                $model->xml_imp_url = $offer->url;
+                $model->name = $offer->name; //Название дискаунта
 
-            $model->beginsell = date('Y-m-d H:i:s', strtotime($offer->beginsell));
-            $model->endsell = date('Y-m-d H:i:s', strtotime($offer->endsell));
-            $model->beginvalid = date('Y-m-d H:i:s', strtotime($offer->beginvalid));
-            $model->endvalid = date('Y-m-d H:i:s', strtotime($offer->endvalid));
-            $model->xml_imp_picture = (string)$offer->picture; //лишнее?
-            $this->urlsImage[] = (string)$offer->picture;
-            $model->price = $offer->price;
-            $model->discount = $offer->discount;
-            $model->discountprice = $offer->discountprice;
-            $model->pricecoupon = $offer->pricecoupon;
-            $model->cheat = rand(50, 500);
-            $model->company_name = $offer->supplier->name;
-            $model->company_url = $offer->supplier->url;
-            $model->company_tel = $offer->supplier->tel;
-
-            //адреса компании
-            $adres =''; // склеиваем адрес, если их несколько через ||
-            $adres1='';
-            foreach ($offer->supplier->addresses->address as $address )
-            {
-                $adres .= (!$adres) ? $address->name : '||' . $address->name;
-                if ($adres1=='') //записываем первый адрес для определния координат
-                $adres1 = (string)$address->name;
-            }
-            $model->company_address = $adres;
-
-            //вычисляем координаты-GPS
-            //если чтото записано в координатах
-            if (isset($offer->supplier->addresses->address[0]->coordinates) && strlen($offer->supplier->addresses->address[0]->coordinates)>4)
-            {
-                $coords = (string)$offer->supplier->addresses->address[0]->coordinates;
-                $coords = str_replace(' ', '', trim($coords)); //long, lat
-                //$coords = explode(",", $coords);
-                $model->coord_write = $coords; //тут строка!
-            }
-            else
-            {
-                //узнаем координаты, если они не указаны.
-                $model->coord_write = YandexmapHepler::getGeoCoordinates($adres1); // [0] - долгота (long), [1] - широта (lat)
-                /*
-                 *
-                 $coords = YandexmapHepler::getGeoCoordinates($adres1); // [0] - долгота (long), [1] - широта (lat)
-                if (is_array($coords)) //значит там лежат координаты, записываем их в модель
-                    $model->coord_write = $coords;
-                */
-            }
-
-
-            //сохраняем модель
-            if ($model->save())
-            {
-                $i++ ;
-                $discountSave[$i]['discountid'] = $model->id;
-                $discountSave[$i]['urlimage'] = (string)$offer->picture;
-
-                // указываем ближайшие метро. функционал в разработке
-                /*
-                if (is_array($coords))  //если координаты найдены
+                if ($url == 'http://fun2mass.ru/kuponator.xml')
                 {
-                    $metros = Metro::model()->findAll(array(
-                        'select'=>"* ,  ROUND( 6372797 * ACOS( COS( RADIANS( $coords[1] ) ) * COS( RADIANS( X( coordinates ) ) ) * COS( RADIANS( Y( coordinates ) ) - RADIANS( $coords[0] ) ) + SIN( RADIANS( $coords[1] ) ) * SIN( RADIANS( X( coordinates ) ) ) ) ) AS distance",
-                        'condition'=>"MBRWITHIN(  `coordinates` , GEOMFROMTEXT( 'Polygon((55.879931  37.285465, 55.895366  37.944645,55.545006  38.068241, 55.549678  37.277225, 55.879931  37.285465))' ) ) ",
-                        'limit' => 3,
-                        //'params'=>array(':id'=>$id),
-                    ));
+                    $descStr = strip_tags($offer->description);
+                    //$descStr =  CHtml::encode($descStr);
+                    $descArray = $this->renderDescArrayKuponator($descStr);
+                    $this->renderDescHtmlKuponator($descArray); //результат метода записывается в $this->descHtmlKuponator
+                    $model->description =  $this->descHtmlKuponator;
+                    $this->descHtmlKuponator=''; //обнуляем значение
+                }
+                else
+                {
+                    //для описания CityRadar
+                    $model->description = $this->renderDescHtmlCityRadar($offer->description);
+                }
 
-                    echo $metros[0]->distance . ' ';
-                    echo $metros[0]->name . '<br> ';
+                $model->beginsell = date('Y-m-d H:i:s', strtotime($offer->beginsell));
+                $model->endsell = date('Y-m-d H:i:s', strtotime($offer->endsell));
+                $model->beginvalid = date('Y-m-d H:i:s', strtotime($offer->beginvalid));
+                $model->endvalid = date('Y-m-d H:i:s', strtotime($offer->endvalid));
+                $model->xml_imp_picture = (string)$offer->picture; //лишнее?
+                $this->urlsImage[] = (string)$offer->picture;
+                $model->price = $offer->price;
+                $model->discount = $offer->discount;
+                $model->discountprice = $offer->discountprice;
+                $model->pricecoupon = $offer->pricecoupon;
+                $model->cheat = rand(50, 500);
+                $model->company_name = $offer->supplier->name;
+                $model->company_url = $offer->supplier->url;
+                $model->company_tel = $offer->supplier->tel;
+
+                //адреса компании
+                $adres =''; // склеиваем адрес, если их несколько через ||
+                $adres1='';
+                foreach ($offer->supplier->addresses->address as $address )
+                {
+                    $adres .= (!$adres) ? $address->name : '||' . $address->name;
+                    if ($adres1=='') //записываем первый адрес для определния координат
+                        $adres1 = (string)$address->name;
+                }
+                $model->company_address = $adres;
+
+                //вычисляем координаты-GPS
+                //если чтото записано в координатах
+                if (isset($offer->supplier->addresses->address[0]->coordinates) && strlen($offer->supplier->addresses->address[0]->coordinates)>4)
+                {
+                    $coords = (string)$offer->supplier->addresses->address[0]->coordinates;
+                    $coords = str_replace(' ', '', trim($coords)); //long, lat
+                    //$coords = explode(",", $coords);
+                    $model->coord_write = $coords; //тут строка!
+                }
+                else
+                {
+                    //узнаем координаты, если они не указаны.
+                    $model->coord_write = YandexmapHepler::getGeoCoordinates($adres1); // [0] - долгота (long), [1] - широта (lat)
+                    /*
+                     *
+                     $coords = YandexmapHepler::getGeoCoordinates($adres1); // [0] - долгота (long), [1] - широта (lat)
+                    if (is_array($coords)) //значит там лежат координаты, записываем их в модель
+                        $model->coord_write = $coords;
+                    */
+                }
+
+                //сохраняем модель
+                if ($model->save())
+                {
+                    $i++ ;
+                    $discountSave[$i]['discountid'] = $model->id;
+                    $discountSave[$i]['urlimage'] = (string)$offer->picture;
+
+                    // указываем ближайшие метро. функционал в разработке
+                    /*
+                    if (is_array($coords))  //если координаты найдены
+                    {
+                        $metros = Metro::model()->findAll(array(
+                            'select'=>"* ,  ROUND( 6372797 * ACOS( COS( RADIANS( $coords[1] ) ) * COS( RADIANS( X( coordinates ) ) ) * COS( RADIANS( Y( coordinates ) ) - RADIANS( $coords[0] ) ) + SIN( RADIANS( $coords[1] ) ) * SIN( RADIANS( X( coordinates ) ) ) ) ) AS distance",
+                            'condition'=>"MBRWITHIN(  `coordinates` , GEOMFROMTEXT( 'Polygon((55.879931  37.285465, 55.895366  37.944645,55.545006  38.068241, 55.549678  37.277225, 55.879931  37.285465))' ) ) ",
+                            'limit' => 3,
+                            //'params'=>array(':id'=>$id),
+                        ));
+
+                        echo $metros[0]->distance . ' ';
+                        echo $metros[0]->name . '<br> ';
 
 
-                    echo $metros[1]->distance . ' ';
-                    echo $metros[1]->name .  '<br> ';
+                        echo $metros[1]->distance . ' ';
+                        echo $metros[1]->name .  '<br> ';
 
-                    echo $metros[2]->distance . ' ';
-                    echo $metros[2]->name .  '<br> ';
-                   }
-                */
+                        echo $metros[2]->distance . ' ';
+                        echo $metros[2]->name .  '<br> ';
+                       }
+                    */
 
-
-                //3) записываем SEO теги: $model->id; $offer->name; $offer->supplier->name;
-                $this->addMetaTegImport($model->id, $offer->name, $offer->supplier->name);
+                    //записываем SEO теги: $model->id; $offer->name; $offer->supplier->name;
+                    $this->addMetaTegImport($model->id, $offer->name, $offer->supplier->name);
+                }
+                $transaction->commit();
+            }
+            catch(Exception $e)
+            {
+                $transaction->rollBack();
             }
         }
 
         $this->addPicturesImport($discountSave);
         echo $i . ' discounts has been imported from ' . $url;
-        /*
-            if ($form->submitted() && $model->save())
-            {
-                $this->redirect(array(
-                    'view',
-                    'id' => $model->id
-                ));
-            }
-            $this->render('create', array('form' => $form));
-        */
     }
 
 
 
 
-    /**
-     * загружаем картинки на сервер
-     * @param $urlPicture - url картинки на чужом сайта
-     * @param $discountId - id дискаунта в нашей базе
-     */
+    /*
+    * загружаем картинки на сервер
+    * @param $urlPicture - url картинки на чужом сайта
+    * @param $discountId - id дискаунта в нашей базе
+    */
     private function addPicturesImport($discountSave)
     {
         //разбить. грузить кратинки вместе. сохранять
@@ -336,7 +334,7 @@ class XmlImportController extends Controller
         {
             $this->descHtmlKuponator .='<li>';
             if (isset($v['label']))
-            $this->descHtmlKuponator .= $v['label'];
+                $this->descHtmlKuponator .= $v['label'];
             if (isset($v['items']))
                 $this->renderDescHtmlKuponator($v['items']);
             $this->descHtmlKuponator .= '</li>';
