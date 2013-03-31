@@ -111,7 +111,20 @@ class XmlImportController extends Controller
                 $model->cheat = rand(50, 500);
                 $model->company_name = $offer->supplier->name;
                 $model->company_url = $offer->supplier->url;
-                $model->company_tel = $offer->supplier->tel;
+
+                if ($unserialTel = @unserialize((string)$offer->supplier->tel))
+                {
+                    //если успешно ансериализовано
+                    if (is_array($unserialTel))
+                        $model->company_tel = implode(", ", $unserialTel);
+                    else
+                        $model->company_tel = (string)$unserialTel;
+                }
+                else
+                {
+                    //если не было ансериализовано
+                    $model->company_tel = $offer->supplier->tel;
+                }
 
                 //адреса компании
                 $adres =''; // склеиваем адрес, если их несколько через ||

@@ -18,14 +18,10 @@ class Discount extends ActiveRecord
     public $coord_write; //массив кординат для записи
     public $actuality; //актуальна ли акция. кеш. вззаимодействие с методом isActual
     const PATH_XML_IMG = 'upload/mediaFiles/xml';
-    const PATH_XML_IMG_CROP = 'upload/mediaFiles/xml_crop';
-    const PATH_OUR_IMG_CROP = 'upload/mediaFiles/our_crop'; //для кропа наших дискаунтов
     const IMG_CROP_WIDTH = 310;
     const IMG_CROP_HEIGHT = 205;
     const NO_CROP_IMAGE = '/upload/mediaFiles/no_image_310x205.jpg';
     const NO_IMAGE = '/upload/mediaFiles/no_image_310x205.jpg';
-
-
 
 
     public function name()
