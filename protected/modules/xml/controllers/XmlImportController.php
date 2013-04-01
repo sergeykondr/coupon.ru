@@ -264,9 +264,9 @@ class XmlImportController extends Controller
         $metatags = new MetaTag();
         $metatags->model_id = 'Discount';
         $metatags->object_id = $discountId;
-        $metatags->title = $discountName;
-        $metatags->keywords = 'москва, ' . $companyName;
-        $metatags->description = $companyName . 'Купон на скидку. Отзывы об акции.';
+        $metatags->title = $discountName . ' на FreeSkidka.ru';
+        $metatags->keywords = 'москва, ' . $companyName . ' со скидкой';
+        $metatags->description = $companyName . ' скидки. Купон на скидку. Отзывы об акции.';
         $metatags->save();
     }
 
