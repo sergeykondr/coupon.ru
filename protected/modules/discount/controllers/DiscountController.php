@@ -221,7 +221,7 @@ class DiscountController extends Controller
     public function subMenuItems()
     {
         //узнаем категории из БД
-        $categories=Category::model()->findAll();
+        $categories=Category::model()->with('discountCount')->findAll();
         //массив для меню
         $menu = array();
         //записываем первое меню - 'Все' (его нет в БД)
@@ -232,15 +232,13 @@ class DiscountController extends Controller
         //записываем всё остальное меню
         //указываем экшен, который обрабатывает запросы
         $urlPart = '/discount/discount/category';
-        foreach ($categories as $name)
+        foreach ($categories as $category)
         {
-            if ($name->id == 11) //пропускаем ссылку на главную страницу
+            if ($category->id == 11) //пропускаем ссылку на главную страницу
                 continue;
-            //обращаемся к модели категорий по id, узнаем кол-во акций
-            $count = Category::model()->with('discountCount')->findByPk($name->id);
             $menu[] = array(
-                'label' => $name->name.' ('.$count->discountCount.')',
-                'url'   => array($urlPart, 'cat' => $name->url )
+                'label' => $category->name.' ('. $category->discountCount.')',
+                'url'   => array($urlPart, 'cat' => $category->url )
             );
         }
         return $menu;
@@ -255,49 +253,7 @@ class DiscountController extends Controller
                 'label' => t('Красота'),
                 'url'   => array('/discount/discount/category', 'cat'=>'beauty')
             ),
-
-            array(
-                'label' => t('Здоровье'),
-                'url'   => array('/category/health')
-            ),
-            array(
-                'label' => t('Еда'),
-                'url'   => array('category/food')
-            ),
-            array(
-                'label' => t('Развлечения'),
-                'url'   => array('discount/category/entertainment')
-            ),
-            array(
-                'label' => t('Отдых'),
-                'url'   => array('discount/category/rest')
-            ),
-            array(
-                'label' => t('Товары'),
-                'url'   => array('discount/category/beauty')
-            ),
-            array(
-                'label' => t('Фото'),
-                'url'   => array('discount/category/photo')
-            ),
-            array(
-                'label' => t('Обучение'),
-                'url'   => array('discount/category/education'),
-                'active'=>false
-            ),
-            array(
-                'label' => t('Авто'),
-                'url'   => array('discount/category/auto')
-            ),
-            array(
-                'label' => t('Прочее'),
-                'url'   => array('discount/category/other')
-            ),
-            array(
-                'label'   => Yii::app()->user->isGuest ?: t('Ваши') . '(' . Page::model()->count('user_id = ' . Yii::app()->user->id) . ')',
-                'url'     => array('/page/user/' . Yii::app()->user->id),
-                'visible' => !Yii::app()->user->isGuest
-            )
+           ...
         );
         */
 
