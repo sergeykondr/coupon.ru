@@ -221,27 +221,33 @@ class DiscountController extends Controller
     public function subMenuItems()
     {
         //узнаем категории из БД
-        $categories=Category::model()->with('discountCount')->findAll();
+        //$categories=Category::model()->findAll();
+        $categories = new Category();
+        $categories = $categories->findAll();
         //массив для меню
         $menu = array();
         //записываем первое меню - 'Все' (его нет в БД)
+
         $menu[] = array(
             'label' => $categories[10]->name, //ссылка на главную страницу
             'url'   => array('/discount/discount/index')
         );
+
         //записываем всё остальное меню
         //указываем экшен, который обрабатывает запросы
         $urlPart = '/discount/discount/category';
+
         foreach ($categories as $category)
         {
-            if ($category->id == 11) //пропускаем ссылку на главную страницу
-                continue;
+            //if ($category->id == 11) //пропускаем ссылку на главную страницу
+            //    continue;
             $menu[] = array(
                 'label' => $category->name.' ('. $category->discountCount.')',
                 'url'   => array($urlPart, 'cat' => $category->url )
             );
         }
         return $menu;
+
 
         /* оригинальный массив меню
         return array(
@@ -253,7 +259,7 @@ class DiscountController extends Controller
                 'label' => t('Красота'),
                 'url'   => array('/discount/discount/category', 'cat'=>'beauty')
             ),
-           ...
+
         );
         */
 
