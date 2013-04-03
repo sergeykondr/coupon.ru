@@ -53,8 +53,9 @@ class Category extends ActiveRecord
     {
         return array(
             'discountCount'=>array(self::STAT, 'Discount', 'category_id',
-                                'condition'=>$this->queryActual()
+                               'condition'=>$this->queryActual()
             ),
+            'discount' => array(self::HAS_MANY, 'Discount','id'),
         );
     }
 

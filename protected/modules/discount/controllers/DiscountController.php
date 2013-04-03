@@ -201,10 +201,12 @@ class DiscountController extends Controller
         if($modelCat===null)
             throw new CHttpException(404,'Страница не найдена');
         $this->setMetaTags($modelCat);
-        $activeDataProvider = new CActiveDataProvider(Discount::model()->with('category')->inCategory($modelCat->id), array(
+
+        $activeDataProvider = new CActiveDataProvider(Discount::model()->with('category'), array(
                 'criteria' => array(
                     'order'     => 't.id DESC', //'beginsell DESC',
                     'condition'=>Category::model()->queryActual(),
+                    'scopes' => array('inCategory'=>array($modelCat->id)),
                 ),
                 'pagination' => array(
                     'pageSize' => '30'
@@ -239,8 +241,8 @@ class DiscountController extends Controller
 
         foreach ($categories as $category)
         {
-            //if ($category->id == 11) //пропускаем ссылку на главную страницу
-            //    continue;
+            if ($category->id == 11) //пропускаем ссылку на главную страницу
+                continue;
             $menu[] = array(
                 'label' => $category->name.' ('. $category->discountCount.')',
                 'url'   => array($urlPart, 'cat' => $category->url )
