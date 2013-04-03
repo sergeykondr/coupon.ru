@@ -14,7 +14,7 @@ class XmlAdminController extends AdminController
     {
         return array(
             "view"        => t("Просмотр import xml"),
-            "manage"      => t("Управление import xml"),
+            "manage"      => t("Управление import xml (показываются только актуальные дискаунты)"),
             //"import"      => t("Import xml"),
             "export"      => t("Export xml"),
             "view2"        => t("Просмотр import xml"),

@@ -129,7 +129,7 @@ class Discount extends ActiveRecord
             ),
 
             array(
-                'id, name, beginsell, xml_imp_id, xml_imp_url', 'safe',
+                'name, beginsell, xml_imp_id, xml_imp_url, category_id', 'safe',
                 'on'=> 'search'
             ),
         );
@@ -296,6 +296,10 @@ class Discount extends ActiveRecord
         $criteria->compare('text', $this->text, true);
         $criteria->compare('xml_imp_id', $this->xml_imp_id, true);
         $criteria->compare('xml_imp_url', $this->xml_imp_url, true);
+        $criteria->compare('category_id', $this->category_id, true);
+
+        if ($type!='our')
+            $criteria->addCondition(Category::model()->queryActual());
 
         return new ActiveDataProvider(get_class($this), array(
             'criteria'   => $criteria,
@@ -480,6 +484,12 @@ class Discount extends ActiveRecord
         //$this->company_coordinates = 234234;//new CDbExpression("GEOMFROMTEXT(  \"POINT($this->coord_write[1] $this->coord_write[0] )\", 0 )"); //координаты заданы в правильных рамках
 
     }
+
+    public function getCategoryIdValue()
+    {
+        return $this->category->name;
+    }
+
 
 
     /**

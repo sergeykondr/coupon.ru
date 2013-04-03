@@ -9,8 +9,12 @@ $this->widget('AdminGridView', array(
             'name' => 'name',
             'type' => 'raw'
         ),
-
-        'beginsell',
+        'endsell',
+        [
+            'name'   => 'category_id',
+            'filter' => CHtml::listData(Category::model()->findAll(), 'id', 'name'),
+            'value'  => '$data->category_id_value'
+        ],
         'xml_imp_id',
         'xml_imp_url',
         array(
