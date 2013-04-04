@@ -10,11 +10,11 @@ $this->widget('AdminGridView', array(
             'type' => 'raw'
         ),
         'endsell',
-        [
+        array(
             'name'   => 'category_id',
             'filter' => CHtml::listData(Category::model()->findAll(), 'id', 'name'),
             'value'  => '$data->category_id_value'
-        ],
+        ),
         'xml_imp_id',
         'xml_imp_url',
         array(
