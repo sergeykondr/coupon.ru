@@ -166,8 +166,8 @@ $this->page_title = $page->name; //заголовок <h1>
                     echo $page->text;
                     //echo  $page->description;
                     $htmlText = str_replace('\&mdash', '', $page->description);
-
-                    echo $htmlText;
+                    $bodytag = str_replace("&mdash", " ", $htmlText);
+                    echo $bodytag;
                     ?>
                 </div>
                 <div class="tab-pane fade" id="second">
