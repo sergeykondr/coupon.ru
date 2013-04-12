@@ -14,7 +14,7 @@
         </div>
         <div class="row-fluid">
             <div class="zalivka">
-            Скидка <? echo CHtml::encode($data->discount); ?>% за <? echo CHtml::encode($data->pricecoupon); ?> р.
+            <a href="<?='/discount/'.$data->id ?>">Скидка <? echo CHtml::encode($data->discount); ?>% за <? echo CHtml::encode($data->pricecoupon); ?> р.</a>
             </div>
         </div>
         <br>

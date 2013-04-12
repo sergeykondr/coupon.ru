@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <title><? echo $this->pageTitle ?></title>
-    <meta charset="utf-8">
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
     <? /*<meta name="description" content="< echo $this->meta_description >">
     <meta name="keywords" content="< echo $this->meta_keywords >">
     <meta name="author" content=""> */?>

@@ -39,6 +39,12 @@
 	padding: 8px;
 	font-size: 14px;
 }
+
+.zalivka a {
+    text-decoration: none;
+    color: #ffffff;
+}
+
 .zalivka2 {
 	color: #FFFFFF;
 	border-radius: 5px 5px 5px 5px;

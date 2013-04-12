@@ -164,7 +164,10 @@ $this->page_title = $page->name; //заголовок <h1>
                     //$parts = explode('{{cut}}', $page->text);
                     //echo array_shift($parts);
                     echo $page->text;
-                    echo  $page->description;
+                    //echo  $page->description;
+                    $htmlText = str_replace('\&mdash', '', $page->description);
+
+                    echo $htmlText;
                     ?>
                 </div>
                 <div class="tab-pane fade" id="second">
