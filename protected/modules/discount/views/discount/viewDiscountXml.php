@@ -164,10 +164,9 @@ $this->page_title = $page->name; //заголовок <h1>
                     //$parts = explode('{{cut}}', $page->text);
                     //echo array_shift($parts);
                     echo $page->text;
-                    //echo  $page->description;
-                    $htmlText = str_replace('\&mdash', '', $page->description);
-                    $bodytag = str_replace("&mdash", " ", $htmlText);
-                    echo $bodytag;
+                    $descriptionPage = str_replace("&", " ", (string)$page->description);
+                    $descriptionPage = str_replace("amp;mdash", " ", $descriptionPage);
+                    echo $descriptionPage;
                     ?>
                 </div>
                 <div class="tab-pane fade" id="second">
