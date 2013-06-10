@@ -132,4 +132,5 @@
 </script>
 <noscript><div><img src="//mc.yandex.ru/watch/20127475" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
 <!-- /Yandex.Metrika counter -->
+<!-- verify-admitad: "09606da1a8" -->
 </body>
