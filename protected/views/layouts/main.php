@@ -133,4 +133,11 @@
 <noscript><div><img src="//mc.yandex.ru/watch/20127475" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
 <!-- /Yandex.Metrika counter -->
 <!-- verify-admitad: "09606da1a8" -->
+<script type="text/javascript">
+    <!--
+    if (uni_tracker_shown===undefined){document.write('<img src="http://mixmarket.biz/t.php?uid=1294957513&r=' + escape(document.referrer) + '&t=' + (new Date()).getTime() + '" width="1" height="1"/>');var uni_tracker_shown=true;}
+    //-->
+</script>
+<noscript><img src="http://mixmarket.biz/t.php?uid=1294957513" width="1" height="1" alt=""/></noscript>
+
 </body>
