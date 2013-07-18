@@ -24,7 +24,7 @@ class DiscountMetro extends ActiveRecord
     {
         return array(
             array('discount_id, metro_id', 'required'),
-            //array('email', 'email'),
+            //array('email', 'email'), //
         );
 
     }
