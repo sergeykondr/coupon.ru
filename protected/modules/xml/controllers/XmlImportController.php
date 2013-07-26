@@ -5,7 +5,7 @@ class XmlImportController extends Controller
     public $urlsImage = array(); //массив url картинок
     public $urlsImageContent; //массив url и контента картинок
     private $descHtmlKuponator;
-    const LOAD_IMAGE_TOGETHER = 30;
+    const LOAD_IMAGE_TOGETHER = 12;
 
 
     public static function actionsTitles()
